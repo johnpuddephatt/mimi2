@@ -16,8 +16,8 @@ class CreateWeeksTable extends Migration
         Schema::create('weeks', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('name')->nullable();
-            $table->text('description');
+            $table->string('name');
+            $table->text('description')->nullable();
             $table->integer('number')->nullable();
             $table->integer('course_id')->references('id')->on('courses')->onDelete('cascade');
 

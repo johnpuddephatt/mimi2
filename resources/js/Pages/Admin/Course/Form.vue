@@ -13,7 +13,7 @@
       </b-field>
 
       <b-field label="Description" :message="errors.description" :type="errors.description ? 'is-danger' : null">
-        <b-input v-model="form.description" name="description" type="textarea" maxlength="120" rows="3" placeholder="Give a description of this course">
+        <b-input v-model="form.description" name="description" type="textarea" rows="6" placeholder="Give a description of this course">
         </b-input>
       </b-field>
 
@@ -91,7 +91,7 @@
 
       </nav>
 
-      <div class="notification" v-else>
+      <div class="notification is-size-7" v-else>
         You need to save this course before adding lessons.
       </div>
 
