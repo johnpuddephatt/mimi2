@@ -1,0 +1,126 @@
+@import "bulma.scss";
+@import "checkmark";
+@import "square-media";
+@import "transitions";
+@import "content";
+
+.ml-a {
+  margin-left: auto;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: .5em;
+}
+
+.navbar {
+  display: block;
+  // box-shadow: $white-bis 0 0 0.75em 0.75em;
+}
+.navbar-brand img {
+ image-rendering: -webkit-optimize-contrast;
+}
+
+.is-rounded {
+  border-radius: 99999px;
+}
+
+.is-radius {
+  border-radius: 6px;
+}
+
+.text-overflow-ellipsis {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.is-bordered {
+  border: 1px solid $light;
+}
+
+.is-borderless {
+  border: 0;
+}
+
+.is-justify-between {
+  justify-content: space-between;
+}
+
+.is-autodismiss {
+  animation: autoDismiss 4s forwards !important;
+}
+
+@keyframes autoDismiss {
+  0%,100% {
+    opacity: 0;
+    transform: translateY(1em);
+  }
+  15%, 85% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+.button {
+  &.is-fullwidth {
+    span:first-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+.button.is-fullwidth + .button.is-fullwidth {
+  margin-top: 1em;
+}
+
+.navbar-item .tag {
+  margin-left: 0.5em;
+}
+
+main {
+  min-height: 82.5vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.box {
+  @media screen and (orientation: portrait) {
+    padding: $box-padding $box-padding/2;
+  }
+}
+
+// .instruction-card {
+//   position: sticky;
+//   top: 5.5em;
+// }
+.instruction-card {
+  margin-bottom: 1.5em;
+  display: flex;
+  flex-direction: row;
+  @media screen and (orientation: portrait) {
+    flex-direction: column;
+  }
+  .card-image {
+    flex: 0 0 50%;
+  }
+}
+
+
+.modal {
+  @media screen and (orientation: portrait) {
+    // Keeps modal over help scout on small screens
+
+    // @todo make help scout beacon work with modals on mobile
+    // as modals are a commmon pain point.
+    z-index: 60;
+  }
+}
+.modal-card {
+  max-width: 100%;
+}

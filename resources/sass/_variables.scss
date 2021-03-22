@@ -1,0 +1,45 @@
+@import "~bulma/sass/utilities/_all";
+
+$carousel-min-height: none;
+
+$navbar-item-img-max-height: 2.25rem;
+$box-padding: 2rem;
+
+$body-line-height: 2;
+$body-font-size: 1.1em;
+
+// Set your colors
+$turquoise: #33C2CF;
+$orange: #F4A627;
+
+$white-ter:    hsl(210, 50%, 96%);
+$white-bis:    hsl(210, 50%, 98%);
+
+$primary: $orange;
+$primary-invert: findColorInvert($primary);
+
+$success: $turquoise;
+
+// Setup $colors to use as bulma classes (e.g. 'is-twitter')
+$colors: (
+    "white": ($white, $black),
+    "black": ($black, $white),
+    "light": ($light, $light-invert),
+    "dark": ($dark, $dark-invert),
+    "primary": ($primary, $primary-invert),
+    "info": ($info, $info-invert),
+    "success": ($success, $success-invert),
+    "warning": ($warning, $warning-invert),
+    "danger": ($danger, $danger-invert),
+);
+
+// Links
+$link: $turquoise;;
+$link-invert: $primary-invert;
+$link-focus-border: $primary;
+
+$background: $white-bis;
+$body-background-color: $background;
+
+$navbar-background-color: $white-bis;
+$footer-background-color: transparent;

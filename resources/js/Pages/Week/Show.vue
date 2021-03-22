@@ -1,0 +1,55 @@
+<template>
+<app-layout>
+  <div class="column is-7-tablet is-6-desktop is-5-widescreen is-paddingless">
+    <inertia-link class="back-link has-text-dark" :href="route('course.show', { 'course': $parameters.course })">{{ course.title }}</inertia-link> > {{ week.name }}
+    <div class="box">
+      <h3 class="title">{{ course.title }}</h3>
+      <h2 class="subtitle mb-3">{{ week.name }}</h2>
+
+        <div v-if="course.archived" class="notification is-warning">
+          <strong>This course has finished and has now been archived.</strong>
+        </div>
+
+        <b-button
+          v-for="lesson in week.lessons"
+          :key="lesson.id"
+          tag="a"
+          size="is-medium"
+          :href="route('lesson.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': lesson.id })"
+          class="is-justify-between"
+          icon-right="arrow-right"
+          expanded
+          outlined>
+          <span class="text-overflow-ellipsis">
+            {{ lesson.title }}
+          </span>
+        </b-button>
+
+        <section v-if="!week.lessons.length" class="section is-medium has-background-light has-text-centered">
+          No weeks have been added to this course yet.
+        </section>
+
+    </div>
+  </div>
+
+</app-layout>
+</template>
+
+<script>
+export default {
+  props: ['course', 'week', '$parameters'],
+  components: {},
+  data() {
+    return {
+    }
+  },
+
+  mounted() {},
+
+  methods: {}
+};
+</script>
+
+<style lang="scss">
+@import "../../../sass/variables";
+</style>

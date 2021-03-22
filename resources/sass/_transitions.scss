@@ -1,0 +1,33 @@
+// @import 'variables';
+
+.list-enter-active, .list-leave-active {
+  transition: all 0.5s;
+}
+
+.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(5px);
+  background-color: #e5e5e5;
+  border-radius: 5px;
+}
+
+.fade-out-enter-active,
+.fade-out-leave-active {
+  transition: all 0.7s linear;
+}
+
+.fade-out-leave-to {
+  opacity: 0;
+}
+
+
+.fade-up-enter-active,
+.fade-up-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+
+.fade-up-enter,
+.fade-up-leave-to {
+  transform: translateY(0.5em);
+  opacity: 0;
+}
