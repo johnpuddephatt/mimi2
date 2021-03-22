@@ -19,7 +19,7 @@
 
       <div class="is-flex is-justify-content-space-between is-align-items-center mb-2">
         <h3 class="label">Lessons</h3>
-        <inertia-link class="button is-primary" :href="route('week.create', {course: $parameters.course })">
+        <inertia-link v-if="$parameters.course" class="button is-primary" :href="route('week.create', {course: $parameters.course })">
           Add new week</inertia-link>
       </div>
 
