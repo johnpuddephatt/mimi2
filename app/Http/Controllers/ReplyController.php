@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 use App\Models\Reply;
 use App\Models\Lesson;
@@ -35,17 +34,14 @@ class ReplyController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function store(Request $request, Lesson $lesson) {
+    public function store(StoreReply $request, Lesson $lesson) {
 
-      Log::info('here we are');
+      $video = Video::create([
+        'disk'              => 'public',
+        'unprocessed_path'  => $request->video->store(Video::$unprocessed_directory, 'public'),
+      ]);
 
-      $video = 2;
-      // $video = Video::create([
-      //   'disk'              => 'public',
-      //   'unprocessed_path'  => $request->video->store(Video::$unprocessed_directory, 'public'),
-      // ]);
-
-      // $this->dispatch(new ConvertReplyVideoForStreaming($video));
+      $this->dispatch(new ConvertReplyVideoForStreaming($video));
 
       Reply::create([
           'user_id' => $request->user_id,
