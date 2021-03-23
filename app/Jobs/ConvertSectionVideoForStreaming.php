@@ -68,7 +68,7 @@ class ConvertSectionVideoForStreaming implements ShouldQueue
               $filters->custom($in, "scale=640:640,fps=20", $out); // $in, $parameters, $out
             });
           })
-          ->useSegmentFilenameGenerator(function ($name, $format, $key, callable $segments, callable $playlist) {
+          ->useSegmentFilenameGenerator(function ($name, $format, $key, callable $segments, callable $playlist) use($hash) {
               $segments("{$hash}-{$name}-{$format}-{$key}-%03d.ts");
               $playlist("{$hash}-{$name}-{$format}-{$key}.m3u8");
           })

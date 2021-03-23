@@ -69,7 +69,7 @@ class ConvertReplyVideoForStreaming implements ShouldQueue
               $filters->custom($in, "crop='min(iw,ih)':'min(iw,ih)',scale=480:480,fps=20", $out); // $in, $parameters, $out
             });
           })
-          ->useSegmentFilenameGenerator(function ($name, $format, $key, callable $segments, callable $playlist) {
+          ->useSegmentFilenameGenerator(function ($name, $format, $key, callable $segments, callable $playlist) use ($hash) {
               $segments("{$hash}-{$name}-{$format}-{$key}-%03d.ts");
               $playlist("{$hash}-{$name}-{$format}-{$key}.m3u8");
           })
