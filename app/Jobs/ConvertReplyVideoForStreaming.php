@@ -41,6 +41,8 @@ class ConvertReplyVideoForStreaming implements ShouldQueue
      */
     public function handle()
     {
+        $hash = random_bytes(10);
+
         $thumbnail_path = Video::$thumbnail_directory . $this->video->id . '.jpg';
         $playlist_path = Video::$video_directory . $this->video->id . '.m3u8';
 
@@ -56,6 +58,10 @@ class ConvertReplyVideoForStreaming implements ShouldQueue
           ->open($this->video->unprocessed_path)
           // ->addLegacyFilter('-vf', "crop='min(iw,ih)':'min(iw,ih)',scale=480:480")
           ->exportForHLS()
+          ->useSegmentFilenameGenerator(function ($name, $format, $key, callable $segments, callable $playlist) {
+              $segments("{$hash}-{$name}-{$format}-{$key}-%03d.ts");
+              $playlist("{$hash}-{$name}-{$format}-{$key}.m3u8");
+          })
           ->toDisk('digitalocean')
           ->addFormat($lowBitrateFormat, function($media){
             $media->addFilter(function ($filters, $in, $out) {
