@@ -29,7 +29,8 @@
           <b-button @click.prevent="onModalEnd">Close</b-button>
         </div>
         <div v-else-if="reply.progress">
-          {{ reply.progress.percentage }}% uploaded
+          <!-- {{ reply.progress.percentage }}% uploaded -->
+          {{uploadProgress}}% uploaded
         </div>
       </section>
     </div>
@@ -66,12 +67,13 @@ export default {
       newVideo: {},
       errors: '',
       noSleep: null,
-      reply: this.$inertia.form({
+      uploadProgress: null,
+      reply: {
         id: null,
         video: null,
         reply_id: this.reply_id ?? null,
         user_id: this.$user.id
-      })
+      }
     }
   },
 
@@ -94,26 +96,51 @@ export default {
       this.isSaving = true;
       var noSleep = new NoSleep();
       noSleep.enable();
-      axios.post('/log', {
-        'error': `BEGINNING UPLOAD, ${ platform.description }, size: ${Math.floor(this.reply.video.size/1024)}kB, `
-      });
+      axios.post('/log', { 'error': `BEGINNING UPLOAD, ${ platform.description }, size: ${Math.floor(this.reply.video.size/1024)}kB, ` });
 
-      this.reply.post(route('reply.create', { lesson: this.$parameters.lesson }), {
-        preserveScroll: true,
-        onSuccess: () => {
+      const data = new FormData();
+      for (let [key, value] of Object.entries(this.reply)) {
+        if (value) data.append(key, value);
+      }
 
-          this.successToast('Your reply has been posted.');
-          axios.post('/log', {
-            'error': `UPLOAD COMPLETE, ${ platform.description }, size: ${Math.floor(this.reply.video.size/1024)}kB, `
-          });
+      axios({
+          method: 'post',
+          url: route('reply.create', { lesson: this.$parameters.lesson }),
+          data: data,
+          headers: {
+            'Content-Type': `multipart/form-data; boundary=${data._boundary}`
+          },
+          onUploadProgress: progressEvent => this.uploadProgress = (Math.round((progressEvent.loaded * 100) / progressEvent.total)),
+          timeout: 600000 // 10 minutes, matches Nginx and PHP config
+        })
+        .then(response => {
+          axios.post('/log', {'error': `UPLOAD COMPLETE, ${ platform.description }, size: ${Math.floor(this.reply.video.size/1024)}kB, `});
+          this.reply = response.data;
           noSleep.disable();
           this.isSaved = true;
-        },
-        onError: errors => {
+        }).catch(error => {
           noSleep.disable();
           this.isSaving = false;
-          this.errorToast('An error has occured');
-          console.log(errors);
+          this.errorToast('Problem uploading please try again');
+          console.log(error)
+        });
+
+      // this.reply.post(route('reply.create', { lesson: this.$parameters.lesson }), {
+      //   preserveScroll: true,
+      //   onSuccess: () => {
+      //
+      //     this.successToast('Your reply has been posted.');
+      //     axios.post('/log', {
+      //       'error': `UPLOAD COMPLETE, ${ platform.description }, size: ${Math.floor(this.reply.video.size/1024)}kB, `
+      //     });
+      //     noSleep.disable();
+      //     this.isSaved = true;
+      //   },
+      //   onError: errors => {
+      //     noSleep.disable();
+      //     this.isSaving = false;
+      //     this.errorToast('An error has occured');
+      //     console.log(errors);
           // var uploadErrorMessage = 'Unknown error';
           // if (error.response) {
           //   uploadErrorMessage = (error.response.data && error.response.data.message) ? error.response.data.message : 'Server reponse error. Let us know and we’ll look into the problem for you.'
@@ -126,8 +153,8 @@ export default {
           // axios.post('/log', {
           //   'error': `UPLOAD ERROR ${ platform.description }, Error: ${ uploadErrorMessage }, ${ error }, Reply data: ${JSON.stringify(this.reply)},`
           // });
-        },
-      })
+        // },
+      // })
     },
 
     onModalEnd() {
