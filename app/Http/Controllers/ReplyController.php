@@ -39,12 +39,13 @@ class ReplyController extends Controller
 
       Log::info('here we are');
 
-      $video = Video::create([
-        'disk'              => 'public',
-        'unprocessed_path'  => $request->video->store(Video::$unprocessed_directory, 'public'),
-      ]);
+      $video = 2;
+      // $video = Video::create([
+      //   'disk'              => 'public',
+      //   'unprocessed_path'  => $request->video->store(Video::$unprocessed_directory, 'public'),
+      // ]);
 
-      $this->dispatch(new ConvertReplyVideoForStreaming($video));
+      // $this->dispatch(new ConvertReplyVideoForStreaming($video));
 
       Reply::create([
           'user_id' => $request->user_id,
