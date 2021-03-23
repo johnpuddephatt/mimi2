@@ -36,6 +36,8 @@ class ReplyController extends Controller
 
     public function store(StoreReply $request, Lesson $lesson) {
 
+      Log::info('here we are');
+
       $video = Video::create([
         'disk'              => 'public',
         'unprocessed_path'  => $request->video->store(Video::$unprocessed_directory, 'public'),
