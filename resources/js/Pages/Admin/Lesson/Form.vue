@@ -37,7 +37,7 @@
 
         <h3 class="label is-flex is-justify-between">
           <p>Sections</p>
-          <inertia-link class="button is-small is-primary ml-a has-text-weight-normal" :href="route('section.create', {course: $parameters.course, week: $parameters.week, lesson: data.id})">Add new section</inertia-link>
+          <inertia-link v-if="$parameters.lesson"  class="button is-small is-primary ml-a has-text-weight-normal" :href="route('section.create', {course: $parameters.course, week: $parameters.week, lesson: data.id})">Add new section</inertia-link>
         </h3>
         <nav v-if="$parameters.lesson" class="panel is-shadowless is-bordered">
 

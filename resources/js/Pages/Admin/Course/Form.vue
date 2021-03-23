@@ -92,7 +92,7 @@
       </nav>
 
       <div class="notification is-size-7" v-else>
-        You need to save this course before adding lessons.
+        Save this course before adding lessons.
       </div>
 
       <b-checkbox v-if="data" v-model="form.archived">Archive this course?</b-checkbox>
