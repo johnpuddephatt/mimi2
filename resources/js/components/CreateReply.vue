@@ -112,6 +112,8 @@ export default {
         onError: errors => {
           noSleep.disable();
           this.isSaving = false;
+          this.errorToast('An error has occured');
+          console.log(errors);
           // var uploadErrorMessage = 'Unknown error';
           // if (error.response) {
           //   uploadErrorMessage = (error.response.data && error.response.data.message) ? error.response.data.message : 'Server reponse error. Let us know and we’ll look into the problem for you.'

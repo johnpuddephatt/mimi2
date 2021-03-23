@@ -160,9 +160,10 @@ export default {
 
     toolConfig() {
       return {
-        list: List,
-        pairedHeading: PairedHeading,
         markerTool: MarkerTool,
+
+        pairedHeading: PairedHeading,
+        list: List,
         audio: {
           class: AudioTool,
           config: {
