@@ -15,7 +15,7 @@
           :key="lesson.id"
           tag="a"
           size="is-medium"
-          :href="route('lesson.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': lesson.id })"
+          :href="route('lesson.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': lesson.number })"
           class="is-justify-between"
           icon-right="arrow-right"
           expanded

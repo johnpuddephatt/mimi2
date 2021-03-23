@@ -43,6 +43,7 @@ class ConvertSectionVideoForStreaming implements ShouldQueue
      */
     public function handle()
     {
+        $hash = random_bytes(10);
 
         $lowBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(200)->setAdditionalParameters(
           ["-preset", "ultrafast"]
@@ -56,6 +57,10 @@ class ConvertSectionVideoForStreaming implements ShouldQueue
           ->open($this->temporary_video_path)
           // ->addLegacyFilter('-vf', "crop='min(iw,ih)':'min(iw,ih)',scale=480:480")
           ->exportForHLS()
+          ->useSegmentFilenameGenerator(function ($name, $format, $key, callable $segments, callable $playlist) {
+              $segments("{$hash}-{$name}-{$format}-{$key}-%03d.ts");
+              $playlist("{$hash}-{$name}-{$format}-{$key}.m3u8");
+          })
           ->toDisk('digitalocean')
           ->addFormat($lowBitrateFormat, function($media){
             $media->addFilter(function ($filters, $in, $out) {
