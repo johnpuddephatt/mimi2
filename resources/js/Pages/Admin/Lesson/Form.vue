@@ -31,7 +31,7 @@
         </b-field>
 
         <b-field label="Instructions" :message="errors.instructions" :type="errors.instructions ? 'is-danger' : null">
-          <b-input v-model="form.instructions" name="instructions" type="textarea" maxlength="120" rows="3" placeholder="Give instructions for this lesson">
+          <b-input v-model="form.instructions" name="instructions" type="textarea" rows="5" placeholder="Give instructions for this lesson">
           </b-input>
         </b-field>
 
