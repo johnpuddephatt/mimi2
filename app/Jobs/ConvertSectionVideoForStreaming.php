@@ -57,10 +57,6 @@ class ConvertSectionVideoForStreaming implements ShouldQueue
           ->open($this->temporary_video_path)
           // ->addLegacyFilter('-vf', "crop='min(iw,ih)':'min(iw,ih)',scale=480:480")
           ->exportForHLS()
-          ->useSegmentFilenameGenerator(function ($name, $format, $key, callable $segments, callable $playlist) {
-              $segments("{$hash}-{$name}-{$format}-{$key}-%03d.ts");
-              $playlist("{$hash}-{$name}-{$format}-{$key}.m3u8");
-          })
           ->toDisk('digitalocean')
           ->addFormat($lowBitrateFormat, function($media){
             $media->addFilter(function ($filters, $in, $out) {
@@ -71,6 +67,10 @@ class ConvertSectionVideoForStreaming implements ShouldQueue
             $media->addFilter(function ($filters, $in, $out) {
               $filters->custom($in, "scale=640:640,fps=20", $out); // $in, $parameters, $out
             });
+          })
+          ->useSegmentFilenameGenerator(function ($name, $format, $key, callable $segments, callable $playlist) {
+              $segments("{$hash}-{$name}-{$format}-{$key}-%03d.ts");
+              $playlist("{$hash}-{$name}-{$format}-{$key}.m3u8");
           })
           ->save($this->playlist_path);
 
