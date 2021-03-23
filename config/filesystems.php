@@ -73,6 +73,7 @@ return [
             'bucket' => env('DIGITALOCEAN_SPACES_BUCKET'),
             'url' => env('DIGITALOCEAN_SPACES_URL'),
             'visibility' => 'public',
+            'disable_asserts' => true
         ],
 
 
