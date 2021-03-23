@@ -35,7 +35,7 @@ class ReplyController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function store($request, Lesson $lesson) {
+    public function store(Request $request, Lesson $lesson) {
 
       Log::info('here we are');
 
