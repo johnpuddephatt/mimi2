@@ -110,7 +110,10 @@ export default {
           headers: {
             'Content-Type': `multipart/form-data; boundary=${data._boundary}`
           },
-          onUploadProgress: progressEvent => this.uploadProgress = (Math.round((progressEvent.loaded * 100) / progressEvent.total)),
+          onUploadProgress: progressEvent => {
+            console.log((progressEvent.loaded * 100) / progressEvent.total);
+            this.uploadProgress = (Math.round((progressEvent.loaded * 100) / progressEvent.total));
+          },
           timeout: 600000 // 10 minutes, matches Nginx and PHP config
         })
         .then(response => {
@@ -122,39 +125,8 @@ export default {
           noSleep.disable();
           this.isSaving = false;
           this.errorToast('Problem uploading please try again');
-          console.log(error)
+          axios.post('/log', {'error': `UPLOAD ERROR, ${ platform.description }, ${ JSON.stringify(error) }`});
         });
-
-      // this.reply.post(route('reply.create', { lesson: this.$parameters.lesson }), {
-      //   preserveScroll: true,
-      //   onSuccess: () => {
-      //
-      //     this.successToast('Your reply has been posted.');
-      //     axios.post('/log', {
-      //       'error': `UPLOAD COMPLETE, ${ platform.description }, size: ${Math.floor(this.reply.video.size/1024)}kB, `
-      //     });
-      //     noSleep.disable();
-      //     this.isSaved = true;
-      //   },
-      //   onError: errors => {
-      //     noSleep.disable();
-      //     this.isSaving = false;
-      //     this.errorToast('An error has occured');
-      //     console.log(errors);
-          // var uploadErrorMessage = 'Unknown error';
-          // if (error.response) {
-          //   uploadErrorMessage = (error.response.data && error.response.data.message) ? error.response.data.message : 'Server reponse error. Let us know and we’ll look into the problem for you.'
-          // } else if (error.request) {
-          //   uploadErrorMessage = (error.request.data && error.request.data.message) ? error.request.data.message : 'Network request error. Either your internet connection is unstable or the upload timed out.'
-          // } else if (error.message) {
-          //   uploadErrorMessage = error.message;
-          // }
-          // this.errorToast(uploadErrorMessage);
-          // axios.post('/log', {
-          //   'error': `UPLOAD ERROR ${ platform.description }, Error: ${ uploadErrorMessage }, ${ error }, Reply data: ${JSON.stringify(this.reply)},`
-          // });
-        // },
-      // })
     },
 
     onModalEnd() {
@@ -168,6 +140,7 @@ export default {
 
 <style lang="scss">
 .create-reply-modal {
+    z-index: 9999;
     .modal-card-foot {
         padding-top: 10px;
         padding-bottom: 10px;

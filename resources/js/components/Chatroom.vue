@@ -6,7 +6,7 @@
     </nav>
     <div class="container is-flex is-flex-wrap-wrap">
       <create-reply :$parameters="$parameters" :$user="$user"/>
-      <reply-card v-for="reply in sortedReplies" :reply="reply" :key="reply.id" :$parameters="$parameters" :$user="$user" :comments="$parameters.reply == reply.id ? comments : null"/>
+      <reply-card @uploaded="startRefreshing" v-for="reply in sortedReplies" :reply="reply" :key="reply.id" :$parameters="$parameters" :$user="$user" :comments="$parameters.reply == reply.id ? comments : null"/>
     </div>
   </div>
 </template>
@@ -27,9 +27,6 @@ export default {
   },
 
   mounted() {
-    setInterval(()=> {
-      Inertia.reload({ only: ['replies'] });
-    }, 10000);
   },
 
 
@@ -39,6 +36,14 @@ export default {
         return b[this.sortBy] - a[this.sortBy];
       });
     },
+  },
+
+  methods: {
+    startRefreshing() {
+      setInterval(()=> {
+        Inertia.reload({ only: ['replies'] });
+      }, 10000);
+    }
   }
 };
 </script>

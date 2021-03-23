@@ -51,7 +51,7 @@ class ConvertReplyVideoForStreaming implements ShouldQueue
           ["-preset", "ultrafast"]
         );
 
-        $highBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(1000)->setAdditionalParameters(
+        $highBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(1200)->setAdditionalParameters(
           ["-preset", "medium"]
         );
 

@@ -280,6 +280,7 @@ export default {
         this.isRecording = true;
         this.shouldStopRecording = false;
         this.mediaRecorder.start();
+        console.log(this.mediaRecorder);
 
         this.timeRemaining = this.maxDuration;
         this.timer = setInterval(()=>{
@@ -319,6 +320,8 @@ export default {
     setupVideo() {
 
       const options = {
+        videoBitsPerSecond: 1200000,
+        audioBitsPerSecond : 128000,
         mimeType: this.supportedMimetypes.length ? this.supportedMimetypes[0] : 'video/webm'
       };
 
