@@ -1,6 +1,6 @@
 <template>
 <transition name="fade-out">
-  <div class="column is-full is-half-widescreen is-relative">
+  <div v-if="reply.video.converted_for_streaming_at || reply.user_id == $user.id" class="column is-full is-half-widescreen is-relative">
 
     <div class="admin-reply" v-if="$user.is_admin">
       <b-tooltip v-if="reply.feedback && reply.feedback.id && !feedbackIsDeleted" label="You’ve replied to this" type="is-dark" animated position="is-left" :delay="1000" class="admin-check-button--tooltip">
@@ -181,8 +181,7 @@ export default {
     delete(id) {
       axios({
           method: 'delete',
-          url: `/lesson/${ this.$parameters.lesson }/reply/${id}/delete`,
-          timeout: 15000
+          url: `/lesson/${ this.$parameters.lesson }/reply/${id}/delete`
         })
         .then(feedback => {
           successToast('Reply deleted');
@@ -207,6 +206,10 @@ export default {
 @import "../../sass/variables";
 
 .reply-card {
+
+    .loading-overlay {
+      z-index: 9;
+    }
 
     .card-image {
         position: relative;

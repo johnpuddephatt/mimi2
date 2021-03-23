@@ -4,19 +4,19 @@
     <a class="back-link has-text-dark" @click="confirmClose">&larr; Back to lesson</a>
 
     <div class="box p-5">
-      <div class="section-controls is-fixed-bottom py-3 has-background-white">
-        <div class="container fields is-flex is-justify-content-flex-end is-align-content-center">
-          <b-checkbox v-model="form.is_chatroom">Enable chatroom?</b-checkbox>
-          <b-button label="Save" type="is-primary" :loading="form.processing" :disabled="!form.title || !isDirty" class="ml-2" @click.prevent="onSubmit" />
-        </div>
-      </div>
-
       <div class="mt-6 mb-5 is-flex is-align-items-center" style="max-width: 650px; margin-left: auto; margin-right: auto;">
-        <input type="text" v-model="form.title" class="p-0 f-0 is-size-2 has-text-weight-semibold is-borderless modal-card-title" placeholder="Enter section title...">
+        <input @input="isDirty = true" type="text" v-model="form.title" class="p-0 f-0 is-size-2 has-text-weight-semibold is-borderless modal-card-title" placeholder="Enter section title...">
       </div>
-
-      <div class="mb-0" id="editorjs" spellcheck="false"></div>
+      <div class="mt-6 mb-0" id="editorjs" spellcheck="false"></div>
     </div>
+
+    <div class="section-controls is-fixed-bottom py-3 has-background-white">
+      <div class="container fields is-flex is-justify-content-flex-end is-align-content-center">
+        <b-checkbox @input="isDirty = true" v-model="form.is_chatroom">Enable chatroom?</b-checkbox>
+        <b-button label="Save" type="is-primary" :loading="form.processing" :disabled="!form.title || !isDirty" class="ml-2" @click.prevent="onSubmit" />
+      </div>
+    </div>
+
   </div>
 </app-layout>
 </template>
@@ -211,9 +211,13 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../../../../sass/variables";
 
 .section-controls {
   position: fixed;
+  border-top: 1px solid $grey-lightest;
+  box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%), 0 0px 0 1px rgb(10 10 10 / 2%);
+
   z-index: 999;
   bottom: 0;
   left: 0;

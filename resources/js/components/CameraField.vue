@@ -118,6 +118,10 @@ export default {
       timeRemaining: null,
       timer: null,
       maxDuration: 300,
+      recordingBitrate: {
+        video: 1200000,
+        audio: 128000
+      },
       accept: {
         photo: 'image/*',
         video: 'video/webm,video/x-matroska,video/mp4,video/x-m4v,video/*'
@@ -227,6 +231,7 @@ export default {
 
     onError(error) {
       this.cameraType = 'fallback';
+      console.log(error);
       axios.post('/log', {'error': `CAMERAFIELD ERROR ${ platform.description }, ${ error.name }: ${ error.message },`});
 
       if (error.name == "NotFoundError") {
@@ -320,8 +325,8 @@ export default {
     setupVideo() {
 
       const options = {
-        videoBitsPerSecond: 1200000,
-        audioBitsPerSecond : 128000,
+        videoBitsPerSecond: this.recordingBitrate.video,
+        audioBitsPerSecond : this.recordingBitrate.audio,
         mimeType: this.supportedMimetypes.length ? this.supportedMimetypes[0] : 'video/webm'
       };
 

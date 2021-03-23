@@ -54,7 +54,7 @@ export default {
             ideal: 480
           },
           frameRate: {
-            ideal: 16
+            ideal: 20
           }
         }
       }
@@ -77,16 +77,10 @@ export default {
 
   methods: {
 
-    /**
-     * setup media
-     */
     setupMedia() {
       this.testMediaAccess();
     },
 
-    /**
-     * load available cameras
-     */
     loadCameras() {
       navigator.mediaDevices
         .enumerateDevices()
@@ -122,7 +116,6 @@ export default {
         })
         .catch(error => {
           this.$emit("error", error)
-          console.log('error');
         });
     },
 
@@ -197,7 +190,6 @@ export default {
         })
         .catch(error => {
           this.$emit("error", error)
-          console.log(error);
         });
     },
 
@@ -208,14 +200,10 @@ export default {
       navigator.mediaDevices
         .getUserMedia(this.constraints)
         .then(stream => {
-          console.log(stream.getVideoTracks()[0].getSettings());
-          console.log(navigator.mediaDevices.getSupportedConstraints());
-
           this.loadSrcStream(stream)
         })
         .catch(error => {
           this.$emit("error", error)
-          console.log(error);
         });
 
     },

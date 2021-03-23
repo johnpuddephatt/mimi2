@@ -1,6 +1,6 @@
 <?php
 use Illuminate\Http\Request;
-
+use Inertia\Inertia;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,7 +24,7 @@ Route::get('/scheduler', function(){
 })->name('scheduler')->middleware('auth');
 
 Route::get('/', function(){
-  return view('home');
+  return Inertia::render('Home');
 })->name('home')->middleware('auth');
 
 Route::get('/courses', 'CourseController@index')->name('course.index')->middleware('auth');
@@ -61,7 +61,7 @@ Route::get('course/{course}/week/{week:number}', 'WeekController@show')->name('w
 Route::get('course/{course}/week/{week:number}/lesson/{lesson}', 'LessonController@show')->name('lesson.show')->middleware('auth','enrolled');
 
 Route::post('lesson/{lesson}/reply', 'ReplyController@store')->name('reply.create')->middleware('auth','enrolled');
-Route::delete('lesson/{lesson}/reply/{reply}/delete', 'ReplyController@delete')->name('reply.delete')->middleware('auth','owner');
+Route::delete('lesson/{lesson}/reply/{reply}/delete', 'ReplyController@destroy')->name('reply.delete')->middleware('auth','owner');
 
 Route::post('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}/reply/{reply}/comment', 'CommentController@store')->name('comment.create')->middleware('auth','enrolled');
 Route::get('lesson/{lesson}/reply/{reply}/comments', 'CommentController@index')->name('comment.index')->middleware('auth','enrolled');
@@ -69,6 +69,7 @@ Route::delete('course/{course}/week/{week:number}/lesson/{lesson}/section/{secti
 
 Route::get('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}', 'SectionController@show')->name('section.show')->middleware('auth','enrolled');
 Route::get('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}/reply/{reply}/{show_feedback?}', 'SectionController@show')->name('section.reply')->middleware('auth','enrolled');
+Route::get('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}/delete', 'SectionController@delete')->name('section.delete')->middleware('auth','enrolled');
 
 
 Route::get('admin/courses', 'CourseController@manage')->name('courses.manage')->middleware('admin');

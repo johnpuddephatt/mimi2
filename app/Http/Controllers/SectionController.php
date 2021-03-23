@@ -29,7 +29,6 @@ class SectionController extends Controller
 
     public function show(Request $request, Course $course, Week $week, Lesson $lesson, Section $section, Reply $reply = null) {
 
-
         return Inertia::render('Section/Show', [
           'course' => $course->only('id','title','archived'),
           'week' => $week->only('id','name','number'),
@@ -78,7 +77,11 @@ class SectionController extends Controller
       return Inertia::render('Admin/Section/Form', ['data' => $section ]);
     }
 
-    public function delete(Course $course, Lesson $lesson, Section $section) {
-      return $section->delete();
+    public function delete(Course $course, Week $week, Lesson $lesson, Section $section) {
+      $section->delete();
+      return Redirect::back();
+
     }
+
+
 }

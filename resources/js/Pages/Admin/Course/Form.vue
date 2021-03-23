@@ -19,8 +19,8 @@
 
       <div class="is-flex is-justify-content-space-between is-align-items-center mb-2">
         <h3 class="label">Lessons</h3>
-        <inertia-link v-if="$parameters.course" class="button is-primary" :href="route('week.create', {course: $parameters.course })">
-          Add new week</inertia-link>
+        <inertia-link v-if="$parameters.course" class="button is-primary is-small" :href="route('week.create', {course: $parameters.course })">
+          Add a new week</inertia-link>
       </div>
 
       <nav v-if="$parameters.course" class="mb-6">
@@ -35,12 +35,12 @@
 
             <template #trigger="props">
 
-              <div :class="props.open ? '' : 'is-radius'" class="is-size-6 p-1 pl-2 is-align-items-center is-flex" role="button">
+              <div :class="props.open ? 'has-background-success' : ''" class="is-radius is-size-6 p-2 pl-2 is-align-items-center is-flex" role="button">
                 <b-icon class="mr-2"
                           :icon="props.open ? 'menu-down' : 'menu-right'">
                       </b-icon>
-                <span class="tag is-white mr-2 has-text-weight-normal">{{ week.number }}</span>
-                <span class="text-overflow-ellipsis">{{ week.name }}</span>
+                <span class="text-overflow-ellipsis mr-2">{{ week.name }}</span>
+
                 <span class="is-size-7 ml-2 mr-2 has-text-weight-normal">
                   {{ week.lessons.length || 'No' }} lessons
                 </span>
@@ -74,9 +74,9 @@
               No lessons in this week. <inertia-link :href="route('lesson.create', {course: $parameters.course, week: week.number })">Add the first</inertia-link>.
             </div>
 
-            <div class="panel-block is-justify-between" v-for="lesson in week.lessons" :key="lesson.id">
-              <span class="text-overflow-ellipsis">{{ lesson.title }}</span>
-              <div class="is-size-7 ml-2">
+            <div class="panel-block pl-6 has-background-white-bis is-justify-between" v-for="lesson in week.lessons" :key="lesson.id">
+              <span class="text-overflow-ellipsis is-size-6">{{ lesson.title }}</span>
+              <div class="is-size-6 ml-2">
                 <inertia-link class="button has-text-grey is-small" :href="route('lesson.edit', { course: $parameters.course, week: week.number, lesson: lesson.id })">Edit</inertia-link>
                 <button class="button has-text-grey is-small" @click="confirmLessonDelete(week.number, lesson.id)">Delete</button>
               </div>
@@ -86,7 +86,7 @@
 
 
         <section v-if="!data.weeks" class="section is-medium has-background-light has-text-centered">
-          Start by <inertia-link :href="route('week.create', {course: $parameters.course })">adding a week</inertia-link>
+          Start by <inertia-link :href="route('week.create', {course: $parameters.course })">adding a week</inertia-link>. Once you’ve added a week, you can then add lessons to it.
         </section>
 
       </nav>

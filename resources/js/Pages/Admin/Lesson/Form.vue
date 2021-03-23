@@ -35,31 +35,29 @@
           </b-input>
         </b-field>
 
-        <h3 class="label">Sections</h3>
+        <h3 class="label is-flex is-justify-between">
+          <p>Sections</p>
+          <inertia-link class="button is-small is-primary ml-a has-text-weight-normal" :href="route('section.create', {course: $parameters.course, week: $parameters.week, lesson: data.id})">Add new section</inertia-link>
+        </h3>
         <nav v-if="$parameters.lesson" class="panel is-shadowless is-bordered">
 
           <draggable v-model="form.sections" @start="drag=true" @end="onMoveEnd">
             <div v-for="section in form.sections" :key="section.id" class="panel-block is-justify-between">
-              <p>
+              <p class="text-overflow-ellipsis">
                 <b-icon icon="drag" type="is-dark"></b-icon>
                 {{ section.title }}
+                <span v-if="section.is_chatroom" class="tag is-rounded">chatroom</span>
               </p>
-
-              <b-field>
-                <p class="control">
-                  <inertia-link class="button" :href="route('section.edit', {course: $parameters.course, week: $parameters.week, lesson: $parameters.lesson , section: section.id})">Edit</inertia-link>
-                </p>
-              </b-field>
+              <div>
+                <button class="button is-small ml-3" @click="confirmSectionDelete(section.id)">Delete</button>
+                <inertia-link class="button is-small ml-1" :href="route('section.edit', {course: $parameters.course, week: $parameters.week, lesson: $parameters.lesson , section: section.id})">Edit</inertia-link>
+              </div>
             </div>
           </draggable>
 
           <section v-if="!form.sections.length" class="section is-medium has-background-light has-text-centered">
             No sections added yet. <br><inertia-link :href="route('section.create', {course: $parameters.course, week: $parameters.week, lesson: data.id})">Create the first section</inertia-link>
           </section>
-
-          <div class="panel-block  is-paddingless">
-            <inertia-link class="button is-fullwidth" :href="route('section.create', {course: $parameters.course, week: $parameters.week, lesson: data.id})">Create new section</inertia-link>
-          </div>
         </nav>
         <div class="notification" v-else>
           You need to save this lesson before adding sections.
@@ -72,6 +70,7 @@
 </template>
 
 <script>
+import { Inertia } from '@inertiajs/inertia';
 import CameraField from "@/components/CameraField";
 import draggable from 'vuedraggable'
 
@@ -92,6 +91,7 @@ export default {
         day: this.data?.day ?? this.latest_lesson_number + 1,
         sections: this.data?.sections ?? []
       }),
+      destroySectionForm: this.$inertia.form(),
     }
   },
 
@@ -106,7 +106,6 @@ export default {
 
     onSubmit() {
       let postRoute = this.data ? route('lesson.update', { course: this.$parameters.course, week: this.$parameters.week, lesson: this.form.id }) : route('lesson.store', { course: this.$parameters.course, week: this.$parameters.week });
-
       this.form.transform((data) => ({
           ...data,
           course_id: this.$parameters.course,
@@ -121,7 +120,32 @@ export default {
             this.errorToast('Check the form for errors');
           },
         })
-    }
+    },
+
+    confirmSectionDelete(sectionId) {
+      this.$buefy.dialog.confirm({
+        title: 'Confirm section deletion',
+        type: 'is-danger',
+        hasIcon: true,
+        message: 'Are you sure you want to delete this section?',
+        onConfirm: () => this.destroySectionForm.delete(route('section.delete', {
+            section: sectionId,
+            lesson: this.$parameters.lesson,
+            week: this.$parameters.week,
+            course: this.$parameters.course
+          }), {
+            preserveScroll: true,
+            onSuccess: () => {
+              Inertia.reload();
+              this.form.sections = this.data.sections;
+              this.successToast('Section deleted');
+            },
+            onError: errors => {
+              this.errorToast('Could not delete section.');
+            },
+          })
+      })
+    },
   }
 }
 </script>

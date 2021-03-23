@@ -20,8 +20,8 @@
                 @else
                     <div class="navbar-item has-dropdown is-hoverable">
                         <a class="navbar-link" href="#">
-                          <figure class="image is-24x24 is-rounded mr-1">
-                            <img src="{{ Auth::user()->photo }}" class=""/>
+                          <figure class="image is-24x24 mr-1">
+                            <img src="{{ Auth::user()->photo }}" class="is-rounded"/>
                           </figure>
                           {{ Arr::random(['Ciao', 'Salve', 'Pronto']) }}, {{ Auth::user()->first_name }}!
                           @if(Auth::user()->is_admin)<span class="tag is-success">Admin</span>@endif
@@ -46,7 +46,7 @@
                             </a>
                           @endif
                             <a class="navbar-item" href="{{ route('scheduler') }}">
-                              Book a speaking club session
+                              Speaking club bookings
                             </a>
                             <a class="navbar-item" href="{{ route('billing.portal') }}">
                               Billing portal

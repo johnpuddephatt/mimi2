@@ -24,7 +24,7 @@ class ReplyController extends Controller
       $this->middleware('auth');
     }
 
-    public function delete(Lesson $lesson, Reply $reply) {
+    public function destroy(Lesson $lesson, Reply $reply) {
       $reply->delete();
     }
 
