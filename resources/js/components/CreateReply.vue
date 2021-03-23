@@ -28,8 +28,8 @@
         <div v-if="isSaved">
           <b-button @click.prevent="onModalEnd">Close</b-button>
         </div>
-        <div v-else-if="reply.progress">
-          <!-- {{ reply.progress.percentage }}% uploaded -->
+        <div v-else-if="uploadProgress">
+          <progress :value="uploadProgress" max="100"></progress>
           {{uploadProgress}}% uploaded
         </div>
       </section>
@@ -96,6 +96,7 @@ export default {
       this.isSaving = true;
       var noSleep = new NoSleep();
       noSleep.enable();
+      console.log(`${Math.floor(this.reply.video.size/1024)}kB video`);
       axios.post('/log', { 'error': `BEGINNING UPLOAD, ${ platform.description }, size: ${Math.floor(this.reply.video.size/1024)}kB, ` });
 
       const data = new FormData();
@@ -111,7 +112,6 @@ export default {
             'Content-Type': `multipart/form-data; boundary=${data._boundary}`
           },
           onUploadProgress: progressEvent => {
-            console.log((progressEvent.loaded * 100) / progressEvent.total);
             this.uploadProgress = (Math.round((progressEvent.loaded * 100) / progressEvent.total));
           },
           timeout: 600000 // 10 minutes, matches Nginx and PHP config

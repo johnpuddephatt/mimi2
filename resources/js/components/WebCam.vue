@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import adapter from 'webrtc-adapter';
+
 export default {
   name: "VueWebCam",
 
@@ -45,19 +47,14 @@ export default {
           deviceId: null,
           facingMode: "user",
           width: {
-            ideal: 480
-            // max: 800,
-            // min: 240
+            ideal: 480,
+            max: 480
           },
           height: {
             ideal: 480
-            // max: 800,
-            // min: 240
           },
           frameRate: {
-            // max: 30
             ideal: 16
-            // min: 10
           }
         }
       }
@@ -79,46 +76,11 @@ export default {
   },
 
   methods: {
-    /**
-     * get user media
-     */
-    legacyGetUserMediaSupport() {
-      return constraints => {
-        // First get ahold of the legacy getUserMedia, if present
-        let getUserMedia =
-          navigator.getUserMedia ||
-          navigator.webkitGetUserMedia ||
-          navigator.mozGetUserMedia ||
-          navigator.msGetUserMedia ||
-          navigator.oGetUserMedia;
-
-        // Some browsers just don't implement it - return a rejected promise with an error
-        // to keep a consistent interface
-        if (!getUserMedia) {
-          return Promise.reject(
-            this.$emit("error", {name: 'NoGetUserMedia'})
-          );
-        }
-
-        // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
-        return new Promise(function(resolve, reject) {
-          getUserMedia.call(navigator, constraints, resolve, reject);
-        });
-      };
-    },
 
     /**
      * setup media
      */
     setupMedia() {
-      if (navigator.mediaDevices === undefined) {
-        navigator.mediaDevices = {};
-      }
-
-      if (navigator.mediaDevices.getUserMedia === undefined) {
-        navigator.mediaDevices.getUserMedia = this.legacyGetUserMediaSupport();
-      }
-
       this.testMediaAccess();
     },
 
@@ -158,7 +120,10 @@ export default {
             this.camerasListEmitted = true;
           }
         })
-        .catch(error => this.$emit("error", error));
+        .catch(error => {
+          this.$emit("error", error)
+          console.log('error');
+        });
     },
 
     /**
@@ -175,14 +140,8 @@ export default {
      * load the stream to the
      */
     loadSrcStream(stream) {
-      if ("srcObject" in this.$refs.video) {
-        // new browsers api
-        this.$refs.video.srcObject = stream;
-      } else {
-        // old broswers
-        this.source = window.HTMLMediaElement.srcObject(stream);
-      }
-      // Emit video start/live event
+      this.$refs.video.srcObject = stream;
+
       this.$refs.video.onloadedmetadata = () => {
         this.$emit("video-live", stream);
       };
@@ -221,20 +180,6 @@ export default {
       }
     },
 
-    // // pause the video
-    // pause() {
-    //   if (this.$refs.video !== null && this.$refs.video.srcObject) {
-    //     this.$refs.video.pause();
-    //   }
-    // },
-    //
-    // // resume the video
-    // resume() {
-    //   if (this.$refs.video !== null && this.$refs.video.srcObject) {
-    //     this.$refs.video.play();
-    //   }
-    // },
-
     /**
      * test access
      */
@@ -250,7 +195,10 @@ export default {
           });
           this.loadCameras();
         })
-        .catch(error => this.$emit("error", error));
+        .catch(error => {
+          this.$emit("error", error)
+          console.log(error);
+        });
     },
 
     /**
@@ -259,8 +207,17 @@ export default {
     loadCamera() {
       navigator.mediaDevices
         .getUserMedia(this.constraints)
-        .then(stream => this.loadSrcStream(stream))
-        .catch(error => this.$emit("error", error));
+        .then(stream => {
+          console.log(stream.getVideoTracks()[0].getSettings());
+          console.log(navigator.mediaDevices.getSupportedConstraints());
+
+          this.loadSrcStream(stream)
+        })
+        .catch(error => {
+          this.$emit("error", error)
+          console.log(error);
+        });
+
     },
 
     /**
