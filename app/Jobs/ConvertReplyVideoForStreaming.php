@@ -44,7 +44,8 @@ class ConvertReplyVideoForStreaming implements ShouldQueue
         $hash = random_bytes(10);
 
         $thumbnail_path = Video::$thumbnail_directory . $this->video->id . '.jpg';
-        $playlist_path = Video::$video_directory . $this->video->id . '.m3u8';
+        $playlist_path = Video::$video_directory . $this->video->id . '/playlist.m3u8';
+        // $playlist_path = Video::$video_directory . $hash . '.m3u8';
 
         $lowBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(200)->setAdditionalParameters(
           ["-preset", "ultrafast"]
@@ -68,10 +69,6 @@ class ConvertReplyVideoForStreaming implements ShouldQueue
             $media->addFilter(function ($filters, $in, $out) {
               $filters->custom($in, "crop='min(iw,ih)':'min(iw,ih)',scale=480:480,fps=20", $out); // $in, $parameters, $out
             });
-          })
-          ->useSegmentFilenameGenerator(function ($name, $format, $key, callable $segments, callable $playlist) use ($hash) {
-              $segments("{$hash}-{$name}-{$format}-{$key}-%03d.ts");
-              $playlist("{$hash}-{$name}-{$format}-{$key}.m3u8");
           })
           ->save($playlist_path)
 
