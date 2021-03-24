@@ -116,6 +116,7 @@ export default {
   float: right;
   max-width: 16em;
   position: relative;
+  z-index: 9;
 }
 
 .lesson-button {
