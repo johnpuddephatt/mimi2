@@ -60,12 +60,12 @@ class ConvertSectionVideoForStreaming implements ShouldQueue
           ->toDisk('digitalocean')
           ->addFormat($lowBitrateFormat, function($media){
             $media->addFilter(function ($filters, $in, $out) {
-                $filters->custom($in, "scale=360:360,fps=20", $out); // $in, $parameters, $out
+                $filters->custom($in, "scale=640:360,fps=20", $out); // $in, $parameters, $out
             });
           })
           ->addFormat($highBitrateFormat, function($media){
             $media->addFilter(function ($filters, $in, $out) {
-              $filters->custom($in, "scale=640:640,fps=20", $out); // $in, $parameters, $out
+              $filters->custom($in, "scale=1280:720,fps=20", $out); // $in, $parameters, $out
             });
           })
           ->save($this->playlist_path);

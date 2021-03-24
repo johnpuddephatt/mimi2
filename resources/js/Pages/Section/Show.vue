@@ -115,6 +115,7 @@ export default {
   margin-bottom: 3em;
   float: right;
   max-width: 16em;
+  position: relative;
 }
 
 .lesson-button {
