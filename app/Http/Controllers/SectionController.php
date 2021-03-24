@@ -49,7 +49,8 @@ class SectionController extends Controller
           'title' => $request->title,
           'content' => $request->content,
           'is_chatroom' => $request->is_chatroom,
-          'lesson_id' => $lesson->id
+          'lesson_id' => $lesson->id,
+          'order' => $lesson->sections ? ($lesson->sections->sortByDesc('order')->first()->order + 1) : 0
       ]);
 
       return Redirect::route('section.edit', [
