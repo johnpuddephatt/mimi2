@@ -68,16 +68,17 @@
     position: relative;
     text-decoration: underline;
     transition: text-decoration 0.5s;
-    text-decoration-color: transparentize($success, 0.5);
-    text-decoration-thickness: 0.4em;
+    background-color: transparentize($success, 0.8);
+    text-decoration-thickness: 0.3em;
 
     &[data-translation] {
       cursor: default;
+      text-decoration-color: transparentize($success, 0.3);
       transition: background-color 0.5s;
 
       &:hover {
         text-decoration-color: transparent;
-        background-color: transparentize($success, 0.2);
+        background-color: transparentize($success, 0.3);
       }
 
       &::after {
