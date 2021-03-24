@@ -13,7 +13,7 @@
     <div class="section-controls is-fixed-bottom py-3 has-background-white">
       <div class="container fields is-flex is-justify-content-flex-end is-align-content-center">
         <b-checkbox @input="isDirty = true" v-model="form.is_chatroom">Enable chatroom?</b-checkbox>
-        <b-button label="Save" type="is-primary" :loading="form.processing" :disabled="!form.title || !isDirty" class="ml-2" @click.prevent="onSubmit" />
+        <b-button label="Save" type="is-primary is-medium" :loading="form.processing" :disabled="!form.title || !isDirty" class="ml-2" @click.prevent="onSubmit" />
       </div>
     </div>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="video-player--wrapper">
-    <div class="has-square-media">
+    <div :class="ratio ? `has-${ ratio }-media` : 'has-square-media'">
     <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
     <video class="video-js vjs-big-play-centered" controls :preload="autoplay? 'auto' : 'none'" width="640" height="264" :autoplay="autoplay" :poster="poster" playsinline ref="player">
       <source :src="source" :type="type" />
@@ -16,7 +16,7 @@
 import videojs from "video.js";
 
 export default {
-  props: ['source', 'type', 'poster', 'should_autoplay'],
+  props: ['ratio', 'source', 'type', 'poster', 'should_autoplay'],
   data() {
     return {
       isLoading: true,

@@ -1,15 +1,21 @@
 .has-square-media {
-   width: 100% !important;
-   padding-top: 100%;
-   position: relative;
-   overflow: hidden;
-   + .has-square-media {
-      margin: 2em 0;
-   }
+  width: 100% !important;
+  padding-top: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.has-widescreen-media {
+  width: 100% !important;
+  padding-top: 56.25%;
+  position: relative;
+  overflow: hidden;
 }
 
 .has-square-media video,
-.has-square-media img {
+.has-square-media img,
+.has-widescreen-media video,
+.has-widescreen-media img {
    position: absolute;
    margin: 0;
    top: 0;
@@ -22,6 +28,7 @@
    object-fit: cover
 }
 
+.has-widescreen-media div.video-js,
 .has-square-media div.video-js {
    position: static !important;
    height: auto !important;
