@@ -46,8 +46,8 @@ class ConvertSectionVideoForStreaming implements ShouldQueue
         $hash = random_bytes(10);
 
         $lowBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(400);
-        $mediumBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(1500);
-        $highBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(2500);
+        $mediumBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(800);
+        $highBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(1500);
 
         FFMpeg::fromDisk('local')
           ->open($this->temporary_video_path)
@@ -60,7 +60,7 @@ class ConvertSectionVideoForStreaming implements ShouldQueue
           })
           ->addFormat($mediumBitrateFormat, function($media){
             $media->addFilter(function ($filters, $in, $out) {
-                $filters->custom($in, "scale=960:540,fps=20", $out); // $in, $parameters, $out
+                $filters->custom($in, "scale=1280:720,fps=20", $out); // $in, $parameters, $out
             });
           })
           ->addFormat($highBitrateFormat, function($media){
