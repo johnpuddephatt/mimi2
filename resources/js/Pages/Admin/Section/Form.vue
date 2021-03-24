@@ -4,8 +4,8 @@
     <a class="back-link has-text-dark" @click="confirmClose">&larr; Back to lesson</a>
 
     <div class="box p-5">
-      <div class="mt-6 mb-5 is-flex is-align-items-center" style="max-width: 650px; margin-left: auto; margin-right: auto;">
-        <input @input="isDirty = true" type="text" v-model="form.title" class="p-0 f-0 is-size-2 has-text-weight-semibold is-borderless modal-card-title" placeholder="Enter section title...">
+      <div class="mt-6 mb-5 is-flex is-align-items-center" style="max-width: 700px; margin-left: auto; margin-right: auto;">
+        <b-input type="textarea" @input="isDirty = true" type="text" v-model="form.title" class="p-0 f-0 is-size-2 has-text-weight-semibold is-borderless modal-card-title" placeholder="Enter section title..." style="resize: none;"/>
       </div>
       <div class="mt-6 mb-0" id="editorjs" spellcheck="false"></div>
     </div>

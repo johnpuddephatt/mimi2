@@ -68,7 +68,8 @@
     position: relative;
     text-decoration: underline;
     transition: text-decoration 0.5s;
-    background-color: transparentize($success, 0.8);
+    text-decoration-skip: none;
+    background-color: transparentize($success, 0.9);
     text-decoration-thickness: 0.3em;
 
     &[data-translation] {
