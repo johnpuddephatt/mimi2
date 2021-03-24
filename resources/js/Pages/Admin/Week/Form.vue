@@ -25,8 +25,7 @@
         </b-field>
 
         <b-field label="Overview" :message="errors.description" :type="errors.description ? 'is-danger' : null">
-          <b-input v-model="form.description" name="description" type="textarea" maxlength="120" rows="3" placeholder="Provide an overview of this week">
-          </b-input>
+          <tip-tap v-model="form.description"/>
         </b-field>
 
 
@@ -38,9 +37,13 @@
 </template>
 
 <script>
+import TipTap from '@/components/TipTap';
+
 export default {
+
   props: ['errors', 'data', '$parameters'],
   components: {
+    TipTap
   },
   data() {
     return {

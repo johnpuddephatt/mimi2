@@ -6,7 +6,7 @@
       <p class="subtitle has-text-centered">There’s not much here at the moment.</p>
 
       <p>This is the homepage but there’s nothing to see here.</p>
-      <a class="button" href="{{ route('courses.manage') }}">
+      <a class="button" :href="route('courses.manage')">
         Manage Courses
       </a>
     </div>

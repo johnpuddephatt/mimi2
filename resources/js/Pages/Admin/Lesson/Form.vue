@@ -31,8 +31,7 @@
         </b-field>
 
         <b-field label="Instructions" :message="errors.instructions" :type="errors.instructions ? 'is-danger' : null">
-          <b-input v-model="form.instructions" name="instructions" type="textarea" rows="5" placeholder="Give instructions for this lesson">
-          </b-input>
+          <tip-tap v-model="form.instructions" />
         </b-field>
 
         <h3 class="label is-flex is-justify-between">
@@ -73,11 +72,13 @@
 import { Inertia } from '@inertiajs/inertia';
 import CameraField from "@/components/CameraField";
 import draggable from 'vuedraggable'
+import TipTap from '@/components/TipTap';
 
 export default {
   props: ['errors', 'data', 'latest_lesson_number', '$parameters'],
   components: {
      CameraField,
+     TipTap,
      draggable
   },
   data() {

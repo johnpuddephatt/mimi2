@@ -13,8 +13,7 @@
       </b-field>
 
       <b-field label="Description" :message="errors.description" :type="errors.description ? 'is-danger' : null">
-        <b-input v-model="form.description" name="description" type="textarea" rows="6" placeholder="Give a description of this course">
-        </b-input>
+        <tip-tap v-model="form.description"/>
       </b-field>
 
       <div class="is-flex is-justify-content-space-between is-align-items-center mb-2">
@@ -83,8 +82,6 @@
             </div>
         </b-collapse>
 
-
-
         <section v-if="!data.weeks" class="section is-medium has-background-light has-text-centered">
           Start by <inertia-link :href="route('week.create', {course: $parameters.course })">adding a week</inertia-link>. Once you’ve added a week, you can then add lessons to it.
         </section>
@@ -105,9 +102,13 @@
 </template>
 
 <script>
+import TipTap from '@/components/TipTap';
+
 export default {
   props: ['errors', 'data', '$parameters'],
-  components: {},
+  components: {
+    TipTap
+  },
   data() {
     return {
       form: this.$inertia.form({

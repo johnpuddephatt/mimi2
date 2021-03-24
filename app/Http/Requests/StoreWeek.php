@@ -32,8 +32,7 @@ class StoreWeek extends FormRequest
         'description' => 'nullable',
         'number' => Rule::unique('weeks')->ignore($week ? $week->id : null)->where(function ($query) use ($course_id) {
           return $query->where('course_id', $course_id);
-        }),
-        'is_chatroom' => 'boolean'
+        })
       ];
     }
 }
