@@ -11,7 +11,7 @@
         "development": "npm run clear-manifest && cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
-        "@editorjs/editorjs": "^2.19.1",
+        "@editorjs/editorjs": "^2.19.3",
         "@editorjs/header": "^2.6.1",
         "@editorjs/image": "^2.6.0",
         "@editorjs/list": "^1.6.1",

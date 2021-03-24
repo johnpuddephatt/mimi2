@@ -18,14 +18,14 @@
 
       <div v-if="section.order == 1">
         <h3 class="has-text-weight-bold is-size-4">Instructions</h3>
-        {{ lesson.instructions }}
+        <div v-html="lesson.instructions"></div>
       </div>
 
       <div class="container content" :class="{'clear-both': section.order == 1 && lesson.instructions.length }">
 
         <div :is="dynamicComponent"></div>
 
-        <div v-if="wordList.length">
+        <!-- <div v-if="wordList.length">
           <div class="editor-js-block editor-js-block__paired-heading">
             <h2>Impare le parole 🔎</h2>
             <h3>Learn the words</h3>
@@ -33,7 +33,7 @@
           <ul>
             <li v-for="word in wordList"><strong>{{word.word}}:</strong> {{ word.translation}}</li>
           </ul>
-        </div>
+        </div> -->
 
       </div>
 
@@ -76,19 +76,19 @@ export default {
       }
     },
 
-    wordList() {
-      var temp = document.createElement('template');
-      temp.innerHTML = this.blocks_prerendered;
-      let domWords = temp.content.querySelectorAll('mark[data-translation]');
-      let arrayWords = [];
-      domWords.forEach(node => {
-        arrayWords.push({
-          'word': node.innerHTML,
-          'translation': node.dataset.translation
-        });
-      })
-      return arrayWords;
-    },
+    // wordList() {
+    //   var temp = document.createElement('template');
+    //   temp.innerHTML = this.blocks_prerendered;
+    //   let domWords = temp.content.querySelectorAll('mark[data-translation]');
+    //   let arrayWords = [];
+    //   domWords.forEach(node => {
+    //     arrayWords.push({
+    //       'word': node.innerHTML,
+    //       'translation': node.dataset.translation
+    //     });
+    //   })
+    //   return arrayWords;
+    // },
 
     currentSectionIndex() {
       return this.lesson.sections.map((section) => { return section.id }).indexOf(this.section.id);

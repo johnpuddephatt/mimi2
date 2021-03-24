@@ -17,6 +17,15 @@
     }
   }
 
+  .editor-js-image {
+    figcaption {
+      font-style: italic;
+      text-align: center;
+      margin-top: 0.5em;
+      font-size: $size-6;
+    }
+  }
+
   .editor-js-audio {
     width: 100%;
     max-width: 480px;
@@ -33,7 +42,7 @@
       font-style: italic;
       text-align: center;
       margin-top: 0.5em;
-      font-size: $size-7;
+      font-size: $size-6;
     }
   }
 
