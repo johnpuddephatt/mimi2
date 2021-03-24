@@ -1,30 +1,34 @@
 <template>
 <div>
-  <b-button label="Course navigator" type="is-primary" @click="isOpen = !isOpen" :icon-right="isOpen ? 'menu-up' : 'menu-down'" />
-  <div v-if="isOpen" aria-role="menu" class="menu course-navigator-menu has-background-light has-box-shadow p-4 pt-6">
-    <div v-if="isLoaded">
-      <h3 class="title is-5">{{ course.title }}</h3>
-      <input v-model="search" @click.stop class="input" type="text" placeholder="Search...">
-      <div v-for="week in filteredData" :key="week.id">
-        <p class="has-text-weight-bold is-size-6 mt-4 mb-2">
-          {{ week.name}}
-        </p>
-        <ul class="menu-list">
-          <li v-for="lesson in week.lessons" :key="lesson.id" :class="{'is-current' : (lesson.id == $parameters.lesson) }">
-            <a class="menu-heading" @click="open = lesson.id" >{{ lesson.title }}</a>
+  <b-button label="Course navigator" size="is-medium" type="is-primary" @click="isOpen = !isOpen" :icon-right="isOpen ? 'menu-up' : 'menu-down'" />
+  <transition name="fade">
+    <div v-if="isOpen" class="course-navigator-menu--mask">
+      <div aria-role="menu" class="menu course-navigator-menu has-background-light has-box-shadow p-4 pt-6">
+        <div v-if="isLoaded">
+          <h3 class="title is-5">{{ course.title }}</h3>
+          <input v-model="search" @click.stop class="input" type="text" placeholder="Search...">
+          <div v-for="week in filteredData" :key="week.id">
+            <p class="has-text-weight-bold is-size-6 mt-4 mb-2">
+              {{ week.name}}
+            </p>
+            <ul class="menu-list">
+              <li v-for="lesson in week.lessons" :key="lesson.id" :class="{'is-current' : (lesson.id == $parameters.lesson) }">
+                <a class="menu-heading" @click="open = lesson.id" >{{ lesson.title }}</a>
 
-            <ul v-if="(lesson.id == open) || (lesson.id == $parameters.lesson) || search">
-              <li v-for="section in lesson.sections">
-                <inertia-link :class="{'is-active' : (lesson.id == $parameters.lesson && section.id == $parameters.section) }" :href="route('section.show', {course: course.id, week: week.number, lesson: lesson.id, section: section.id })">{{ section.title }}</inertia-link>
+                <ul v-if="(lesson.id == open) || (lesson.id == $parameters.lesson) || search">
+                  <li v-for="section in lesson.sections">
+                    <inertia-link :class="{'is-active' : (lesson.id == $parameters.lesson && section.id == $parameters.section) }" :href="route('section.show', {course: course.id, week: week.number, lesson: lesson.id, section: section.id })">{{ section.title }}</inertia-link>
+                  </li>
+                  <li v-if="!lesson.sections.length" class="notification is-size-7">No sections in this lesson</li>
+                </ul>
               </li>
-              <li v-if="!lesson.sections.length" class="notification is-size-7">No sections in this lesson</li>
             </ul>
-          </li>
-        </ul>
+          </div>
+        </div>
+        <b-loading v-else />
       </div>
     </div>
-    <b-loading v-else />
-  </div>
+  </transition>
 </div>
 </template>
 
@@ -107,6 +111,16 @@ export default {
 
 <style lang="scss">
 @import "../../sass/variables";
+
+.course-navigator-menu--mask {
+  z-index: 998;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0,0,0,150);
+}
 
 .course-navigator-menu {
   position: fixed;

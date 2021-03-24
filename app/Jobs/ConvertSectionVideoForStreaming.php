@@ -45,22 +45,22 @@ class ConvertSectionVideoForStreaming implements ShouldQueue
     {
         $hash = random_bytes(10);
 
-        $lowBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(200)->setAdditionalParameters(
-          ["-preset", "ultrafast"]
-        );
-
-        $highBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(1000)->setAdditionalParameters(
-          ["-preset", "medium"]
-        );
+        $lowBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(400);
+        $mediumBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(1500);
+        $highBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(2500);
 
         FFMpeg::fromDisk('local')
           ->open($this->temporary_video_path)
-          // ->addLegacyFilter('-vf', "crop='min(iw,ih)':'min(iw,ih)',scale=480:480")
           ->exportForHLS()
           ->toDisk('digitalocean')
           ->addFormat($lowBitrateFormat, function($media){
             $media->addFilter(function ($filters, $in, $out) {
                 $filters->custom($in, "scale=640:360,fps=20", $out); // $in, $parameters, $out
+            });
+          })
+          ->addFormat($mediumBitrateFormat, function($media){
+            $media->addFilter(function ($filters, $in, $out) {
+                $filters->custom($in, "scale=960:540,fps=20", $out); // $in, $parameters, $out
             });
           })
           ->addFormat($highBitrateFormat, function($media){
@@ -69,7 +69,6 @@ class ConvertSectionVideoForStreaming implements ShouldQueue
             });
           })
           ->save($this->playlist_path);
-
          // Storage::disk('local')->delete($this->temporary_video_path);
          // FFMpeg::cleanupTemporaryFiles();
     }
