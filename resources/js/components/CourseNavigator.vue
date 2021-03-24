@@ -2,8 +2,8 @@
 <div>
   <b-button label="Course navigator" size="is-medium" type="is-primary" @click="isOpen = !isOpen" :icon-right="isOpen ? 'menu-up' : 'menu-down'" />
   <transition name="fade">
-    <div v-if="isOpen" class="course-navigator-menu--mask">
-      <div aria-role="menu" class="menu course-navigator-menu has-background-light has-box-shadow p-4 pt-6">
+    <div @click="isOpen = false" v-if="isOpen" class="course-navigator-menu--mask">
+      <div @click.stop aria-role="menu" class="menu course-navigator-menu has-background-light has-box-shadow p-4 pt-6">
         <div v-if="isLoaded">
           <h3 class="title is-5">{{ course.title }}</h3>
           <input v-model="search" @click.stop class="input" type="text" placeholder="Search...">
