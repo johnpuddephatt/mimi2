@@ -9,7 +9,7 @@
     </div>
     <div class="box p-6">
 
-      <h3 class="title is-1 mb-6">{{ section.title }}</h3>
+      <h3 class="title is-2 has-text-weight-bold mt-4 mb-6">{{ section.title }}</h3>
 
       <div v-if="lesson.sections.length > 1" class="sections-box box p-4">
         <h3 class="has-text-weight-bold is-size-4 mt-0">Today’s lesson 🧑‍🏫</h3>

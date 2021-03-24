@@ -5,7 +5,7 @@
 
     <div class="box p-5">
       <div class="mt-6 mb-5 is-flex is-align-items-center" style="max-width: 650px; margin-left: auto; margin-right: auto;">
-        <b-input type="textarea" rows="2" @input="isDirty = true" v-model="form.title" custom-class="p-0 f-0 is-size-2 has-text-weight-semibold is-borderless modal-card-title" style="width: 100%;" placeholder="Enter section title..."/>
+        <b-input type="textarea" rows="2" @input="isDirty = true" v-model="form.title" custom-class="no-resize p-0 f-0 is-size-2 has-text-weight-semibold is-borderless modal-card-title" style="width: 100%;" placeholder="Enter section title..."/>
       </div>
       <div class="mt-6 mb-0" id="editorjs" spellcheck="false"></div>
     </div>
@@ -253,7 +253,8 @@ export default {
     }
 }
 
-textarea {
-  resize: none;
+.no-resize {
+  resize: none !important;
+  overflow: visible;
 }
 </style>
