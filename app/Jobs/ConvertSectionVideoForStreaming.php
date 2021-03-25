@@ -47,7 +47,7 @@ class ConvertSectionVideoForStreaming implements ShouldQueue
 
         $lowBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(400);
         $mediumBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(800);
-        $highBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(1500);
+        $highBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(1200);
 
         FFMpeg::fromDisk('local')
           ->open($this->temporary_video_path)
