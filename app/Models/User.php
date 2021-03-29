@@ -8,12 +8,14 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Cashier\Billable;
 use Illuminate\Support\Facades\Storage;
+use App\Traits\SubscriptionsSync;
 
 class User extends Authenticatable
 {
     use Billable;
     use Notifiable;
     use HasFactory;
+    use SubscriptionsSync;
 
     public static $photo_directory = "users/thumbnail/";
 

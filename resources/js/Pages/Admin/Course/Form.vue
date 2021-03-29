@@ -8,91 +8,99 @@
       <b-notification v-if="errors.course" type="is-danger" has-icon role="alert" :closable="false" :message="errors.course[0]">
       </b-notification>
 
-      <b-field label="Title" :message="errors.title" :type="errors.title ? 'is-danger' : null">
-        <b-input required name="title" v-model="form.title" placeholder="Enter the title for this course"></b-input>
-      </b-field>
+      <b-tabs>
+        <b-tab-item label="Overview">
 
-      <b-field label="Description" :message="errors.description" :type="errors.description ? 'is-danger' : null">
-        <tip-tap v-model="form.description"/>
-      </b-field>
+          <b-field label="Title" :message="errors.title" :type="errors.title ? 'is-danger' : null">
+            <b-input required name="title" v-model="form.title" placeholder="Enter the title for this course"></b-input>
+          </b-field>
 
-      <div class="is-flex is-justify-content-space-between is-align-items-center mb-2">
-        <h3 class="label">Lessons</h3>
-        <inertia-link v-if="$parameters.course" class="button is-primary is-small" :href="route('week.create', {course: $parameters.course })">
-          Add a new week</inertia-link>
-      </div>
+          <b-field label="Description" :message="errors.description" :type="errors.description ? 'is-danger' : null">
+            <tip-tap v-model="form.description"/>
+          </b-field>
 
-      <nav v-if="$parameters.course" class="mb-6">
+          <b-checkbox v-if="data" v-model="form.archived">Archive this course?</b-checkbox>
 
-        <b-collapse
-            class="collapse"
-            animation="slide"
-            v-for="(week, index) of data.weeks"
-            :key="index"
-            :open="isOpen == index"
-            @open="isOpen = index">
+        </b-tab-item>
 
-            <template #trigger="props">
+        <b-tab-item label="Lessons">
+          <div class="is-flex is-justify-content-space-between is-align-items-center mb-2">
+            <h3 class="label">Lessons</h3>
+            <inertia-link v-if="$parameters.course" class="button is-primary is-small" :href="route('week.create', {course: $parameters.course })">
+              Add a new week</inertia-link>
+          </div>
 
-              <div :class="props.open ? 'has-background-success' : ''" class="is-radius is-size-6 p-2 pl-2 is-align-items-center is-flex" role="button">
-                <b-icon class="mr-2"
-                          :icon="props.open ? 'menu-down' : 'menu-right'">
-                      </b-icon>
-                <span class="text-overflow-ellipsis mr-2">{{ week.name }}</span>
+          <nav v-if="$parameters.course" class="mb-6">
 
-                <span class="is-size-7 ml-2 mr-2 has-text-weight-normal">
-                  {{ week.lessons.length || 'No' }} lessons
-                </span>
+            <b-collapse
+                class="collapse"
+                animation="slide"
+                v-for="(week, index) of data.weeks"
+                :key="index"
+                :open="isOpen == index"
+                @open="isOpen = index">
 
-                <div class="ml-a has-text-weight-normal">
-                  <inertia-link @click.stop class="button is-small is-link is-outlined" :href="route('lesson.create', {course: $parameters.course, week: week.number })">Add lesson</inertia-link>
-                  <b-dropdown
-                      position="is-bottom-left"
-                      append-to-body
+                <template #trigger="props">
 
-                      aria-role="menu"
-                      @click.native.stop>
-                      <template #trigger>
-                          <b-button class="is-small">
-                            <b-icon icon="cog" size="is-small"></b-icon>
-                          </b-button>
-                      </template>
+                  <div :class="props.open ? 'has-background-success' : ''" class="is-radius is-size-6 p-2 pl-2 is-align-items-center is-flex" role="button">
+                    <b-icon class="mr-2"
+                              :icon="props.open ? 'menu-down' : 'menu-right'">
+                          </b-icon>
+                    <span class="text-overflow-ellipsis mr-2">{{ week.name }}</span>
 
-                      <b-dropdown-item has-link aria-role="menuitem">
-                        <inertia-link @click.stop :href="route('week.edit', {course: $parameters.course, week: week.number})">Edit</inertia-link>
-                      </b-dropdown-item>
-                      <b-dropdown-item has-link aria-role="menuitem">
-                        <a href="#" role="button" @click.stop="confirmWeekDelete(week.number)">Delete</a>
-                      </b-dropdown-item>
-                  </b-dropdown>
+                    <span class="is-size-7 ml-2 mr-2 has-text-weight-normal">
+                      {{ week.lessons.length || 'No' }} lessons
+                    </span>
+
+                    <div class="ml-a has-text-weight-normal">
+                      <inertia-link @click.stop class="button is-small is-link is-outlined" :href="route('lesson.create', {course: $parameters.course, week: week.number })">Add lesson</inertia-link>
+                      <b-dropdown
+                          position="is-bottom-left"
+                          append-to-body
+
+                          aria-role="menu"
+                          @click.native.stop>
+                          <template #trigger>
+                              <b-button class="is-small">
+                                <b-icon icon="cog" size="is-small"></b-icon>
+                              </b-button>
+                          </template>
+
+                          <b-dropdown-item has-link aria-role="menuitem">
+                            <inertia-link @click.stop :href="route('week.edit', {course: $parameters.course, week: week.number})">Edit</inertia-link>
+                          </b-dropdown-item>
+                          <b-dropdown-item has-link aria-role="menuitem">
+                            <a href="#" role="button" @click.stop="confirmWeekDelete(week.number)">Delete</a>
+                          </b-dropdown-item>
+                      </b-dropdown>
+                    </div>
+                  </div>
+                </template>
+
+                <div class="notification has-background-white mb-0 is-size-7 has-text-centered" v-if="!week.lessons.length">
+                  No lessons in this week. <inertia-link :href="route('lesson.create', {course: $parameters.course, week: week.number })">Add the first</inertia-link>.
                 </div>
-              </div>
-            </template>
 
-            <div class="notification has-background-white mb-0 is-size-7 has-text-centered" v-if="!week.lessons.length">
-              No lessons in this week. <inertia-link :href="route('lesson.create', {course: $parameters.course, week: week.number })">Add the first</inertia-link>.
-            </div>
+                <div class="panel-block pl-6 has-background-white-bis is-justify-between" v-for="lesson in week.lessons" :key="lesson.id">
+                  <span class="text-overflow-ellipsis is-size-6">{{ lesson.title }}</span>
+                  <div class="is-size-6 ml-2">
+                    <inertia-link class="button has-text-grey is-small" :href="route('lesson.edit', { course: $parameters.course, week: week.number, lesson: lesson.id })">Edit</inertia-link>
+                    <button class="button has-text-grey is-small" @click="confirmLessonDelete(week.number, lesson.id)">Delete</button>
+                  </div>
+                </div>
+            </b-collapse>
 
-            <div class="panel-block pl-6 has-background-white-bis is-justify-between" v-for="lesson in week.lessons" :key="lesson.id">
-              <span class="text-overflow-ellipsis is-size-6">{{ lesson.title }}</span>
-              <div class="is-size-6 ml-2">
-                <inertia-link class="button has-text-grey is-small" :href="route('lesson.edit', { course: $parameters.course, week: week.number, lesson: lesson.id })">Edit</inertia-link>
-                <button class="button has-text-grey is-small" @click="confirmLessonDelete(week.number, lesson.id)">Delete</button>
-              </div>
-            </div>
-        </b-collapse>
+            <section v-if="!data.weeks" class="section is-medium has-background-light has-text-centered">
+              Start by <inertia-link :href="route('week.create', {course: $parameters.course })">adding a week</inertia-link>. Once you’ve added a week, you can then add lessons to it.
+            </section>
 
-        <section v-if="!data.weeks" class="section is-medium has-background-light has-text-centered">
-          Start by <inertia-link :href="route('week.create', {course: $parameters.course })">adding a week</inertia-link>. Once you’ve added a week, you can then add lessons to it.
-        </section>
+          </nav>
 
-      </nav>
-
-      <div class="notification is-size-7" v-else>
-        Save this course before adding lessons.
-      </div>
-
-      <b-checkbox v-if="data" v-model="form.archived">Archive this course?</b-checkbox>
+          <div class="notification is-size-7" v-else>
+            Save this course before adding lessons.
+          </div>
+        </b-tab-item>
+      </b-tabs>
 
       <hr>
       <b-button type="is-primary" :disabled="!form.title" @click.prevent="onSubmit" :loading="form.processing" expanded>{{ data ? 'Update' : 'Create' }}</b-button>

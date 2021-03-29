@@ -42,10 +42,12 @@
     "dependencies": {
         "@babel/plugin-syntax-dynamic-import": "^7.8.3",
         "@editorjs/attaches": "^1.0.1",
+        "@editorjs/paragraph": "^2.8.0",
         "@inertiajs/inertia": "^0.8.5",
         "@inertiajs/inertia-vue": "^0.5.5",
         "@inertiajs/progress": "^0.2.4",
         "@mdi/font": "^5.7.55",
+        "@vue-stripe/vue-stripe": "^4.1.8",
         "buefy": "^0.9.4",
         "chart.js": "^2.9.4",
         "dayjs": "^1.9.6",

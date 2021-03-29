@@ -2,7 +2,7 @@
   {!! ($data['style'] == 'unordered') ? '<ul>' : '<ol>' !!}
     @foreach($data['items'] as $item)
     <li>
-      {{ $item }}
+      {!! $item !!}
     </li>
     @endforeach
   {!! ($data['style'] == 'unordered') ? '</ul>' : '</ol>' !!}

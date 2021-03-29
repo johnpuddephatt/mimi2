@@ -10,14 +10,12 @@ return [
       'text' => [
         'type' => 'string',
         'required' => true,
-        'allowedTags' => 'b,i,a[href]',
+        'allowedTags' => 'strong,b,i,a[href]',
       ],
       'level' => [
         'type' => 'int',
         'canBeOnly' => [
-          0 => 2,
-          1 => 3,
-          2 => 4,
+          0 => 4,
         ],
       ],
     ],
@@ -49,7 +47,7 @@ return [
         'data' => [
           '-' => [
             'type' => 'string',
-            'allowedTags' => 'i,b,u',
+            'allowedTags' => 'strong,i,b,u',
           ],
         ],
       ],

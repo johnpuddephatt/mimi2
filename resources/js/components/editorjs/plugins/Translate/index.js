@@ -115,7 +115,8 @@ export default class MarkerTool {
 
   static get sanitize() {
         return {
-            mark: true
+            mark: true,
+            strong: {}
         };
   }
 }

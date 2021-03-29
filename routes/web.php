@@ -27,15 +27,19 @@ Route::get('/', function(){
   return Inertia::render('Home');
 })->name('home')->middleware('auth');
 
-Route::get('/courses', 'CourseController@index')->name('course.index')->middleware('auth');
 
-Route::get('billing/start', 'BillingController@start')->name('billing.start')->middleware('auth');
-Route::get('billing/single', 'BillingController@single')->name('billing.single')->middleware('auth');
-Route::post('billing/subscription/{stripe_price_code}', 'BillingController@createUserSubscription')->name('billing.create-user-subscription')->middleware('auth');
-Route::get('billing/subscription/add-payment-method/{stripe_price_code}/', 'BillingController@addSubscriptionPaymentMethod')->name('billing.add-subscription-payment-method')->middleware('auth');
-Route::get('billing/single/add-payment-method/{stripe_price_code}/', 'BillingController@addSinglePaymentMethod')->name('billing.add-single-payment-method')->middleware('auth');
-Route::post('billing/single/create/{stripe_price_code}', 'BillingController@createUserPayment')->name('billing.create-user-payment')->middleware('auth');
+
+Route::get('billing', 'BillingController@listProducts')->name('billing.list-products');
+Route::get('billing/{payment_type}/{stripe_price_code}', 'BillingController@paymentForm')->name('billing.payment-form');
+Route::post('billing/{payment_type}/{stripe_price_code}/user/create', 'BillingController@createUser')->name('billing.create-user');
+Route::post('billing/{payment_type}/{stripe_price_code}/user/{user_hash}', 'BillingController@processPayment')->name('billing.process-payment');
+
+// Route::get('billing/single/add-payment-method/{stripe_price_code}/', 'BillingController@addSinglePaymentMethod')->name('billing.add-single-payment-method');
+// Route::post('billing/single/create/{stripe_price_code}', 'BillingController@createUserPayment')->name('billing.create-user-payment');
+
 Route::get('billing/portal', 'BillingController@billingPortal')->name('billing.portal')->middleware('auth');
+
+
 
 Route::get('stats', 'StatController@index')->name('stats');
 Route::get('stats/teacher-monthly/{from}/{to}', 'StatController@teacherMonthly')->name('stats.teacherMonthly')->middleware('admin');
@@ -46,6 +50,8 @@ Route::get('stats/replies-monthly/{from}/{to}', 'StatController@repliesMonthly')
 Route::get('section/{section}', 'SectionController@single')->name('section.single')->middleware('auth');
 
 Route::get('users', 'UserController@index')->name('users.index')->middleware('admin');
+
+Route::get('courses', 'CourseController@index')->name('course.index')->middleware('auth');
 
 Route::get('course/{course}/enroll', 'CourseController@enrollCurrentUser')->name('course.enrollCurrentUser');
 Route::post('course/{course}/enroll', 'CourseController@enroll')->name('course.enroll')->middleware('admin');

@@ -23,7 +23,10 @@
 
 <script>
 import EditorJS from '@editorjs/editorjs';
+
+// import Paragraph from '@editorjs/paragraph';
 import List from '@editorjs/list';
+import Header from '@editorjs/header';
 // import Table from '@editorjs/table';
 import Table from 'editorjs-table';
 import Warning from '@editorjs/warning';
@@ -161,9 +164,19 @@ export default {
     toolConfig() {
       return {
         markerTool: MarkerTool,
-
         pairedHeading: PairedHeading,
-        list: List,
+        header: {
+          class: Header,
+          config: {
+            placeholder: 'Enter a heading title',
+            levels: [4],
+            defaultLevel: 4
+          }
+        },
+        list: {
+          class: List,
+          inlineToolbar: true,
+        },
         audio: {
           class: AudioTool,
           config: {

@@ -48,9 +48,11 @@
                             <a class="navbar-item" href="{{ route('scheduler') }}">
                               Speaking club bookings
                             </a>
-                            <a class="navbar-item" href="{{ route('billing.portal') }}">
-                              Billing portal
-                            </a>
+                            @if(Auth::user()->subscribed() || Auth::user()->subscription('default')->onGracePeriod())
+                              <a class="navbar-item" href="{{ route('billing.portal') }}">
+                                Manage my subscription
+                              </a>
+                            @endif
                             <a class="navbar-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                                 Logout
