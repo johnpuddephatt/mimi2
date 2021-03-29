@@ -17,6 +17,7 @@
 
             <div class="navbar-end">
                 @if (Auth::guest())
+
                 @else
                     <div class="navbar-item has-dropdown is-hoverable">
                         <a class="navbar-link" href="#">
@@ -48,7 +49,7 @@
                             <a class="navbar-item" href="{{ route('scheduler') }}">
                               Speaking club bookings
                             </a>
-                            @if(Auth::user()->subscribed() || Auth::user()->subscription('default')->onGracePeriod())
+                            @if(Auth::user()->subscribed())
                               <a class="navbar-item" href="{{ route('billing.portal') }}">
                                 Manage my subscription
                               </a>
