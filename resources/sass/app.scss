@@ -17,8 +17,13 @@
   display: block;
   // box-shadow: $white-bis 0 0 0.75em 0.75em;
 }
-.navbar-brand img {
- image-rendering: -webkit-optimize-contrast;
+
+.navbar-brand {
+  margin-right: 1em;
+
+  img {
+    image-rendering: -webkit-optimize-contrast;
+  }
 }
 
 .is-rounded {

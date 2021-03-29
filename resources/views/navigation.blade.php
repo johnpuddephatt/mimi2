@@ -13,7 +13,12 @@
         </div>
 
         <div class="navbar-menu" id="navMenu">
-            <div class="navbar-start"></div>
+            <div class="navbar-start">
+              @if(Auth::user())
+                <a class="navbar-item" href="{{ route('course.index') }}">My courses</a>
+                <a class="navbar-item" href="{{ route('scheduler') }}">Speaking club</a>
+              @endif
+            </div>
 
             <div class="navbar-end">
                 @if (Auth::guest())
@@ -27,7 +32,6 @@
                           {{ Arr::random(['Ciao', 'Salve', 'Pronto']) }}, {{ Auth::user()->first_name }}!
                           @if(Auth::user()->is_admin)<span class="tag is-success">Admin</span>@endif
                           @if(Auth::user()->subscribed())<span class="tag is-success">Subscribed</span>@endif
-
                         </a>
 
                         <div class="navbar-dropdown">
