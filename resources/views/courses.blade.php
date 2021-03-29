@@ -14,14 +14,8 @@
             @endif
 
             @forelse($courses as $course)
-              <b-button
-                tag="a"
-                size="is-medium"
-                href="{{ route('course.show', ['course' => $course->id ]) }}"
-                class="is-justify-between"
-                icon-right="arrow-right"
-                expanded
-                outlined>
+              <a class="is-medium is-justify-between is-fullwidth is-outlined"
+                href="{{ route('course.show', ['course' => $course->id ]) }}">
 
                   {{ $course->title }}
                   @if(Auth::user()->is_admin && $course->feedbackless_replies_count)<span class="tag is-primary ml-2" title="{{ $course->feedbackless_replies_count }} replies awaiting feedback">{{ $course->feedbackless_replies_count }} new</span>@endif
@@ -29,7 +23,7 @@
                     <span class="tag is-light ml-2">Archived</span>
                   @endif
 
-              </b-button>
+              </a>
             @empty
               <section class="section is-medium has-background-light has-text-centered">
                 @if(Auth::user()->is_admin)
