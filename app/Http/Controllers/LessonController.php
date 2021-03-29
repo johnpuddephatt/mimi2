@@ -67,7 +67,7 @@ class LessonController extends Controller
         'course' => $course,
         'week' => $week,
         'lesson' => $lesson,
-        'section' => 462
+        'section' => $section->id
       ]);
     }
 
