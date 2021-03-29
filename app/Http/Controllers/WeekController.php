@@ -40,21 +40,9 @@ class WeekController extends Controller
     public function store(StoreWeek $request, Course $course)
     {
 
-      $merged = array_merge($request->validated(), [
-        'course_id' => $course->id,
-      ]);
-
       $week = Week::create(array_merge($request->validated(), [
         'course_id' => $course->id,
       ]));
-
-
-      // $week = Week::create([
-      //     'name' => $request->name,
-      //     'description' => $request->description,
-      //     'number' => intval($request->number),
-      //     'course_id' => $course->id,
-      // ]);
 
       return Redirect::route('course.edit', [
         'course' => $course
