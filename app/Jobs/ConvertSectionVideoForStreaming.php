@@ -23,7 +23,7 @@ class ConvertSectionVideoForStreaming implements ShouldQueue
     protected $temporary_video_path;
     protected $playlist_path;
 
-    public $timeout = 1800;
+    public $timeout = 3600;
 
     /**
      * Create a new job instance.
