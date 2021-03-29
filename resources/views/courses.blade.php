@@ -14,7 +14,7 @@
             @endif
 
             @forelse($courses as $course)
-              <a class="is-medium is-justify-between is-fullwidth is-outlined"
+              <a class="button is-medium is-justify-between is-fullwidth is-outlined"
                 href="{{ route('course.show', ['course' => $course->id ]) }}">
 
                   {{ $course->title }}
