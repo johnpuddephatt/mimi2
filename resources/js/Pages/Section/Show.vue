@@ -16,7 +16,7 @@
         <inertia-link v-for="section in lesson.sections" :key="section.id" :href="route('section.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': $parameters.lesson, 'section': section.id })" class="lesson-button mt-3 is-block p-2 is-bordered has-text-black is-outlined is-fullwidth">{{ section.title }}</inertia-link>
       </div>
 
-      <div v-if="section.order == 1">
+      <div v-if="section.order == 1 && lesson.instructions.length && lesson.instructions != '<p></p>'">
         <h3 class="has-text-weight-bold is-size-4">Instructions</h3>
         <div v-html="lesson.instructions"></div>
       </div>
