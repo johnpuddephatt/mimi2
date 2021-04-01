@@ -141,7 +141,7 @@ return [
                 'data' => [
                     '-' => [
                         'type' => 'string',
-                        'allowedTags' => 'i,b,u,br,a'
+                        'allowedTags' => 'strong,b,i,a[href]',
                     ]
                 ],
             ]

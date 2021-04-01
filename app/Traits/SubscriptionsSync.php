@@ -27,7 +27,7 @@ trait SubscriptionsSync {
 
         foreach ($subscriptions->data as $sub) {
             if ($sub->id === $subscription_current->stripe_id) {
-                $subscription_match = $sub;
+                $subscription_match = $sub; // Find the subscription in Stripe that matches what we have in our DB
             }
 
             if (!$subscription_active && $sub->status === 'active') {
@@ -64,7 +64,8 @@ trait SubscriptionsSync {
             $trial_ends_at = @$subscription->trial_end ?: null;
 
             $data = [
-                'name' => 'primary',
+                'name' => 'default',
+                'stripe_status' => $subscription->status,
                 'stripe_id' => $subscription->id,
                 'stripe_plan' => $subscription->plan->id,
                 'quantity' => $subscription->quantity,
