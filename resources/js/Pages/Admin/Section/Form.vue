@@ -35,6 +35,9 @@ import VideoTool from 'editorjs-video-jdp';
 import AudioTool from 'editorjs-attaches-audio';
 import PairedHeading from 'editorjs-pairedheading';
 import MarkerTool from '@/components/editorjs/plugins/Translate';
+import Hyperlink from 'editorjs-hyperlink';
+import Delimiter from '@editorjs/delimiter';
+import Undo from 'editorjs-undo';
 
 export default {
   props: ['errors', 'data', '$parameters'],
@@ -57,18 +60,21 @@ export default {
 
   mounted() {
 
-   this.editor = new EditorJS({
-     holder: 'editorjs',
-     data: this.parsedContent,
-     placeholder: 'Start writing!',
-     tools: this.toolConfig(),
+    this.editor = new EditorJS({
+      holder: 'editorjs',
+      data: this.parsedContent,
+      placeholder: 'Start writing!',
+      inlineToolbar: ['bold', 'italic', 'hyperlink', 'markerTool'],
+      tools: this.toolConfig(),
 
-     onChange: () => {
-       this.isDirty = true
-     },
+      onChange: () => {
+        this.isDirty = true
+      },
 
-     onReady: () => {},
-   })
+      onReady: () => {
+        new Undo({ editor });
+      },
+    })
 
   },
   updated() {
@@ -173,6 +179,7 @@ export default {
             defaultLevel: 4
           }
         },
+        delimiter: Delimiter,
         list: {
           class: List,
           inlineToolbar: true,
@@ -190,6 +197,7 @@ export default {
         },
         image: {
           class: ImageTool,
+          inlineToolbar: true,
           config: {
             types: 'image/*',
             endpoints: {
@@ -217,6 +225,17 @@ export default {
           inlineToolbar: true,
         },
         warning: Warning,
+        hyperlink: {
+          class: Hyperlink,
+          config: {
+            shortcut: 'CMD+L',
+            target: '_blank',
+            rel: 'nofollow',
+            availableTargets: ['_blank', '_self'],
+            availableRels: ['author', 'noreferrer'],
+            validate: false,
+          }
+        },
       }
     }
   }

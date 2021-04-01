@@ -1,11 +1,34 @@
 .content {
 
-  .editor-js-block {
+  h4 {
+    margin-top: 4rem;
+    margin-bottom: -1.5em;
+  }
+
+  .ce-delimiter,
+  hr {
+    border-top: 1px solid $primary;
+    background-color: none;
+    height: 0;
+    margin: 3rem 0;
+    padding: 0;
+
+    &::before {
+      content: none;
+    }
+  }
+
+  .ce-header {
+    padding: 0;
+  }
+
+  .editor-js-block,
+  .ce-block {
     margin: 2em 0;
 
     &__paired-heading {
       border-top: 1px solid $primary;
-      padding-top: 2.5em;
+      padding-top: 1.5em;
 
       *:first-child {
         margin-bottom: 0.25em;
@@ -22,6 +45,32 @@
   }
 
   .editor-js-image {
+    border-radius: 0.5rem;
+
+    img {
+      max-width: 400px;
+      margin: 0 auto;
+      display: block;
+      border-radius: 0.5rem;
+    }
+
+    &.stretched {
+      img {
+        max-width: 100%;
+      }
+    }
+
+    &.with-background {
+      padding: 2em 2em 1em;
+      background-color: $white-ter;
+    }
+
+    &.with-border {
+        img {
+          border: 1px solid $grey-lighter;
+        }
+    }
+
     figcaption {
       font-style: italic;
       text-align: center;
@@ -54,11 +103,11 @@
     color: $text;
     text-decoration: underline;
     transition: text-decoration 0.5s;
-    text-decoration-color: transparentize($primary, 0.65);
-    text-decoration-thickness: 0.3em;
+    text-decoration-color: transparentize($primary, 0.5);
+    text-decoration-style: dotted;
 
     &:hover {
-      text-decoration-color: transparentize($primary, 0.35);
+      text-decoration-color: $primary;
     }
   }
 
@@ -69,12 +118,11 @@
     text-decoration: underline;
     transition: text-decoration 0.5s;
     text-decoration-skip: none;
-    // background-color: transparentize($success, 0.9);
+    text-decoration-color: transparentize($success, 0.3);
     text-decoration-thickness: 0.3em;
 
     &[data-translation] {
       cursor: default;
-      text-decoration-color: transparentize($success, 0.3);
       transition: background-color 0.5s;
 
       &:hover {

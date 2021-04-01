@@ -10,7 +10,7 @@ return [
       'text' => [
         'type' => 'string',
         'required' => true,
-        'allowedTags' => 'strong,b,i,a[href]',
+        'allowedTags' => '*',
       ],
       'level' => [
         'type' => 'int',
@@ -47,7 +47,7 @@ return [
         'data' => [
           '-' => [
             'type' => 'string',
-            'allowedTags' => 'strong,i,b,u',
+            'allowedTags' => '*',
           ],
         ],
       ],
@@ -112,7 +112,8 @@ return [
             ],
         ],
         'caption' => [
-            'type' => 'string'
+            'type' => 'string',
+            'allowedTags' => '*',
         ],
         'withBorder' => [
             'type' => 'boolean'
@@ -132,6 +133,8 @@ return [
         'type' => 'string'
       ]
     ],
+    'delimiter' => [
+    ],
     'table' => [
       'content' => [
         'type' => 'array',
@@ -141,7 +144,7 @@ return [
                 'data' => [
                     '-' => [
                         'type' => 'string',
-                        'allowedTags' => 'strong,b,i,a[href]',
+                        'allowedTags' => '*',
                     ]
                 ],
             ]
