@@ -17,7 +17,7 @@ class CreateLessonsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->string('title');
-            $table->text('instructions');
+            $table->text('instructions')->nullable();
             $table->integer('day')->unsigned();
             $table->integer('week_id')->references('id')->on('weeks')->onDelete('cascade');
         });
