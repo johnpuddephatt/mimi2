@@ -13,6 +13,7 @@
     "devDependencies": {
         "@editorjs/delimiter": "^1.2.0",
         "@editorjs/editorjs": "^2.19.3",
+        "@editorjs/embed": "^2.4.0",
         "@editorjs/header": "^2.6.1",
         "@editorjs/image": "^2.6.0",
         "@editorjs/list": "^1.6.1",
@@ -29,7 +30,7 @@
         "editorjs-hyperlink": "^1.0.5",
         "editorjs-pairedheading": "^1.23.0",
         "editorjs-table": "^1.4.10",
-        "editorjs-undo": "^0.1.4",
+        "editorjs-undo": "^0.1.5",
         "laravel-mix": "^6.0.13",
         "laravel-mix-clean": "^0.1.0",
         "purify-css": "^1.2.5",

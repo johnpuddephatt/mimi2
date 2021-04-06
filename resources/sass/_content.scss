@@ -113,12 +113,12 @@
 
   mark {
     background-color: transparent;
-    display: inline-block;
+    white-space: nowrap;
     position: relative;
     text-decoration: underline;
     transition: text-decoration 0.5s;
     text-decoration-skip: none;
-    text-decoration-color: transparentize($success, 0.3);
+    text-decoration-color: lighten($success, 10%);
     text-decoration-thickness: 0.3em;
 
     &[data-translation] {
@@ -127,7 +127,7 @@
 
       &:hover {
         text-decoration-color: transparent;
-        background-color: transparentize($success, 0.3);
+        background-color: lighten($success, 10%);
       }
 
       &::after {
@@ -145,6 +145,7 @@
         box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%), 0 0px 0 1px rgb(10 10 10 / 2%);
         border-radius: 3px;
         padding: 10px;
+        white-space: normal;
         content: attr(data-translation);
         transition: opacity 0.5s, transform 0.5s;
         transition-delay: 0.5;

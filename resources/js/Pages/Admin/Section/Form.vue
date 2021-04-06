@@ -38,6 +38,7 @@ import MarkerTool from '@/components/editorjs/plugins/Translate';
 import Hyperlink from 'editorjs-hyperlink';
 import Delimiter from '@editorjs/delimiter';
 import Undo from 'editorjs-undo';
+import Embed from '@editorjs/embed';
 
 export default {
   props: ['errors', 'data', '$parameters'],
@@ -59,7 +60,6 @@ export default {
   },
 
   mounted() {
-
     this.editor = new EditorJS({
       holder: 'editorjs',
       data: this.parsedContent,
@@ -72,7 +72,10 @@ export default {
       },
 
       onReady: () => {
-        new Undo({ editor });
+        this.editor.caret.setToFirstBlock();
+        this.editor.caret.focus();
+        const undo = new Undo({ editor: this.editor });
+        undo.initialize(this.parsedContent);
       },
     })
 
@@ -217,6 +220,23 @@ export default {
             },
             additionalRequestHeaders: {
               'X-CSRF-TOKEN': window.axios.defaults.headers.common['X-CSRF-TOKEN']
+            }
+          }
+        },
+        embed: {
+          class: Embed,
+          inlineToolbar: true,
+          config: {
+            services: {
+              youtube: true,
+              vimeo: true,
+              soundcloud: {
+                regex: /^https?:\/\/soundcloud\.com\/(.*)$/,
+                embedUrl: 'https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/<%= remote_id %>&color=33c2cf',
+                html: '<iframe style="width:100%;" height="166" frameborder="0"></iframe>',
+                width: 600,
+                height: 166,
+              },
             }
           }
         },

@@ -4,8 +4,7 @@
     <a class="back-link has-text-dark" :href="route('course.index')">&larr; Back to all courses</a>
     <div class="box">
       <h3 class="title has-text-centered">{{ course.title }}</h3>
-      <p class="subtitle has-text-centered">{{ course.description }}</p>
-
+      <div class="subtitle has-text-centered" v-html="course.description"></div>
 
         <div v-if="course.archived" class="notification is-warning">
           <strong>This course has finished and has now been archived.</strong>

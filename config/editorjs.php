@@ -5,7 +5,14 @@
 
 return [
   'tools' => [
-
+    'embed' => [
+      'service' => 'string',
+      'source' => 'string',
+      'embed' => 'string',
+      'width' => 'integer',
+      'height' => 'integer',
+      'caption' => 'string'
+    ],
     'header' => [
       'text' => [
         'type' => 'string',

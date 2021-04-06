@@ -3,7 +3,7 @@
     <img src="{{ $data['file']['url'] }}" alt="{{ $data['caption'] }}">
     @if(isset($data['caption']))
       <figcaption>
-        {{ $data['caption'] }}
+        {!! $data['caption'] !!}
       </figcaption>
     @endif
   </figure>
