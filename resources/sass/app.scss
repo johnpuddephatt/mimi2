@@ -129,3 +129,8 @@ main {
 .modal-card {
   max-width: 100%;
 }
+
+#card-element, #stripe-element-mount-point {
+  @extend .input;
+  display: block !important;
+}

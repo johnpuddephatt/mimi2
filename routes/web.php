@@ -30,16 +30,26 @@ Route::get('/', function(){
 
 
 Route::get('billing', 'BillingController@listProducts')->name('billing.list-products');
+Route::get('billing/verify/{id}', 'BillingController@verifyPayment')->name('billing.verify-payment')->middleware('cashier.verifyredirecturl');
+
 Route::get('billing/{payment_type}/{stripe_price_code}', 'BillingController@paymentForm')->name('billing.payment-form');
 Route::post('billing/{payment_type}/{stripe_price_code}/user/create', 'BillingController@createUser')->name('billing.create-user');
-Route::post('billing/{payment_type}/{stripe_price_code}/user/{user_hash}', 'BillingController@processPayment')->name('billing.process-payment');
 
-// Route::get('billing/single/add-payment-method/{stripe_price_code}/', 'BillingController@addSinglePaymentMethod')->name('billing.add-single-payment-method');
-// Route::post('billing/single/create/{stripe_price_code}', 'BillingController@createUserPayment')->name('billing.create-user-payment');
+Route::get('billing/{payment_type}/{stripe_price_code}/user/create', function ($payment_type, $stripe_price_code) {
+  return redirect()->route('billing.payment-form', ['payment_type' => $payment_type, 'stripe_price_code' => $stripe_price_code]);
+});
+
+Route::post('billing/{payment_type}/{stripe_price_code}/user/{user_hash}', 'BillingController@processPayment')->name('billing.process-payment');
 
 Route::get('billing/portal', 'BillingController@billingPortal')->name('billing.portal')->middleware('auth');
 
+Route::get('billing/error', function(){
+  return Inertia::render('Billing/Error');
+})->name('billing.error')->middleware('auth');
 
+Route::get('billing/success', function(){
+  return Inertia::render('Billing/Success');
+})->name('billing.success')->middleware('auth');
 
 Route::get('stats', 'StatController@index')->name('stats');
 Route::get('stats/teacher-monthly/{from}/{to}', 'StatController@teacherMonthly')->name('stats.teacherMonthly')->middleware('admin');

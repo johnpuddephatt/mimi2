@@ -1,8 +1,13 @@
 .content {
+  line-height: 2;
 
   h4 {
     margin-top: 4rem;
     margin-bottom: -1.5em;
+  }
+
+  table {
+    margin-top: 1rem;
   }
 
   .ce-delimiter,
@@ -103,11 +108,12 @@
     color: $text;
     text-decoration: underline;
     transition: text-decoration 0.5s;
-    text-decoration-color: transparentize($primary, 0.5);
+    text-decoration-color: $primary;
     text-decoration-style: dotted;
+    text-decoration-thickness: 0.3em;
 
     &:hover {
-      text-decoration-color: $primary;
+      text-decoration-color: darken($primary,15%);
     }
   }
 
@@ -118,7 +124,7 @@
     text-decoration: underline;
     transition: text-decoration 0.5s;
     text-decoration-skip: none;
-    text-decoration-color: lighten($success, 10%);
+    text-decoration-color: lighten($success, 15%);
     text-decoration-thickness: 0.3em;
 
     &[data-translation] {
@@ -127,6 +133,7 @@
 
       &:hover {
         text-decoration-color: transparent;
+        text-decoration-color: lighten($success, 10%);
         background-color: lighten($success, 10%);
       }
 

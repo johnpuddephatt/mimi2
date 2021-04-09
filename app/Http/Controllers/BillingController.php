@@ -5,10 +5,13 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use Laravel\Cashier\Cashier;
+use Laravel\Cashier\Payment;
 use Inertia\Inertia;
 use App\Http\Requests\StoreUser;
 use Redirect;
 use Vinkla\Hashids\Facades\Hashids;
+use Laravel\Cashier\Exceptions\IncompletePayment;
 
 class BillingController extends Controller
 {
@@ -21,36 +24,12 @@ class BillingController extends Controller
     {
     }
 
-    public function addSinglePaymentMethod($stripe_price_code) {
-      \Auth::user()->createOrGetStripeCustomer();
-      return view('billing.add-single-payment-method', [
-        'stripe_price_code' => $stripe_price_code
-      ]);
-    }
-
-
-    public function createUserPayment(Request $request, $stripe_price_code) {
-      \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-
-      $stripeCharge = $request->user()->charge(
-        \Stripe\Price::retrieve($stripe_price_code)->unit_amount, $request->paymentMethodId
-      );
-
-      if($stripeCharge->status == 'succeeded') {
-        \Auth::user()->trial_ends_at = Carbon::now()->addMonths(4);
-        \Auth::user()->save();
-      }
-      return response()->json([
-        'status' => $stripeCharge->status,
-      ]);
-    }
 
     public function billingPortal (Request $request) {
       return $request->user()->redirectToBillingPortal();
     }
 
 
-    // Page that lists current ‘products’ in Stripe
     public function listProducts() {
       \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
       $prices = \Stripe\Price::all();
@@ -60,11 +39,19 @@ class BillingController extends Controller
       return view('billing.start', compact('prices'));
     }
 
+
     public function paymentForm($payment_type, $stripe_price_code) {
+      \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+      $price = \Stripe\Price::retrieve($stripe_price_code);
+      $price->product_data =  \Stripe\Product::retrieve($price->product);
+
       return Inertia::render('Billing/Subscribe', [
-        'stripe_public_key' => config('services.stripe.public')
+        'stripe_public_key' => config('services.stripe.public'),
+        'price' => $price
+
       ]);
     }
+
 
     public function createUser(StoreUser $request, $payment_type, $stripe_price_code) {
 
@@ -91,15 +78,30 @@ class BillingController extends Controller
       \Auth::loginUsingId(Hashids::decode($user_hash)[0], true);
 
       if($payment_type == 'subscription') {
-        \Auth::user()->newSubscription('default', $stripe_price_code)->create($request->intent['payment_method']);
+        try {
+          \Auth::user()->newSubscription('default', $stripe_price_code)->create($request->intent['payment_method']);
+        } catch (IncompletePayment $exception) {
+          return redirect()->route('billing.verify-payment',[$exception->payment->id]);
+        } catch(Exception $exception) {
+          return redirect()->route('billing.error');
+        }
       }
 
       else {
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-        $stripeCharge = \Auth::user()->charge(
-          \Stripe\Price::retrieve($stripe_price_code)->unit_amount, $request->paymentMethodId
-        );
+        try {
+          $stripeCharge = \Auth::user()->charge(
+            \Stripe\Price::retrieve($stripe_price_code)->unit_amount, $request->paymentMethodId
+          );
+        } catch (IncompletePayment $exception) {
+          return redirect()->route(
+            'billing.verify-payment',
+            [$exception->payment->id]
+          );
+        } catch(Exception $exception) {
+          return redirect()->route('billing.error');
+        }
 
         if($stripeCharge->status == 'succeeded') {
           \Auth::user()->credits = 99999;
@@ -107,6 +109,30 @@ class BillingController extends Controller
         }
       }
 
-      return 'I think this worked';
+      return redirect()->route('billing.success');
     }
+
+
+    public function verifyPayment($id)
+    {
+      $payment = new Payment(
+          \Stripe\PaymentIntent::retrieve($id, Cashier::stripeOptions())
+      );
+
+      return Inertia::render('Billing/VerifyPayment', [
+        'stripe_public_key' => config('services.stripe.public'),
+        'payment' => [
+          'amount' => $payment->amount(),
+          'is_succeeded' => $payment->isSucceeded(),
+          'is_cancelled' => $payment->isCancelled(),
+          'requires_payment_method' => $payment->requiresPaymentMethod(),
+          'requires_action' => $payment->requiresAction(),
+          'requires_confirmation' => $payment->requiresConfirmation(),
+          'client_secret' => $payment->clientSecret(),
+          'payment_method' => $payment->payment_method,
+        ],
+        'stripe_authentication_failure_code' => \Stripe\ErrorObject::CODE_PAYMENT_INTENT_AUTHENTICATION_FAILURE
+      ]);
+    }
+
 }
