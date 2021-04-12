@@ -100,6 +100,15 @@
             Save this course before adding lessons.
           </div>
         </b-tab-item>
+        <b-tab-item label="Students">
+          <course-users :course_id="$parameters.course"/>
+
+          <div class="notification has-background-light">
+            <h3>Invite people</h3>
+            <p class="is-size-7">Share the link below with people to invite them to this course. If they don’t already have an account they'll be prompted to create one.</p>
+            <input id="course-invite-link" class="input is-small" type="text" :value="route('course.enrollCurrentUser', {'course' : data.hash })">
+          </div>
+        </b-tab-item>
       </b-tabs>
 
       <hr>
@@ -111,11 +120,13 @@
 
 <script>
 import TipTap from '@/components/TipTap';
+import CourseUsers from '@/components/CourseUsers';
 
 export default {
   props: ['errors', 'data', '$parameters'],
   components: {
-    TipTap
+    TipTap,
+    CourseUsers
   },
   data() {
     return {

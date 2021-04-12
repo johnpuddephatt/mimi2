@@ -17,6 +17,11 @@
                </p>
              @enderror
 
+             <p class="notification is-success is-size-6" role="alert">
+               <strong>Returning students</strong><br>
+              You’ll need new login details this term as we’ve made big changes to our platform. If you’re yet to create a new account, email <a href="mailto:katie@joyoflanguages.com">katie@joyoflanguages.com</a> to get sorted.
+             </p>
+
             <div class="field">
               <label for="email" class="label">Email</label>
               <div class="control has-icons-left">

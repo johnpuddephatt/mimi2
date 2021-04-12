@@ -16,7 +16,7 @@
             <div class="navbar-start">
               @if(Auth::user())
                 <a class="navbar-item" href="{{ route('course.index') }}">My courses</a>
-                <a class="navbar-item" href="{{ route('scheduler') }}">Speaking club</a>
+                {{-- <a class="navbar-item" href="{{ route('scheduler') }}">Speaking club</a> --}}
               @endif
             </div>
 
@@ -50,9 +50,9 @@
                               Logs
                             </a>
                           @endif
-                            <a class="navbar-item" href="{{ route('scheduler') }}">
+                            {{-- <a class="navbar-item" href="{{ route('scheduler') }}">
                               Speaking club bookings
-                            </a>
+                            </a> --}}
                             @if(Auth::user()->subscribed() || (Auth::user()->subscription('default') && Auth::user()->subscription('default')->onGracePeriod()))
                               <a class="navbar-item" href="{{ route('billing.portal') }}">
                                 Manage my subscription

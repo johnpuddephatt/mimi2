@@ -62,8 +62,13 @@ class CourseController extends Controller
           return redirect(RouteServiceProvider::HOME)->with('message', 'You have been enrolled.');
         }
       }
+      // The below allows unregistered users to create an account to enrol.
+      // else {
+      //   return view('enrol', compact('course'));
+      // }
+
       else {
-        return view('enrol', compact('course'));
+        return redirect()->route('login', ['course' => $course ]);
       }
     }
 

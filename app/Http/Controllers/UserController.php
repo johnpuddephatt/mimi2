@@ -22,6 +22,6 @@ class UserController extends Controller
 
     public function index()
     {
-      return User::all();
+      return User::select('id', 'first_name', 'last_name', 'email')->where('is_admin', false)->orderBy('last_name')->get();
     }
 }

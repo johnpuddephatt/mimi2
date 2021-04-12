@@ -23,11 +23,7 @@ Route::get('/scheduler', function(){
   return view('scheduler');
 })->name('scheduler')->middleware('auth');
 
-Route::get('/', function(){
-  return Inertia::render('Home');
-})->name('home')->middleware('auth');
-
-
+Route::get('/', 'CourseController@index')->name('home')->middleware('auth');
 
 Route::get('billing', 'BillingController@listProducts')->name('billing.list-products');
 Route::get('billing/verify/{id}', 'BillingController@verifyPayment')->name('billing.verify-payment')->middleware('cashier.verifyredirecturl');
@@ -61,7 +57,10 @@ Route::get('section/{section}', 'SectionController@single')->name('section.singl
 
 Route::get('users', 'UserController@index')->name('users.index')->middleware('admin');
 
-Route::get('courses', 'CourseController@index')->name('course.index')->middleware('auth');
+Route::get('courses', function() {
+  return redirect()->route('home');
+})->name('course.index')->middleware('auth');
+
 
 Route::get('course/{course}/enroll', 'CourseController@enrollCurrentUser')->name('course.enrollCurrentUser');
 Route::post('course/{course}/enroll', 'CourseController@enroll')->name('course.enroll')->middleware('admin');

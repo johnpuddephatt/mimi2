@@ -33,8 +33,11 @@ class BillingController extends Controller
     public function listProducts() {
       \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
       $prices = \Stripe\Price::all();
-      foreach($prices as $price) {
+      foreach($prices as $key => $price) {
         $price->product_data =  \Stripe\Product::retrieve($price->product);
+        if(!$price->product_data->active) {
+          unset($prices->data[$key]);
+        }
       }
       return view('billing.start', compact('prices'));
     }
@@ -104,7 +107,7 @@ class BillingController extends Controller
         }
 
         if($stripeCharge->status == 'succeeded') {
-          \Auth::user()->credits = 99999;
+          \Auth::user()->credits = 3;
           \Auth::user()->save();
         }
       }

@@ -16,8 +16,10 @@
 
 .has-square-media video,
 .has-square-media img,
+.has-square-media iframe,
 .has-widescreen-media video,
-.has-widescreen-media img {
+.has-widescreen-media img,
+.has-widescreen-media iframe {
    position: absolute;
    margin: 0;
    top: 0;

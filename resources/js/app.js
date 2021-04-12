@@ -41,7 +41,6 @@ Vue.mixin({
 
 Vue.component('app-layout', require('@/Layouts/AppLayout').default);
 Vue.component('course-navigator', require('./components/CourseNavigator.vue').default);
-Vue.component('course-users', require('./components/CourseUsers.vue').default);
 Vue.component('video-player', require('./components/VideoPlayer.vue').default);
 Vue.component('create-reply', require('./components/CreateReply.vue').default);
 Vue.component('reply-card', require('./components/ReplyCard.vue').default);

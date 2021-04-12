@@ -17,7 +17,11 @@ class Course extends Model
     'archived' => 'boolean'
   ];
 
-  public function hash() {
+  protected $appends = [
+    'hash'
+  ];
+
+  public function getHashAttribute() {
     return \Hashids::encode($this->id);
   }
 
