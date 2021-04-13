@@ -18,11 +18,20 @@ class RedirectIfNotEnrolled
      */
     public function handle($request, Closure $next, $guard = null)
     {
-      if(
-        Auth::User()->is_admin
-        || ($request->route('course') && Auth::User()->courses()->find($request->route('course')->id))
-        || ($request->route('lesson') && Auth::User()->courses()->find($request->route('lesson')->week->course->id))
-      ){
+      if($request->route('course')) {
+        $course_id = $request->route('course')->id;
+      }
+      else if($request->route('lesson')) {
+        $course_id = $request->route('lesson')->week->course->id;
+      }
+
+      // Return next if user is an admin or we’re not looking at a course
+      if(!$course_id || Auth::User()->is_admin){
+        return $next($request);
+      }
+
+      // Return next if user is enrolled on course and either has subscription OR the enrolment isn’t subscription based
+      if(Auth::User()->courses()->find($course_id) && (Auth::User()->subscribed() || !Auth::User()->courses()->find($course_id)->pivot->is_subscription_based)) {
         return $next($request);
       }
 
@@ -32,7 +41,7 @@ class RedirectIfNotEnrolled
         );
       }
       else {
-        return redirect(RouteServiceProvider::HOME);
+        return redirect(RouteServiceProvider::HOME)->with('message', 'You’re not enrolled on this course or your subscription has expired.');
       }
     }
 }

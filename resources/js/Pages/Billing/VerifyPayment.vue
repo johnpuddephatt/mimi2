@@ -4,21 +4,13 @@
 
     <form ref="form" class="box register-form">
 
-      <div v-if="payment.is_succeeded">
-        <h3 class="title has-text-centered">Payment Successful <span class="emoji">🚦</span></h3>
-        <p class="subtitle has-text-centered">This payment was already successfully confirmed.</p>
-
-        <p>Some routine additional security checks were performed and your payment has now been processed successfully.</p>
-        <inertia-link class="mt-4 button is-fullwidth" :href="route('billing.success')">Continue</inertia-link>
-
-      </div>
-
-      <div v-else-if="payment.is_cancelled">
+      <div v-if="payment.is_cancelled">
         <h3 class="title has-text-centered">Payment Cancelled <span class="emoji">🚦</span></h3>
         <p class="subtitle has-text-centered">This payment was cancelled.</p>
 
         <p>The transaction has been cancelled, no payment has been taken.</p>
         <p>If you did not intend to cancel the payment, please try again from the beginning.</p>
+
       </div>
 
       <div v-else>
@@ -26,48 +18,51 @@
         <p class="subtitle has-text-centered">Please verify your payment details.</p>
 
         <b-notification
-              v-if="errorMessage"
-              type="is-danger"
-              has-icon
-              role="alert"
-              :closable="false"
-              :message="errorMessage">
+          v-if="errorMessage"
+          type="is-danger"
+          has-icon
+          role="alert"
+          :closable="false"
+          :message="errorMessage">
         </b-notification>
 
         <div v-if="!paymentProcessed" id="payment-elements">
 
             <div v-show="requiresPaymentMethod">
 
-                <p>Additional confirmation is needed to process your payment of {{ payment.amount}}.</p>
-                <p>Please confirm your payment by filling out your payment details below.</p>
-                <hr>
+              <p>We were unable to process your payment of {{ payment.amount}}. Please try again.</p>
 
-                <b-field label="Cardholder name">
-                  <b-input id="cardholder-name" required v-model="name" type="text">
-                  </b-input>
-                </b-field>
+              <hr>
 
-                <b-field label="Card details">
-                  <div id="card-element"></div>
-                </b-field>
+              <b-field label="Cardholder name">
+                <b-input id="cardholder-name" required v-model="name" type="text">
+                </b-input>
+              </b-field>
 
-                <button
-                    class="button is-primary"
-                    id="card-button"
-                    @click="addPaymentMethod"
-                    :disabled="paymentProcessing">
-                    Pay now
-                </button>
+              <b-field label="Card details">
+                <div id="card-element"></div>
+              </b-field>
+
+              <button
+                class="button is-primary"
+                id="card-button"
+                @click="addPaymentMethod"
+                :disabled="paymentProcessing">
+                Pay now
+              </button>
             </div>
 
             <div v-show="requiresAction || requiresConfirmation">
-                <button
-                    class="button is-primary"
-                    id="card-button"
-                    @click="confirmPaymentMethod"
-                    :disabled="paymentProcessing">
-                    Confirm your {{ payment.amount }} payment
-                </button>
+
+              <p>You are about to make a payment of {{ payment.amount}}. Click the button below if you wish to proceed.</p>
+
+              <button
+                class="button is-primary"
+                id="card-button"
+                @click="confirmPaymentMethod"
+                :disabled="paymentProcessing">
+                Confirm payment
+              </button>
             </div>
         </div>
 
@@ -147,19 +142,19 @@ export default {
        this.paymentProcessed = false;
        this.errorMessage = '';
        Stripe.confirmCardPayment(
-           self.payment.client_secret, {
-               payment_method: self.payment.payment_method
-           }
+         self.payment.client_secret, {
+           payment_method: self.payment.payment_method
+         }
        ).then(function (result) {
-           self.paymentProcessing = false;
-           if (result.error) {
-               self.errorMessage = result.error.message;
-               if (result.error.code === self.stripe_authentication_failure_code) {
-                   self.requestPaymentMethod();
-               }
-           } else {
-              Inertia.visit(route('billing.success'));
-           }
+         self.paymentProcessing = false;
+         if (result.error) {
+             self.errorMessage = result.error.message;
+             if (result.error.code === self.stripe_authentication_failure_code) {
+                 self.requestPaymentMethod();
+             }
+         } else {
+            Inertia.visit(route('billing.success'));
+         }
        });
     },
     requestPaymentMethod: function () {

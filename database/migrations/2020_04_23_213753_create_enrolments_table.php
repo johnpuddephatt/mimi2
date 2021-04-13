@@ -15,8 +15,8 @@ class CreateEnrolmentsTable extends Migration
     {
         Schema::create('enrolments', function (Blueprint $table) {
             $table->id();
-            $table->integer('course_id')->references('id')->on('courses')->onDelete('cascade');;
-            $table->integer('user_id')->references('id')->on('users')->onDelete('cascade');;
+            $table->integer('course_id')->references('id')->on('courses')->onDelete('cascade');
+            $table->integer('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

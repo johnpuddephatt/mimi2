@@ -48,9 +48,14 @@ class User extends Authenticatable
         'trial_ends_at' => 'datetime'
     ];
 
+
+    public function hasCredits() {
+      return $this->credits > 0;
+    }
+
     public function courses()
     {
-      return $this->belongsToMany('App\Models\Course', 'enrolments');
+      return $this->belongsToMany('App\Models\Course', 'enrolments')->withPivot('is_subscription_based');
     }
 
     public function comments()

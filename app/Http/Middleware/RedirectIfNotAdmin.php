@@ -25,7 +25,7 @@ class RedirectIfNotAdmin
           );
         }
         else {
-          return redirect(RouteServiceProvider::HOME);
+          return redirect(RouteServiceProvider::HOME)->with('message', 'Sorry. That page can only be accessed by admins.');
         }
       }
 

@@ -58,12 +58,29 @@ class BillingController extends Controller
 
     public function createUser(StoreUser $request, $payment_type, $stripe_price_code) {
 
-        $user =  User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
+        $user = User::where(['email' => $request->email])->first();
+
+        if($user) {
+          if($user->subscribed()) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+               'email' => ['An account with this email already has an active subscription.'],
+            ]);
+          }
+          if(!Hash::check($request->password, $user->password)) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+               'email' => ['An account with this email exists but the provided password did not match.'],
+            ]);
+          }
+        }
+
+        if(!$user) {
+          $user = User::create([
             'email' => $request->email,
             'password' => Hash::make($request->password),
-        ]);
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name
+          ]);
+        }
 
         if($payment_type == "single") {
           $user->createOrGetStripeCustomer();

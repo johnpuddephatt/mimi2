@@ -6,7 +6,7 @@
       <h3 class="title has-text-centered">C’è stato un problema <span class="emoji">🤕</span></h3>
       <p class="subtitle has-text-centered">There has been an error processing your payment.</p>
 
-      <p>We’ve been able to process your payment. Please try again, and, if the problem persists, drop us an email at <a href="mailto:katie@joyoflanguages.com">katie@joyoflanguages.com</a></p>
+      <p>We’ve been able to process your payment, please try again. If the problem persists, drop us an email at <a href="mailto:katie@joyoflanguages.com">katie@joyoflanguages.com</a></p>
     </form>
 
 

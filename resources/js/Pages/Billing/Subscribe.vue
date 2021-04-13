@@ -32,20 +32,20 @@
         </b-notification>
 
         <div class="columns mb-0">
-          <b-field class="column" label="First name" :message="errors.first_name" :type="errors.first_name ? 'is-danger' : null">
+          <b-field class="column" label="First name" :message="userErrors.first_name" :type="userErrors.first_name ? 'is-danger' : null">
             <b-input required name="first_name" v-model="userForm.first_name" ></b-input>
           </b-field>
 
-          <b-field class="column" label="Last name" :message="errors.last_name" :type="errors.last_name ? 'is-danger' : null">
+          <b-field class="column" label="Last name" :message="userErrors.last_name" :type="userErrors.last_name ? 'is-danger' : null">
             <b-input required name="last_name" v-model="userForm.last_name"></b-input>
           </b-field>
         </div>
 
-        <b-field label="Email" :message="errors.email" :type="errors.email ? 'is-danger' : null">
+        <b-field label="Email" :message="userErrors.email" :type="userErrors.email ? 'is-danger' : null">
           <b-input required type="email" name="email" v-model="userForm.email"></b-input>
         </b-field>
 
-        <b-field label="Password" :message="errors.password || 'Minimum 8 characters'" :type="errors.password ? 'is-danger' : null">
+        <b-field label="Password" :message="userErrors.password || 'Minimum 8 characters'" :type="userErrors.password ? 'is-danger' : null">
           <b-input v-model="userForm.password" name="password" type="password" password-reveal minlength="8" required>
           </b-input>
         </b-field>
@@ -65,11 +65,12 @@
 
         <b-field label="Card details">
           <stripe-element-card
+            @element-change="stripeElementCardChanged($event)"
             ref="stripeElementCard"
             :pk="stripe_public_key" />
         </b-field>
 
-        <b-button @click.prevent="register" :loading="isProcessing" class="has-text-weight-medium" type="is-primary" size="is-large" expanded>Pay now</b-button>
+        <b-button @click.prevent="register" :disabled="!stripeElementCardComplete" :loading="isProcessing" class="has-text-weight-medium" type="is-primary" size="is-large" expanded>Pay now</b-button>
       </div>
 
     </form>
@@ -96,6 +97,7 @@ export default {
       user_is_cardholder: true,
       errorMessage: null,
       show_billing_fields: false,
+      stripeElementCardComplete: false,
       userForm: this.$inertia.form({
         first_name: null,
         last_name: null,
@@ -114,6 +116,9 @@ export default {
   mounted() {
   },
   computed: {
+    userErrors() {
+      return this.errors?.user || {};
+    }
 
   },
   methods: {
@@ -183,12 +188,20 @@ export default {
 
     processPayment() {
       this.paymentForm.post(route('billing.process-payment', { payment_type: this.$parameters.payment_type, stripe_price_code: this.$parameters.stripe_price_code, user_hash: this.user_hash }), {
-        preserveScroll: true,
+        // preserveScroll: true,
         onError: errors => {
           this.isProcessing = false;
           this.errorToast('Error processing payment');
         },
       })
+    },
+
+    stripeElementCardChanged(event) {
+      if (event.complete) {
+        this.stripeElementCardComplete = true;
+      } else {
+        this.stripeElementCardComplete = false;
+      }
     }
   }
 }

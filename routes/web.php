@@ -25,17 +25,21 @@ Route::get('/scheduler', function(){
 
 Route::get('/', 'CourseController@index')->name('home')->middleware('auth');
 
-Route::get('billing', 'BillingController@listProducts')->name('billing.list-products');
-Route::get('billing/verify/{id}', 'BillingController@verifyPayment')->name('billing.verify-payment')->middleware('cashier.verifyredirecturl');
+Route::middleware(['nonpaying'])->group(function () {
 
-Route::get('billing/{payment_type}/{stripe_price_code}', 'BillingController@paymentForm')->name('billing.payment-form');
-Route::post('billing/{payment_type}/{stripe_price_code}/user/create', 'BillingController@createUser')->name('billing.create-user');
+  Route::get('billing', 'BillingController@listProducts')->name('billing.list-products');
+  Route::get('billing/verify/{id}', 'BillingController@verifyPayment')->name('billing.verify-payment')->middleware('cashier.verifyredirecturl');
 
-Route::get('billing/{payment_type}/{stripe_price_code}/user/create', function ($payment_type, $stripe_price_code) {
-  return redirect()->route('billing.payment-form', ['payment_type' => $payment_type, 'stripe_price_code' => $stripe_price_code]);
+  Route::get('billing/{payment_type}/{stripe_price_code}', 'BillingController@paymentForm')->name('billing.payment-form');
+  Route::post('billing/{payment_type}/{stripe_price_code}/user/create', 'BillingController@createUser')->name('billing.create-user');
+
+  Route::get('billing/{payment_type}/{stripe_price_code}/user/create', function ($payment_type, $stripe_price_code) {
+    return redirect()->route('billing.payment-form', ['payment_type' => $payment_type, 'stripe_price_code' => $stripe_price_code]);
+  });
+
+  Route::post('billing/{payment_type}/{stripe_price_code}/user/{user_hash}', 'BillingController@processPayment')->name('billing.process-payment');
+
 });
-
-Route::post('billing/{payment_type}/{stripe_price_code}/user/{user_hash}', 'BillingController@processPayment')->name('billing.process-payment');
 
 Route::get('billing/portal', 'BillingController@billingPortal')->name('billing.portal')->middleware('auth');
 

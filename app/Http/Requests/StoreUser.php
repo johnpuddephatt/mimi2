@@ -28,7 +28,7 @@ class StoreUser extends FormRequest
         'last_name' => ['required', 'string', 'max:255'],
         'photo' => ['nullable', 'image'],
         'description' => ['nullable','string', 'max:120'],
-        'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        // 'email' => ['required', 'email', \Illuminate\Validation\Rule::unique('users')->ignore(request()->field)],
         'password' => ['required', 'string', 'min:8'],
         'course' => ['nullable'],
         'admin' => ['nullable']

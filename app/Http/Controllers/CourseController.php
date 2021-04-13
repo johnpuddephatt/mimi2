@@ -58,8 +58,19 @@ class CourseController extends Controller
           return redirect(RouteServiceProvider::HOME)->with('message', 'You are already enrolled in this course');
         }
         else {
-          \Auth::User()->courses()->attach(\Hashids::decode($course));
-          return redirect(RouteServiceProvider::HOME)->with('message', 'You have been enrolled.');
+          if(\Auth::User()->subscribed() || \Auth::User()->hasCredits()) {
+            \Auth::User()->courses()->attach(\Hashids::decode($course), [
+              'is_subscription_based' => (\Auth::User()->hasCredits() ? false : true)
+            ]);
+            if(\Auth::User()->hasCredits()) {
+              \Auth::User()->decrement('credits');
+            }
+            return redirect(RouteServiceProvider::HOME)->with('message', 'You have been enrolled.');
+          }
+          else {
+            return redirect(RouteServiceProvider::HOME)->with('message', 'You do not have a active payment plan.');
+          }
+
         }
       }
       // The below allows unregistered users to create an account to enrol.
@@ -99,12 +110,7 @@ class CourseController extends Controller
       }
       else {
         $courses = \Auth::User()->courses;
-        if($courses->count() == 1) {
-          return redirect()->route('course.single', ['course' => $courses->first()]);
-        }
-        else {
-          return view('courses', compact('courses'));
-        }
+        return view('courses', compact('courses'));
       }
     }
 }

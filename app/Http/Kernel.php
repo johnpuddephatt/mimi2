@@ -62,6 +62,7 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'owner' => \App\Http\Middleware\RedirectIfNotOwnerOrAdmin::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
+        'nonpaying' => \App\Http\Middleware\RedirectIfAlreadyPaying::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,

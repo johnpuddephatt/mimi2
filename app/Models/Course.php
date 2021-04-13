@@ -31,7 +31,7 @@ class Course extends Model
 
   public function users()
   {
-    return $this->belongsToMany('App\Models\User', 'enrolments');
+    return $this->belongsToMany('App\Models\User', 'enrolments')->withPivot('is_subscription_based');
   }
 
   public function weeks()
