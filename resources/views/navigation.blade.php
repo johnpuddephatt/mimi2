@@ -49,10 +49,14 @@
                             <a class="navbar-item" href="/admin/logs">
                               Logs
                             </a>
+                            <hr class="navbar-divider">
                           @endif
                             {{-- <a class="navbar-item" href="{{ route('scheduler') }}">
                               Speaking club bookings
                             </a> --}}
+                            <a class="navbar-item" href="{{ route('profile.show') }}">
+                              My profile
+                            </a>
                             @if(Auth::user()->subscribed() || (Auth::user()->subscription('default') && Auth::user()->subscription('default')->onGracePeriod()))
                               <a class="navbar-item" href="{{ route('billing.portal') }}">
                                 Manage my subscription

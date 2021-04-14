@@ -24,12 +24,13 @@ class StoreUser extends FormRequest
     public function rules()
     {
       return [
-        'first_name' => ['required', 'string', 'max:255'],
-        'last_name' => ['required', 'string', 'max:255'],
-        'photo' => ['nullable', 'image'],
-        'description' => ['nullable','string', 'max:120'],
+        'first_name' => ['nullable'],
+        'last_name' => ['nullable'],
+        'photo' => ['nullable'],
+        'description' => ['nullable'],
+        'email' => ['required_without:id'],
         // 'email' => ['required', 'email', \Illuminate\Validation\Rule::unique('users')->ignore(request()->field)],
-        'password' => ['required', 'string', 'min:8'],
+        'password' => ['required_without:id'],
         'course' => ['nullable'],
         'admin' => ['nullable']
       ];

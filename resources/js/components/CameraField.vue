@@ -19,7 +19,7 @@
     </div>
 
     <div class="camera-controls has-background-light is-bordered has-text-centered">
-      <b-button class="restart-camera" icon-right="camera-retake" @click.prevent="confirmRestart">Start again</b-button>
+      <b-button class="restart-camera" icon-right="camera-retake" @click.prevent="confirmRestart">{{ mode == 'photo' ? 'Take a new photo' : 'Record a new video'}}</b-button>
     </div>
   </div>
 
@@ -201,15 +201,19 @@ export default {
   methods: {
 
     confirmRestart() {
-
-      this.$buefy.dialog.confirm({
-        title: 'Start again?',
-        message: 'Are you sure you want to <b>re-record</b> your video? What you’ve recorded so far will be lost.',
-        confirmText: 'Confirm',
-        type: 'is-danger',
-        hasIcon: true,
-        onConfirm: () => this.onRestart()
-      })
+      if(this.mode == 'video') {
+        this.$buefy.dialog.confirm({
+          title: 'Start again?',
+          message: 'Are you sure you want to <b>re-record</b> your video? What you’ve recorded so far will be lost.',
+          confirmText: 'Confirm',
+          type: 'is-danger',
+          hasIcon: true,
+          onConfirm: () => this.onRestart()
+        })
+      }
+      else {
+        this.onRestart()
+      }
     },
 
     onCapture() {

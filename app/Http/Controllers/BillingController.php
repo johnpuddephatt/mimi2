@@ -12,6 +12,8 @@ use App\Http\Requests\StoreUser;
 use Redirect;
 use Vinkla\Hashids\Facades\Hashids;
 use Laravel\Cashier\Exceptions\IncompletePayment;
+use Illuminate\Support\Facades\Storage;
+
 
 class BillingController extends Controller
 {
@@ -86,9 +88,14 @@ class BillingController extends Controller
           $user->createOrGetStripeCustomer();
         }
 
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+        $price = \Stripe\Price::retrieve($stripe_price_code);
+        $price->product_data =  \Stripe\Product::retrieve($price->product);
+
         return Inertia::render('Billing/Subscribe', [
           'user_hash' => Hashids::encode($user->id),
           'stripe_price_code' => $stripe_price_code,
+          'price' => $price,
           'stripe_public_key' => config('services.stripe.public'),
           'client_secret' => $payment_type == 'subscription' ? $user->createSetupIntent()->client_secret : null,
         ]);
@@ -129,7 +136,7 @@ class BillingController extends Controller
         }
       }
 
-      return redirect()->route('billing.success');
+      return redirect()->route('billing.show-profile');
     }
 
 
@@ -155,4 +162,23 @@ class BillingController extends Controller
       ]);
     }
 
+
+    public function showProfile() {
+      return Inertia::render('Billing/CompleteProfile', [ 'user' => \Auth::user() ]);
+    }
+
+    public function updateProfile(StoreUser $request) {
+      if($request->photo) {
+        $resized = \Image::make($request->photo)->orientate()->fit(480,480)->encode('jpg',80);
+        $photo_path = User::$photo_directory . $request->photo->hashName();
+        Storage::cloud()->put($photo_path, $resized);
+      }
+
+      \Auth::user()->update([
+          'photo' => $photo_path ? Storage::cloud()->url($photo_path) : null,
+          'description' => $request->description,
+      ]);
+
+      return redirect()->route('billing.success');
+    }
 }

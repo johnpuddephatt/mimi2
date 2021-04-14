@@ -21,6 +21,9 @@
 
           <b-checkbox v-if="data" v-model="form.archived">Archive this course?</b-checkbox>
 
+          <b-checkbox v-model="form.is_open">Make this course open to all?</b-checkbox>
+
+
         </b-tab-item>
 
         <b-tab-item label="Lessons">
@@ -134,7 +137,9 @@ export default {
         id: this.data?.id ?? null,
         title: this.data?.title ?? null,
         description: this.data?.description ?? null,
-        archived: this.data?.archived ?? false
+        archived: this.data?.archived ?? false,
+        is_open: this.data?.is_open ?? false
+
       }),
       destroyWeekForm: this.$inertia.form(),
       destroyLessonForm: this.$inertia.form(),

@@ -10,11 +10,12 @@ class Course extends Model
   use HasFactory;
 
   protected $fillable = [
-      'title', 'description', 'archived'
+      'title', 'description', 'archived', 'is_open'
   ];
 
   protected $casts = [
-    'archived' => 'boolean'
+    'archived' => 'boolean',
+    'is_open' => 'boolean'
   ];
 
   protected $appends = [
@@ -27,6 +28,10 @@ class Course extends Model
 
   public function feedbackless_reply_count() {
     return $this->replies()->feedbackless()->count();
+  }
+
+  public function scopeOpen($query) {
+    return $query->where('is_open', true);
   }
 
   public function users()

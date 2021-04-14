@@ -132,7 +132,7 @@ export default {
                    self.errorMessage = result.error.message;
                }
            } else {
-               Inertia.visit(route('billing.success'));
+               Inertia.visit(route('billing.show-profile'));
            }
        });
     },
@@ -153,7 +153,7 @@ export default {
                  self.requestPaymentMethod();
              }
          } else {
-            Inertia.visit(route('billing.success'));
+            Inertia.visit(route('billing.show-profile'));
          }
        });
     },

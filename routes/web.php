@@ -29,6 +29,9 @@ Route::get('/terms', function(){
 
 Route::get('/', 'CourseController@index')->name('home')->middleware('auth');
 
+Route::get('/profile', 'UserController@showProfile')->name('profile.show')->middleware('auth');
+Route::put('/profile', 'UserController@updateProfile')->name('profile.update')->middleware('auth');
+
 Route::middleware(['nonpaying'])->group(function () {
 
   Route::get('billing', 'BillingController@listProducts')->name('billing.list-products');
@@ -50,6 +53,9 @@ Route::get('billing/portal', 'BillingController@billingPortal')->name('billing.p
 Route::get('billing/error', function(){
   return Inertia::render('Billing/Error');
 })->name('billing.error')->middleware('auth');
+
+Route::get('billing/complete-profile', 'BillingController@showProfile')->name('billing.show-profile')->middleware('auth');
+Route::put('billing/complete-profile', 'BillingController@updateProfile')->name('billing.complete-profile')->middleware('auth');
 
 Route::get('billing/success', function(){
   return Inertia::render('Billing/Success');

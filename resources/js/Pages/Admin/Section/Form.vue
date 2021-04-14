@@ -194,7 +194,8 @@ export default {
             types: 'audio/*',
             endpoint: route('upload.store'),
             additionalRequestHeaders: {
-              'X-CSRF-TOKEN': window.axios.defaults.headers.common['X-CSRF-TOKEN']
+              'X-CSRF-TOKEN': window.axios.defaults.headers.common['X-CSRF-TOKEN'],
+              'Content-Disposition': 'attachment'
             }
           }
         },

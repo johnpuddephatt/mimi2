@@ -84,7 +84,19 @@ class CourseController extends Controller
     }
 
     public function enroll(Request $request, Course $course) {
-      return $course->users()->attach($request->all());
+      $user_ids = $request->all();
+
+      foreach($user_ids as $user_id) {
+        $user = User::find($user_id);
+        if(!$user->courses->contains($course)) {
+          $user->courses()->attach($course, [
+            'is_subscription_based' => ($user->hasCredits() ? false : true)
+          ]);
+          if($user->hasCredits()) {
+            $user->decrement('credits');
+          }
+        }
+      }
     }
 
     public function unenroll(Course $course, User $user) {
@@ -110,6 +122,7 @@ class CourseController extends Controller
       }
       else {
         $courses = \Auth::User()->courses;
+        $courses = $courses->merge(Course::open()->get());
         return view('courses', compact('courses'));
       }
     }
