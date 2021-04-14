@@ -1,4 +1,4 @@
-<footer class="footer">
+<footer class="footer mt-6">
   <div class="column has-text-centered">
     <p class="menu-label">©{{ date("Y") }} Joy of Languages SRL<br> Milano, Via Pietro Mascagni n.31, 11461250968, MI - 2604182</p>
   </div>
