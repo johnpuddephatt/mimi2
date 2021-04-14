@@ -47,15 +47,15 @@ class ConvertSectionVideoForStreaming implements ShouldQueue
 
         $lowBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(400);
         $mediumBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(800);
-        $highBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(1200);
+        $highBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(1600);
 
         FFMpeg::fromDisk('local')
           ->open($this->temporary_video_path)
           ->exportForHLS()
           ->toDisk('digitalocean')
-          ->addFormat($lowBitrateFormat, function($media){
+          ->addFormat($highBitrateFormat, function($media){
             $media->addFilter(function ($filters, $in, $out) {
-                $filters->custom($in, "scale=640:360,fps=20", $out); // $in, $parameters, $out
+              $filters->custom($in, "scale=1280:720,fps=20", $out); // $in, $parameters, $out
             });
           })
           ->addFormat($mediumBitrateFormat, function($media){
@@ -63,9 +63,9 @@ class ConvertSectionVideoForStreaming implements ShouldQueue
                 $filters->custom($in, "scale=1280:720,fps=20", $out); // $in, $parameters, $out
             });
           })
-          ->addFormat($highBitrateFormat, function($media){
+          ->addFormat($lowBitrateFormat, function($media){
             $media->addFilter(function ($filters, $in, $out) {
-              $filters->custom($in, "scale=1280:720,fps=20", $out); // $in, $parameters, $out
+                $filters->custom($in, "scale=640:360,fps=20", $out); // $in, $parameters, $out
             });
           })
           ->save($this->playlist_path);
