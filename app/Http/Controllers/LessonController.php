@@ -62,7 +62,7 @@ class LessonController extends Controller
 
 
     public function show(Course $course, Week $week, Lesson $lesson) {
-      $section = $lesson->sections()->first();
+      $section = $lesson->sections()->firstOrFail();
       return Redirect::route('section.show', [
         'course' => $course,
         'week' => $week,
