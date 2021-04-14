@@ -14,10 +14,10 @@
             @endif
 
             @forelse($courses as $course)
-              <a class="button is-medium is-justify-between is-fullwidth is-outlined"
+              <a class="button is-medium is-justify-between is-fullwidth is-outlined text-overflow-ellipsis"
                 href="{{ route('course.show', ['course' => $course->id ]) }}">
 
-                  {{ $course->title }}
+                  <span>{{ $course->title }}</span>
                   @if(Auth::user()->is_admin && $course->feedbackless_replies_count)<span class="tag is-primary ml-2" title="{{ $course->feedbackless_replies_count }} replies awaiting feedback">{{ $course->feedbackless_replies_count }} new</span>@endif
                   @if($course->archived)
                     <span class="tag is-light ml-2">Archived</span>

@@ -3,7 +3,7 @@
 
   h4 {
     margin-top: 4rem;
-    margin-bottom: -1.5em;
+    margin-bottom: -0.5em;
   }
 
   table {
@@ -29,7 +29,7 @@
 
   .editor-js-block,
   .ce-block {
-    margin: 2em 0;
+    margin: 1.5em 0;
 
     &__paired-heading {
       border-top: 1px solid $primary;
@@ -110,7 +110,8 @@
     transition: text-decoration 0.5s;
     text-decoration-color: $primary;
     text-decoration-style: dotted;
-    text-decoration-thickness: 0.3em;
+    text-decoration-skip-ink: none;
+    text-decoration-thickness: 0.1em;
 
     &:hover {
       text-decoration-color: darken($primary,15%);
@@ -123,7 +124,7 @@
     position: relative;
     text-decoration: underline;
     transition: text-decoration 0.5s;
-    text-decoration-skip: none;
+    text-decoration-skip-ink: none;
     text-decoration-color: lighten($success, 15%);
     text-decoration-thickness: 0.3em;
 

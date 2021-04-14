@@ -18,7 +18,7 @@
 
       <div v-if="section.order == 1 && lesson.instructions && lesson.instructions.length && lesson.instructions != '<p></p>'">
         <h3 class="has-text-weight-bold is-size-4">Instructions</h3>
-        <div v-html="lesson.instructions"></div>
+        <div class="content" v-html="lesson.instructions"></div>
       </div>
 
       <div class="container content" :class="{'clear-both': section.order == 1 && lesson.instructions && lesson.instructions.length }">

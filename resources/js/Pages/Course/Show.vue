@@ -3,8 +3,10 @@
   <div class="column is-7-tablet is-6-desktop is-5-widescreen is-paddingless">
     <a class="back-link has-text-dark" :href="route('course.index')">&larr; Back to all courses</a>
     <div class="box">
-      <h3 class="title has-text-centered">{{ course.title }}</h3>
-      <div class="subtitle has-text-centered" v-html="course.description"></div>
+      <div class="mb-3">
+        <h3 class="title has-text-centered">{{ course.title }}</h3>
+        <div class="subtitle has-text-centered" v-html="course.description"></div>
+      </div>
 
         <div v-if="course.archived" class="notification is-warning">
           <strong>This course has finished and has now been archived.</strong>

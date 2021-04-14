@@ -15,7 +15,7 @@
 
       <div v-else>
         <h3 class="title has-text-centered">Verifica necessaria <span class="emoji">🚦</span></h3>
-        <p class="subtitle has-text-centered">Please verify your payment details.</p>
+        <p class="subtitle has-text-centered">Please verify your payment</p>
 
         <b-notification
           v-if="errorMessage"
@@ -54,10 +54,10 @@
 
             <div v-show="requiresAction || requiresConfirmation">
 
-              <p>You are about to make a payment of {{ payment.amount}}. Click the button below if you wish to proceed.</p>
+              <p>You are about to make a payment of {{ payment.amount}}, click the button below to proceed. You may be prompted for additional verification for security purposes.</p>
 
               <button
-                class="button is-primary"
+                class="button is-primary is-fullwidth mt-4"
                 id="card-button"
                 @click="confirmPaymentMethod"
                 :disabled="paymentProcessing">

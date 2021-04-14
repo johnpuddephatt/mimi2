@@ -13,9 +13,14 @@
 
               @foreach($prices as $price)
                 <a class="box" href="{{ route('billing.payment-form', ['payment_type' => ($price->recurring ? 'subscription' : 'single'), 'stripe_price_code' => $price->id ]) }}">
-                  <h3 class="is-size-4">{{$price->product_data->name}}</h3>
+                  @if($price->recurring)<p class="tag is-success mb-4">Recurring {{ $price->recurring->interval }}ly payment</p>
+                  @else<p class="tag is-success mb-4">Single payment</p>@endif
+
+
+
+                  <h3 class="title is-size-4">{{$price->product_data->name}}</h3>
                   <p>{{$price->product_data->description}}</p>
-                  <p>
+                  <p class="title is-size-5 mt-3">
                     @if($price->currency == 'eur')€@endif
                     @if($price->currency == 'gbp')£@endif
                     @if($price->currency == 'usd')$@endif

@@ -23,6 +23,10 @@ Route::get('/scheduler', function(){
   return view('scheduler');
 })->name('scheduler')->middleware('auth');
 
+Route::get('/terms', function(){
+  return view('terms');
+})->name('terms');
+
 Route::get('/', 'CourseController@index')->name('home')->middleware('auth');
 
 Route::middleware(['nonpaying'])->group(function () {

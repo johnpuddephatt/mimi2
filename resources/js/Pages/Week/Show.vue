@@ -4,12 +4,15 @@
     <inertia-link class="back-link has-text-dark" :href="route('course.show', { 'course': $parameters.course })">{{ course.title }}</inertia-link> > {{ week.name }}
     <div class="box">
       <h3 class="title">{{ course.title }}</h3>
-      <h2 class="subtitle mb-3">{{ week.name }}</h2>
+      <h2 class="subtitle mb-4">{{ week.name }}</h2>
 
         <div v-if="course.archived" class="notification is-warning">
           <strong>This course has finished and has now been archived.</strong>
         </div>
 
+        <div class="content mb-4" v-html="week.description"></div>
+
+        <h3 v-if="week.lessons.length" class="title is-size-5">This week’s lessons</h3>
         <b-button
           v-for="lesson in week.lessons"
           :key="lesson.id"

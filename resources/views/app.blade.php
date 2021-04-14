@@ -21,7 +21,7 @@
         @routes
         <script defer src="{{ mix('js/app.js') }}"></script>
     </head>
-    <body>
+    <body class="has-navbar-fixed-top">
         @include('navigation')
         @inertia
         @include('footer')
