@@ -109,9 +109,9 @@
     text-decoration: underline;
     transition: text-decoration 0.5s;
     text-decoration-color: $primary;
-    text-decoration-style: dotted;
+    text-decoration-style: dashed;
     text-decoration-skip-ink: none;
-    text-decoration-thickness: 0.1em;
+    text-decoration-thickness: 0.15em;
 
     &:hover {
       text-decoration-color: darken($primary,15%);
