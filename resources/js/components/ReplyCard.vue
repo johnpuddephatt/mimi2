@@ -184,7 +184,7 @@ export default {
           url: `/lesson/${ this.$parameters.lesson }/reply/${id}/delete`
         })
         .then(feedback => {
-          successToast('Reply deleted');
+          this.successToast('Reply deleted');
           Inertia.reload({ only: ['replies'] });
 
           if (id != this.reply.id) {
@@ -192,7 +192,7 @@ export default {
           }
         })
         .catch(error => {
-          errorToast('Reply could not be deleted');
+          this.errorToast('Reply could not be deleted');
           axios.post('/log', {
             'error': `REPLY DELETE ERROR, ${ platform.description }, ${ JSON.stringify(error) }`
           });
