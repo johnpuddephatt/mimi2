@@ -115,6 +115,7 @@
 
 <script>
 import Comments from '@/components/Comments'
+import { Inertia } from '@inertiajs/inertia'
 
 export default {
   props: ['reply', '$parameters', '$user', 'comments'],
@@ -186,6 +187,7 @@ export default {
         .then(feedback => {
           this.successToast('Reply deleted');
           Inertia.reload({ only: ['replies'] });
+          this.is_open = false;
 
           if (id != this.reply.id) {
             this.updateSlide(0);
