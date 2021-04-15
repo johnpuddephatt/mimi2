@@ -1,6 +1,7 @@
 <footer class="footer mt-6">
-  <div class="column has-text-centered">
+  <div class="has-text-centered">
     <p class="menu-label">©{{ date("Y") }} Joy of Languages SRL<br> Milano, Via Pietro Mascagni n.31, 11461250968, MI - 2604182</p>
+    <p class="menu-label"><a target="_blank" href="/terms">Terms and conditions</a>&nbsp;&nbsp;&nbsp;&nbsp; <a target="_blank" href="https://www.iubenda.com/privacy-policy/49813028">Privacy&nbsp;policy</a></p>
   </div>
 </footer>
 

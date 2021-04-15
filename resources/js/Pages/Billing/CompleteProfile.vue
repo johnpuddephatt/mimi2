@@ -6,7 +6,7 @@
       <p class="subtitle has-text-centered">Introduce yourself</p>
 
       <div class="notification mt-3">
-        <p class="mt-2"><strong>Your payment was successful</strong><p>
+        <p class="mt-2">🪅 <strong>Your payment was successful</strong></p>
         <p class="mt-2">You can add a photo and introduce yourself below. This is optional but will help your teacher and other students get to know you.</p>
         <inertia-link :href="route('billing.success')" class="mt-2 button is-outlined">Skip this step</inertia-link>
       </div>

@@ -134,3 +134,16 @@ main {
   @extend .input;
   display: block !important;
 }
+
+.notification {
+  &.is-primary {
+    background-color: #f0e5d3;
+    color: $text;
+    border-left: 1em solid $primary;
+  }
+  &.is-success {
+    background-color: #e3f1f3;
+    color: $text;
+    border-left: 1em solid $success;
+  }
+}
