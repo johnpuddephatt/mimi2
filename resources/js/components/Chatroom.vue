@@ -5,8 +5,8 @@
       <button class="button" @click="sortBy = 'id'">Newest</button>
     </nav>
     <div class="container is-flex is-flex-wrap-wrap">
-      <create-reply :$parameters="$parameters" :$user="$user"/>
-      <reply-card @uploaded="startRefreshing" v-for="reply in sortedReplies" :reply="reply" :key="reply.id" :$parameters="$parameters" :$user="$user" :comments="$parameters.reply == reply.id ? comments : null"/>
+      <create-reply @uploaded="startRefreshing" :$parameters="$parameters" :$user="$user"/>
+      <reply-card v-for="reply in sortedReplies" :reply="reply" :key="reply.id" :$parameters="$parameters" :$user="$user" :comments="$parameters.reply == reply.id ? comments : null"/>
     </div>
   </div>
 </template>
