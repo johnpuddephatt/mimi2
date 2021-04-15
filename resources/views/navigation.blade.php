@@ -29,7 +29,7 @@
                           <figure class="image is-24x24 mr-1">
                             <img src="{{ Auth::user()->photo }}" class="is-rounded"/>
                           </figure>
-                          {{ Arr::random(['Ciao', 'Salve', 'Pronto']) }}, {{ Auth::user()->first_name }}!
+                          {{ Arr::random(['Ciao', 'Salve', 'Ehilà']) }}, {{ Auth::user()->first_name }}!
                           @if(Auth::user()->is_admin)<span class="tag is-success">Admin</span>@endif
                           @if(Auth::user()->subscribed())<span class="tag is-success">Subscribed</span>@endif
                         </a>

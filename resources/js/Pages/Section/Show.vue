@@ -7,7 +7,7 @@
       </div>
       <course-navigator :$parameters="$parameters" :course_id="$parameters.course"></course-navigator>
     </div>
-    <div class="box p-6">
+    <div class="box section-content">
 
       <h3 class="title is-2 has-text-weight-bold mt-4 mb-6">{{ section.title }}</h3>
 
@@ -107,6 +107,14 @@ export default {
 
 <style lang="scss">
 @import "../../../sass/variables";
+
+.section-content {
+  padding: 3rem !important;
+
+  @media(orientation: portrait) {
+    padding: 2rem 1rem !important
+  }
+}
 
 .sections-box {
   margin-top: -0.5em;
