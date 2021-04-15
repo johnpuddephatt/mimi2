@@ -121,8 +121,10 @@ export default {
           this.reply = response.data;
           noSleep.disable();
           this.isSaved = true;
-          this.$emit('startRefreshing');
-          this.errorToast('Upload successful. Your video will appear on the page shortly.');
+          this.$emit('uploaded');
+          this.successToast('Upload successful. Your video will appear on the page shortly.');
+
+
         }).catch(error => {
           noSleep.disable();
           this.isSaving = false;

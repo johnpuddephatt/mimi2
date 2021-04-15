@@ -185,13 +185,17 @@ export default {
           url: `/lesson/${ this.$parameters.lesson }/reply/${id}/delete`
         })
         .then(feedback => {
-          this.successToast('Reply deleted');
-          Inertia.reload({ only: ['replies'] });
-          this.is_open = false;
-
           if (id != this.reply.id) {
             this.updateSlide(0);
           }
+          else {
+            this.is_open = false;
+          }
+
+          this.$nextTick(() => {
+            this.successToast('Reply deleted');
+            Inertia.reload({ only: ['replies'] });
+          });
         })
         .catch(error => {
           this.errorToast('Reply could not be deleted');
