@@ -58,7 +58,7 @@ class RegisterController extends Controller
           return Inertia::render('Registration', ['admin' => $request->query('admin')]);
         }
         else {
-          return Inertia::render('Registration');
+          return Inertia::render('Registration', ['course' => $request->query('course')]);
         }
 
      }
