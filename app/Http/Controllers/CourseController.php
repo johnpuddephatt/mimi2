@@ -118,12 +118,13 @@ class CourseController extends Controller
     {
       if(\Auth::User()->is_admin) {
         $courses = Course::all();
-        return view('courses', compact('courses'));
       }
       else {
         $courses = \Auth::User()->courses;
         $courses = $courses->merge(Course::open()->get());
-        return view('courses', compact('courses'));
       }
+      return Inertia::render('Course/Index', compact('courses'));
+
+
     }
 }

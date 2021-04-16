@@ -118,9 +118,8 @@ class BillingController extends Controller
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
         try {
-          $stripeCharge = \Auth::user()->charge(
-            \Stripe\Price::retrieve($stripe_price_code)->unit_amount, $request->paymentMethodId
-          );
+          $price = \Stripe\Price::retrieve($stripe_price_code);
+          $stripeCharge = \Auth::user()->charge($price->unit_amount, $request->paymentMethodId);
         } catch (IncompletePayment $exception) {
           return redirect()->route(
             'billing.verify-payment',
@@ -131,7 +130,8 @@ class BillingController extends Controller
         }
 
         if($stripeCharge->status == 'succeeded') {
-          \Auth::user()->credits = 3;
+          $product = \Stripe\Product::retrieve($price->product);
+          \Auth::user()->credits ? (\Auth::user()->credits->increment($product->metadata->credits ?? 1)) : (\Auth::user()->credits = $product->metadata->credits ?? 1);
           \Auth::user()->save();
         }
       }
@@ -178,7 +178,7 @@ class BillingController extends Controller
           'photo' => $photo_path ? Storage::cloud()->url($photo_path) : null,
           'description' => $request->description,
       ]);
-
       return redirect()->route('billing.success');
+
     }
 }

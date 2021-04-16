@@ -106,6 +106,10 @@ class RegisterController extends Controller
             'is_admin' => isset($data['admin']) && ($data['admin'] == config('app.admin_invite_key'))
         ]);
 
+        if(isset($data['course'])) {
+          $user->courses()->attach(\Hashids::decode($data['course']));
+        }
+
         return $user;
     }
 }
