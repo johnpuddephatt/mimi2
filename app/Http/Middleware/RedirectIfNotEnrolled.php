@@ -26,7 +26,7 @@ class RedirectIfNotEnrolled
       }
 
       // Return next if user is an admin or we’re not looking at a course or course is open access
-      if(!$course_id || Auth::User()->is_admin || $course->is_open){
+      if(!$course_id || Auth::User()->is_admin || \App\Models\Course::find($course_id)->is_open){
         return $next($request);
       }
 
