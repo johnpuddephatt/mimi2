@@ -25,8 +25,8 @@ class RedirectIfNotEnrolled
         $course_id = $request->route('lesson')->week->course->id;
       }
 
-      // Return next if user is an admin or we’re not looking at a course
-      if(!$course_id || Auth::User()->is_admin){
+      // Return next if user is an admin or we’re not looking at a course or course is open access
+      if(!$course_id || Auth::User()->is_admin || $course->is_open){
         return $next($request);
       }
 
