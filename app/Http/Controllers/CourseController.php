@@ -74,13 +74,13 @@ class CourseController extends Controller
         }
       }
       // The below allows unregistered users to create an account to enrol.
-      // else {
-      //   return view('enrol', compact('course'));
-      // }
-
       else {
-        return redirect()->route('login', ['course' => $course ]);
+        return view('enrol', compact('course'));
       }
+
+      // else {
+      //   return redirect()->route('login', ['course' => $course ]);
+      // }
     }
 
     public function enroll(Request $request, Course $course) {
