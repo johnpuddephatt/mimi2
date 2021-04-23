@@ -1,0 +1,331 @@
+<template>
+
+<div class="camera-wrapper">
+
+  <!-- Audio preview -->
+  <div v-if="value">
+    <div class="has-square-media">
+      <audio controls :src="dataUrl" />
+    </div>
+
+    <div class="camera-controls has-background-light is-bordered has-text-centered">
+      <b-button class="restart-camera" icon-right="camera-retake" @click.prevent="confirmRestart">Start again</b-button>
+    </div>
+  </div>
+
+  <!-- Audio capture -->
+  <div v-else>
+
+    <div>
+      <div class="has-square-media">
+        <span v-if="isRecording"  class="recording-indicator tag" :class="timeRemaining < 30 ? 'is-red': 'is-black'">{{ timeRemaining > 30 ? 'Rec' : timeRemaininginMinutes }}</span>
+        <b-notification type="is-dark" v-if="mode == 'video' && isLoaded" class="recording-instructions" v-model="showInstructions" aria-close-label="Close instructions">
+          <p class="is-size-7"><b-icon icon="alarm" />Aim for a reply between 30 seconds and two minutes long. Five minutes is the maximum.</p>
+          <p class="is-size-7"><b-icon icon="restart" />You’ll be able to play your video back before uploading, and re-record it if you want to.</p>
+        </b-notification>
+
+        <canvas width="420" height="420" ref="canvas" class="visualizer"></canvas>
+
+      </div>
+      <div class="camera-controls has-background-light is-bordered has-text-centered">
+
+        <b-tooltip :label="isRecording ? 'Stop recording' : 'Start recording'" type="is-dark" animated position="is-bottom" :delay="1000" class="shutter-tooltip">
+          <b-button size="is-large" type="is-danger" @click.prevent="onRecordToggle" class="take-photo" icon-right="radiobox-blank" />
+        </b-tooltip>
+
+      </div>
+    </div>
+  </div>
+</div>
+</template>
+
+<script>
+import VueWebCam from "./WebCam";
+var platform = require('platform');
+
+export default {
+  components: {
+    'vue-web-cam': VueWebCam
+  },
+  props: {
+    mode: {
+      default: 'photo',
+      type: String
+    },
+    value: {
+    }
+  },
+  data() {
+    return {
+      audioCtx: null,
+      analyser: null,
+      chunks: [],
+      dataArray: null,
+      bufferLength: null,
+      showInstructions: true,
+      cameraType: 'mediaRecorder',
+      mediaRecorder: null,
+      isStarted: false,
+      newValue: null,
+      isRecording: false,
+      shouldStopRecording: false,
+      errorMessage: null,
+      warningMessage: null,
+      timeRemaining: null,
+      timer: null,
+      maxDuration: 300,
+      recordingBitrate: {
+        audio: 128000
+      },
+      accept: {
+        photo: 'audio/*',
+        video: 'audio/mpeg,audio/mp4,video/*'
+      }
+    };
+  },
+  computed: {
+    timeRemaininginMinutes: function() {
+      let minutes = Math.floor(this.timeRemaining / 60);
+      let seconds = ('0' + Math.floor(this.timeRemaining % 60)).slice(-2);;
+      return `${minutes}:${seconds}`;
+    },
+    dataUrl: function() {
+      return this.value instanceof Blob ? URL.createObjectURL(this.value) : this.value;
+    }
+  },
+  watch: {
+
+  },
+
+  mounted: function () {
+    if (navigator.mediaDevices.getUserMedia) {
+      const constraints = { audio: true };
+      navigator.mediaDevices.getUserMedia(constraints).then(this.onSuccess, this.onError);
+    } else {
+       console.log('getUserMedia not supported on your browser!');
+    }
+
+  },
+
+  methods: {
+
+    onRecordToggle() {
+      if(!this.isRecording) {
+        this.showInstructions = false;
+        this.timeRemaining = this.maxDuration;
+        this.isRecording = true;
+        this.timer = setInterval(()=>{
+          this.timeRemaining--;
+          if(this.timeRemaining < 1) {
+            this.onRecordToggle();
+          }
+        }, 1000);
+        this.mediaRecorder.start()
+      }
+      else {
+        this.isRecording = false;
+        clearInterval(this.timer);
+        this.timeRemaining = this.maxDuration;
+        this.mediaRecorder.stop();
+        // Timeout fallback for Safari, which only fires the dataavailable event once on stop
+        setTimeout(() => {
+          if (this.mediaRecorder.state == 'recording') {
+            this.mediaRecorder.stop();
+          }
+        }, 1000);
+      }
+    },
+
+    confirmRestart() {
+      this.$buefy.dialog.confirm({
+        title: 'Start again?',
+        message: 'Are you sure you want to <b>re-record</b> your audio? What you’ve recorded so far will be lost.',
+        confirmText: 'Confirm',
+        type: 'is-danger',
+        hasIcon: true,
+        onConfirm: () => this.onRestart()
+      })
+    },
+
+    onRestart() {
+      this.$emit('input', null);
+    },
+
+    onSuccess(stream) {
+      this.mediaRecorder = new MediaRecorder(stream);
+
+      this.visualize(stream);
+
+      this.mediaRecorder.onstop = (e) => {
+
+        const blob = new Blob(this.chunks, { 'type' : 'audio/ogg; codecs=opus' });
+        this.chunks = [];
+        this.$emit('input', blob)
+
+      }
+
+      this.mediaRecorder.ondataavailable = (e) => {
+        this.chunks.push(e.data);
+      }
+    },
+
+    onError(err) {
+      console.log('The following error occured: ' + err);
+    },
+
+    visualize(stream) {
+
+      if(!this.audioCtx) {
+        this.audioCtx = new AudioContext();
+      }
+
+      const source = this.audioCtx.createMediaStreamSource(stream);
+
+      this.analyser = this.audioCtx.createAnalyser();
+      this.analyser.fftSize = 128;
+      this.bufferLength = this.analyser.frequencyBinCount;
+      this.dataArray = new Uint8Array(this.bufferLength);
+      source.connect(this.analyser);
+      //this.analyser.connect(audioCtx.destination);
+      this.draw();
+    },
+
+    draw() {
+        const WIDTH = this.$refs.canvas.width
+        const HEIGHT = this.$refs.canvas.height;
+
+        window.requestAnimationFrame(this.draw);
+        this.analyser.getByteTimeDomainData(this.dataArray);
+        this.$refs.canvas.getContext("2d").fillStyle = 'rgba(98, 191, 205, 1)';
+        this.$refs.canvas.getContext("2d").fillRect(0, 0, WIDTH, HEIGHT);
+        let sliceWidth = WIDTH * 1.0 / this.bufferLength;
+        let dotRadius = 10;
+        let x = 0;
+        let bin = 0;
+        for(let i = 1; i < this.bufferLength + 1; i++) {
+          let v = this.dataArray[i] / 128.0;
+          let y = v * HEIGHT/8;
+          bin = bin + y;
+          if(i % 8 == 0) {
+            let ybin = bin/10;
+            this.$refs.canvas.getContext("2d").fillStyle = 'rgb(250, 250, 250)';
+            this.$refs.canvas.getContext("2d").beginPath();
+            this.$refs.canvas.getContext("2d").moveTo(x-dotRadius, HEIGHT/2 - ybin);
+            this.$refs.canvas.getContext("2d").arc(x, HEIGHT/2 - bin/10, dotRadius, 0, Math.PI, true);
+            this.$refs.canvas.getContext("2d").lineTo(x + dotRadius, HEIGHT/2 - ybin);
+            this.$refs.canvas.getContext("2d").arc(x, HEIGHT/2 + ybin, dotRadius, 0, Math.PI);
+            this.$refs.canvas.getContext("2d").fill();
+            bin = 0;
+          }
+          x += sliceWidth;
+        }
+      }
+    }
+};
+</script>
+
+
+<style lang="scss">
+
+  .visualizer {
+    background-color: rgb(98, 191, 205);
+    display: block;
+    margin-bottom: 0.5rem;
+    padding: 2em;
+  }
+
+  .camera-wrapper {
+    position: relative;
+  }
+
+  .field .camera-wrapper .has-square-media {
+    border-radius: 5px 5px 0 0;
+    border: 1px solid #dbdbdb;
+  }
+
+  .camera-controls {
+    padding: .5em 0;
+  }
+
+  .field .camera-controls {
+    border-radius: 0 0 5px 5px;
+    border: 1px solid #dbdbdb;
+    border-top: none;
+  }
+
+  .camera-controls button,
+  .camera-controls a {
+    border-radius: 9999px;
+  }
+
+  .camera-controls>* {
+    vertical-align: middle;
+  }
+
+  .change-camera-tooltip {
+    margin-left: -5rem;
+    margin-right: 1.5rem;
+  }
+
+  .file-upload-tooltip {
+    margin-left: 1.5rem;
+    margin-right: -5rem;
+  }
+
+
+  .recording-indicator {
+    position: absolute;
+    right: .5em;
+    top: .5em;
+    z-index: 9;
+    padding-right: 2em !important;
+
+    &.is-danger::after {
+      background-color: white;
+    }
+  }
+
+  .recording-indicator::after {
+    width: .75em;
+    height: .75em;
+    position: absolute;
+    right: .75em;
+    background-color: red;
+    border-radius: 9999px;
+    content: '';
+    animation: pulse 2s infinite ease;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(0.75);
+    }
+    90% {
+      transform: scale(1);
+    }
+  }
+
+  .recording-instructions {
+    position: absolute;
+    bottom: 0;
+    left: 1em;
+    right: 1em;
+    background-color: #000A !important;
+    z-index: 9;
+
+    p + p {
+      margin-top: 0.5em;
+    }
+
+    p {
+      padding-left: 2.2rem;
+      margin-bottom: 0;
+    }
+
+    .icon {
+      margin-left: -2rem;
+      margin-right: 0.5rem;
+      transform: translateY(40%);
+    }
+  }
+</style>

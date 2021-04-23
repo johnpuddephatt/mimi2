@@ -17,9 +17,11 @@
 .has-square-media video,
 .has-square-media img,
 .has-square-media iframe,
+.has-square-media canvas,
 .has-widescreen-media video,
 .has-widescreen-media img,
-.has-widescreen-media iframe {
+.has-widescreen-media iframe,
+.has-widescreen-media canvas {
    position: absolute;
    margin: 0;
    top: 0;

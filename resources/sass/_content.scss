@@ -1,6 +1,10 @@
 .content {
   line-height: 2;
 
+  video, iframe {
+    max-width: 100%;
+  }
+
   h4 {
     margin-top: 4rem;
     margin-bottom: -0.5em;
@@ -8,6 +12,13 @@
 
   table {
     margin-top: 1rem;
+  }
+
+  figure {
+    @media screen and (orientation: portrait) {
+      margin-left: 0;
+      margin-right: 0;
+    }
   }
 
   .ce-delimiter,
@@ -53,7 +64,8 @@
     border-radius: 0.5rem;
 
     img {
-      max-width: 400px;
+      max-width: 100%;
+      width: 400px;
       margin: 0 auto;
       display: block;
       border-radius: 0.5rem;
@@ -68,6 +80,9 @@
     &.with-background {
       padding: 2em 2em 1em;
       background-color: $white-ter;
+      @media screen and (orientation: portrait) {
+        padding: 2em 1em 1em;
+      }
     }
 
     &.with-border {

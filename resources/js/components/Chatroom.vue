@@ -6,6 +6,7 @@
     </nav>
     <div class="container is-flex is-flex-wrap-wrap">
       <create-reply @uploaded="startRefreshing" :$parameters="$parameters" :$user="$user"/>
+
       <reply-card v-for="reply in sortedReplies" :reply="reply" :key="reply.id" :$parameters="$parameters" :$user="$user" :comments="$parameters.reply == reply.id ? comments : null"/>
     </div>
   </div>
@@ -15,7 +16,7 @@
 import { Inertia } from '@inertiajs/inertia'
 
 export default {
-  props: ['replies', '$parameters', '$user'],
+  props: ['replies', 'comments', '$parameters', '$user'],
   components: {
 
   },

@@ -103,7 +103,8 @@
             Save this course before adding lessons.
           </div>
         </b-tab-item>
-        <b-tab-item label="Students">
+        <b-tab-item  v-if="$parameters.course" label="Students">
+
           <course-users :course_id="$parameters.course"/>
 
           <div class="notification has-background-light">

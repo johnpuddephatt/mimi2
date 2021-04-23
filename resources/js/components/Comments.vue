@@ -148,17 +148,11 @@ export default {
   watch: {
     preloadedComments() {
       this.comments = this.preloadedComments;
-      this.$nextTick(function () {
-        this.$refs.comments.$el.scrollTop = 999999;
-      });
+      this.scrollToBottom();
     },
 
     isLoaded() {
-      this.$nextTick(function () {
-        if(this.$refs.comments) {
-          this.$refs.comments.$el.scrollTop = 999999;
-        }
-      })
+      this.scrollToBottom();
     },
 
     currentlyCommentingOn(value) {
@@ -191,6 +185,14 @@ export default {
 
     setupReply(id) {
       this.currentlyCommentingOn = id;
+    },
+
+    scrollToBottom() {
+      this.$nextTick(function () {
+        if(this.$refs.comments) {
+          this.$refs.comments.$el.scrollTop = 999999;
+        }
+      })
     },
 
     confirmDelete(id) {

@@ -36,18 +36,31 @@ class ReplyController extends Controller
 
     public function store(StoreReply $request, Lesson $lesson) {
 
-      $video = Video::create([
-        'disk'              => 'public',
-        'unprocessed_path'  => $request->video->store(Video::$unprocessed_directory, 'public'),
-      ]);
+      if($request->video) {
+        $type = 'video';
+        $video = Video::create([
+          'disk'              => 'public',
+          'unprocessed_path'  => $request->video->store(Video::$unprocessed_directory, 'public'),
+        ]);
 
-      $this->dispatch(new ConvertReplyVideoForStreaming($video));
+        $this->dispatch(new ConvertReplyVideoForStreaming($video));
+      }
+      elseif($request->audio) {
+        $type = 'audio';
+        if($request->audio) {
+          $audio_path = Reply::$audio_directory . $request->audio->hashName();
+          Storage::cloud()->put($audio_path, $request->audio);
+        }
+      }
 
       Reply::create([
           'user_id' => $request->user_id,
           'reply_id' => null,
           'lesson_id' => $request->reply_id ? null : $lesson->id,
-          'video_id' => $video->id,
+          'video_id' => ($type == 'video') ? $video->id : null,
+          'audio' => ($type == 'audio') ? $audio_path : null,
+          'text' => ($type == 'text') ? $request->text : null,
+          'type' => $type
       ]);
 
       return redirect()->back();

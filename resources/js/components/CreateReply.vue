@@ -2,13 +2,16 @@
 <div v-if="!isSaved" :class="reply_id ? '' : 'column is-full is-half-widescreen'">
 
   <b-tooltip v-if="reply_id" label="Record admin reply" type="is-dark" animated position="is-left" :delay="1000" class="admin-reply-button--tooltip">
-    <b-button class="admin-reply-button" @click="isReplyModalActive = true" size="is-light" icon-right="reply" />
+    <b-button class="admin-reply-button" @click="openModal('video')" size="is-light" icon-right="reply" />
   </b-tooltip>
 
   <div v-else class="card reply-card reply-card__add">
-    <b-button class="reply-button" @click="isReplyModalActive = true" expanded size="is-medium is-primary" icon-right="plus-circle">
-      Add your reply
+    <b-button class="reply-button" @click="openModal('video')" expanded size="is-medium is-primary" icon-right="plus-circle">
+      Add your video
     </b-button>
+    <!-- <b-button class="reply-button" @click="openModal('audio')" expanded size="is-medium is-primary" icon-right="plus-circle">
+      Add your audio
+    </b-button> -->
   </div>
 
   <b-modal custom-class="create-reply-modal" :active.sync="isReplyModalActive" has-modal-card trap-focus :can-cancel="!reply.video && !isRecording" :destroy-on-hide="true" aria-role="dialog" width="420px" aria-modal>
@@ -37,10 +40,11 @@
 
     <div v-else class="modal-card">
       <section class="modal-card-body is-paddingless" style="overflow: visible;">
-        <camera-field @is-recording="isRecording = $event" v-model="reply.video" mode="video"></camera-field>
+        <camera-field v-if="replyMode == 'video'" @is-recording="isRecording = $event" v-model="reply.video" mode="video"></camera-field>
+        <audio-field v-else v-model="reply.audio" ></audio-field>
       </section>
       <footer class="modal-card-foot has-background-light">
-        <b-button v-if="reply.video" expanded type="is-primary" size="is-medium" @click.prevent="onSubmit" :loading="isSaving">Upload your reply</b-button>
+        <b-button v-if="reply.video || reply.audio" expanded type="is-primary" size="is-medium" @click.prevent="onSubmit" :loading="isSaving">Upload your reply</b-button>
         <p class="is-size-7" v-else>Start and stop recording with the red record button.</p>
       </footer>
     </div>
@@ -52,15 +56,18 @@
 import NoSleep from 'nosleep.js';
 var platform = require('platform');
 import CameraField from '@/components/CameraField';
+import AudioField from '@/components/AudioField';
 
 export default {
   props: ['$parameters', '$user', 'reply_id', 'should_open'],
   components: {
+    AudioField,
     CameraField
   },
   data() {
     return {
       isReplyModalActive: false,
+      replyMode: null,
       isSaving: false,
       isRecording: false,
       isSaved: false,
@@ -70,6 +77,7 @@ export default {
       uploadProgress: null,
       reply: {
         id: null,
+        audio: null,
         video: null,
         reply_id: this.reply_id ?? null,
         user_id: this.$user.id
@@ -78,11 +86,6 @@ export default {
   },
 
   watch: {
-    isReplyModalActive: function() {
-      if (this.$root.$refs.instructionVideo) {
-        this.$root.$refs.instructionVideo.pause();
-      }
-    },
     should_open: function(should_open) {
       if (should_open) {
         this.isReplyModalActive = true;
@@ -92,12 +95,16 @@ export default {
 
   methods: {
 
+    openModal(type) {
+      this.replyMode = type;
+      this.isReplyModalActive = true;
+    },
+
     onSubmit() {
       this.isSaving = true;
       var noSleep = new NoSleep();
       noSleep.enable();
-      console.log(`${Math.floor(this.reply.video.size/1024)}kB video`);
-      axios.post('/log', { 'error': `BEGINNING UPLOAD, ${ platform.description }, size: ${Math.floor(this.reply.video.size/1024)}kB, ` });
+      axios.post('/log', { 'error': `BEGINNING ${this.replyMode } UPLOAD, ${ platform.description }, size: ${Math.floor(this.replyMode == 'video' ? this.reply.video.size/1024 : this.reply.audio.size/1024)}kB, ` });
 
       const data = new FormData();
       for (let [key, value] of Object.entries(this.reply)) {
@@ -117,12 +124,12 @@ export default {
           timeout: 600000 // 10 minutes, matches Nginx and PHP config
         })
         .then(response => {
-          axios.post('/log', {'error': `UPLOAD COMPLETE, ${ platform.description }, size: ${Math.floor(this.reply.video.size/1024)}kB, `});
+          axios.post('/log', {'error': `${this.replyMode } UPLOAD COMPLETE, ${ platform.description }, size: ${Math.floor(this.replyMode == 'video' ? this.reply.video.size/1024 : this.reply.audio.size/1024)}kB, `});
           this.reply = response.data;
           noSleep.disable();
           this.isSaved = true;
           this.$emit('uploaded');
-          this.successToast('Upload successful. Your video will appear on the page shortly.');
+          this.successToast(`Upload successful. Your ${this.replyMode} will appear on the page shortly.`);
 
 
         }).catch(error => {
@@ -144,7 +151,7 @@ export default {
 
 <style lang="scss">
 .create-reply-modal {
-    z-index: 9999;
+    // z-index: 9999;
     .modal-card-foot {
         padding-top: 10px;
         padding-bottom: 10px;

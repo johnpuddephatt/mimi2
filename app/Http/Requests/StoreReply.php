@@ -27,6 +27,8 @@ class StoreReply extends FormRequest
           'lesson_id' => 'nullable|integer',
           'user_id' => 'required|integer',
           'video' => 'nullable',
+          'audio' => 'nullable',
+          'text' => 'nullable',
           'reply_id' => 'nullable|integer'
       ];
     }

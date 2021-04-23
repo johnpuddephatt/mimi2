@@ -18,8 +18,13 @@ class Reply extends Model
 {
     use LogsActivity;
 
+    public static $audio_directory = "reply/audio/";
+
+
     protected $fillable = [
         'video_id',
+        'audio',
+        'text',
         'lesson_id',
         'reply_id',
         'user_id'
@@ -29,7 +34,7 @@ class Reply extends Model
       'user_id' => 'integer',
       'lesson_id' => 'integer',
       'reply_id' => 'integer',
-      'video_id' => 'integer'
+      'video_id' => 'integer',
     ];
 
     protected $with = ['user'];
@@ -41,10 +46,6 @@ class Reply extends Model
 
       static::addGlobalScope('order', function (Builder $builder) {
         $builder->orderBy('id', 'desc');
-      });
-
-      static::addGlobalScope('video', function (Builder $builder) {
-        $builder->has('video');
       });
 
       static::created(function($reply){
@@ -59,6 +60,10 @@ class Reply extends Model
         // }
 
       });
+    }
+
+    public function scopeAudioOrVideo($query){
+      return $query->where('type', 'video')->orWhere('type', 'audio');
     }
 
     public function scopeFeedbackless($query) {

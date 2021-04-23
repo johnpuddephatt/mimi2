@@ -22,6 +22,7 @@ class RedirectIfNotEnrolled
         $course_id = $request->route('course')->id;
       }
       else if($request->route('lesson')) {
+
         $course_id = $request->route('lesson')->week->course->id;
       }
 

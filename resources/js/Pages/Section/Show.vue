@@ -1,7 +1,7 @@
 <template>
 <app-layout>
   <div class="column is-10-tablet is-8-desktop is-7-widescreen">
-    <div class="mb-2 is-flex is-align-items-center is-justify-content-space-between">
+    <div class="breadcrumb-wrapper">
       <div>
         <inertia-link class="back-link mb-0 has-text-dark" :href="route('course.show', {'course': $parameters.course })">{{ course.title }}</inertia-link> &gt; <inertia-link class="back-link mb-0 has-text-dark" accesskey="":href="route('week.show', {'course': $parameters.course, 'week': $parameters.week })">{{ week.name }}</inertia-link>
       </div>
@@ -37,7 +37,7 @@
 
       </div>
 
-      <Chatroom v-if="section.is_chatroom" :replies="replies" :$user="$user" :$parameters="$parameters"></Chatroom>
+      <Chatroom v-if="section.is_chatroom" :replies="replies" :$user="$user" :comments="comments" :$parameters="$parameters"></Chatroom>
 
       <div class="container is-flex mt-5">
         <inertia-link class="button" v-if="previousSectionID" :href="route('section.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': $parameters.lesson, 'section': previousSectionID })">Previous</inertia-link>
@@ -53,7 +53,7 @@
 import Chatroom from '@/components/Chatroom'
 
 export default {
-  props: ['blocks_prerendered', 'replies', 'course', 'week', 'lesson', 'section', '$parameters', '$user'],
+  props: ['blocks_prerendered', 'comments', 'replies', 'course', 'week', 'lesson', 'section', '$parameters', '$user'],
 
   components: {
     Chatroom
@@ -135,5 +135,17 @@ export default {
 
 .clear-both {
   clear: both;
+}
+
+.breadcrumb-wrapper {
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  @media screen and (orientation: portrait) {
+    flex-direction: column;
+  }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
 <transition name="fade-out">
-  <div v-if="reply.video.converted_for_streaming_at || reply.user_id == $user.id" class="column is-full is-half-widescreen is-relative">
+  <div v-if="reply.type == 'audio' || reply.video.converted_for_streaming_at || reply.user_id == $user.id" class="column is-full is-half-widescreen is-relative">
 
     <div class="admin-reply" v-if="$user.is_admin">
       <b-tooltip v-if="reply.feedback && reply.feedback.id && !feedbackIsDeleted" label="You’ve replied to this" type="is-dark" animated position="is-left" :delay="1000" class="admin-check-button--tooltip">
@@ -10,10 +10,11 @@
     </div>
 
     <div class="card reply-card">
-      <div class="card-image" :class="{'loaded' : reply.video.converted_for_streaming_at}" @click="is_open = true">
+      <div class="card-image" :class="{'loaded' : reply.audio || reply.video.converted_for_streaming_at}" @click="is_open = true">
         <figure class="image is-square m-0">
-          <img v-if="reply.video.converted_for_streaming_at" :src="reply.video.thumbnail_path" alt="">
-          <b-loading :is-full-page="false" :active="!reply.video.converted_for_streaming_at"></b-loading>
+          <div v-if="reply.audio">Audio preview</div>
+          <img v-else-if="reply.video && reply.video.converted_for_streaming_at" :src="reply.video.thumbnail_path" alt="">
+          <b-loading v-else :is-full-page="false" :active="true"></b-loading>
         </figure>
       </div>
       <div class="card-content is-justify-between">
@@ -24,7 +25,8 @@
           <p>
             <span class="is-size-6">{{ reply.user.first_name}}</span>
             <span class="is-size-7">
-              <timeago v-if="reply.video.converted_for_streaming_at" :datetime="reply.video.converted_for_streaming_at" :auto-update="60"></timeago>
+              <timeago v-if="reply.video && reply.video.converted_for_streaming_at" :datetime="reply.video.converted_for_streaming_at" :auto-update="60"></timeago>
+              <timeago v-else-if="reply.audio" :datetime="reply.created_at" :auto-update="60"></timeago>
               <span v-else class="tag is-light">Processing</span>
             </span>
           </p>
@@ -32,6 +34,7 @@
         <span v-if="reply.comments_count > 0" class="tag is-rounded">{{ reply.comments_count }} comments</span>
       </div>
     </div>
+
 
     <b-modal custom-class="has-background-white-bis reply-card-modal" :active.sync="is_open" has-modal-card trap-focus :destroy-on-hide="true" animation="zoom-in" aria-role="dialog" width="840px" aria-modal>
 
@@ -52,7 +55,8 @@
 
         <b-carousel animated="fade" @change="updateSlide($event)" :arrow="false" :indicator="false" :has-drag="false" v-model="currentSlide" :autoplay="false" icon-size="is-medium">
           <b-carousel-item key="reply">
-            <video-player @playing="video_stopped = null" @stopped="video_stopped = 'reply'" :should_autoplay="currentSlide == 0" :source="reply.video.playlist_path" :poster="reply.video.thumbnail_path" type="application/x-mpegURL"></video-player>
+            <video-player v-if="reply.video" @playing="video_stopped = null" @stopped="video_stopped = 'reply'" :should_autoplay="currentSlide == 0" :source="reply.video.playlist_path" :poster="reply.video.thumbnail_path" type="application/x-mpegURL"></video-player>
+            <div v-else>Audio player</div>
           </b-carousel-item>
           <b-carousel-item v-if="reply.feedback && reply.feedback.playlist && !feedbackIsDeleted" key="feedback">
             <video-player @playing="video_stopped = null" @stopped="video_stopped = 'feedback'" :should_autoplay="currentSlide == 1" :source="reply.feedback.playlist_path" :poster="reply.feedback.thumbnail_path" type="application/x-mpegURL"></video-player>
@@ -69,7 +73,8 @@
             <p>
               <span class="is-size-6">{{ reply.user.first_name }}</span>
               <span class="is-size-7">
-                <timeago :datetime="reply.video.converted_for_streaming_at" :auto-update="60"></timeago>
+                <timeago v-if="reply.video" :datetime="reply.video.converted_for_streaming_at" :auto-update="60"></timeago>
+                <timeago v-else :datetime="reply.created_at" :auto-update="60"></timeago>
               </span>
             </p>
           </div>
@@ -268,7 +273,7 @@ export default {
         border: 2px dashed $grey-lighter;
         height: 100%;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
         padding: 2em;
         justify-content: center;

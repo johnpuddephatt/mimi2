@@ -168,6 +168,8 @@ class BillingController extends Controller
     }
 
     public function updateProfile(StoreUser $request) {
+      $photo_path = null;
+
       if($request->photo) {
         $resized = \Image::make($request->photo)->orientate()->fit(480,480)->encode('jpg',80);
         $photo_path = User::$photo_directory . $request->photo->hashName();
@@ -175,7 +177,7 @@ class BillingController extends Controller
       }
 
       \Auth::user()->update([
-          'photo' => $photo_path ? Storage::cloud()->url($photo_path) : null,
+          'photo' => ($photo_path ? Storage::cloud()->url($photo_path) : null),
           'description' => $request->description,
       ]);
       return redirect()->route('billing.success');

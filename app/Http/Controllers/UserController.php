@@ -34,15 +34,21 @@ class UserController extends Controller
     protected function updateProfile(StoreUser $request) {
 
         if($request->photo) {
-          $resized = \Image::make($request->photo)->orientate()->fit(480,480)->encode('jpg',80);
-          $photo_path = User::$photo_directory . $request->photo->hashName();
-          Storage::cloud()->put($photo_path, $resized);
+          if($request->photo == \Auth::user()->photo) {
+            $photo_url = $request->photo;
+          }
+          else {
+            $resized = \Image::make($request->photo)->orientate()->fit(480,480)->encode('jpg',80);
+            $photo_path = User::$photo_directory . $request->photo->hashName();
+            Storage::cloud()->put($photo_path, $resized);
+            $photo_url = Storage::cloud()->url($photo_path);
+          }
         }
 
         \Auth::user()->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
-            'photo' => $photo_path ? Storage::cloud()->url($photo_path) : null,
+            'photo' => isset($photo_url) ? $photo_url : null,
             'description' => $request->description,
         ]);
 
