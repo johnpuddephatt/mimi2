@@ -37,6 +37,9 @@ class CourseController extends Controller
     }
 
     public function show(Course $course) {
+      if(!$course->live && !\Auth::user()->is_admin) {
+        return back()->with('message', 'This course is not live yet.');
+      }
       $course->load('weeks');
       return Inertia::render('Course/Show', ['course' => $course]);
     }

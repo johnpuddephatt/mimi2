@@ -1,9 +1,9 @@
 <template>
   <div>
-    <nav class="clear-both">
+    <!-- <nav class="clear-both">
       <button class="button" @click="sortBy = 'comments_count'">Most commented</button>
       <button class="button" @click="sortBy = 'id'">Newest</button>
-    </nav>
+    </nav> -->
     <div class="container is-flex is-flex-wrap-wrap">
       <create-reply @uploaded="startRefreshing" :$parameters="$parameters" :$user="$user"/>
 

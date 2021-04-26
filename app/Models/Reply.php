@@ -18,7 +18,8 @@ class Reply extends Model
 {
     use LogsActivity;
 
-    public static $audio_directory = "reply/audio/";
+    public static $audio_directory = "replies/audio/";
+    public static $unprocessed_audio_directory = "audio/unprocessed";
 
 
     protected $fillable = [
@@ -27,7 +28,8 @@ class Reply extends Model
         'text',
         'lesson_id',
         'reply_id',
-        'user_id'
+        'user_id',
+        'type'
     ];
 
     protected $casts = [

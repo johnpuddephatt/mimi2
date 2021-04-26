@@ -41,11 +41,8 @@ class ConvertReplyVideoForStreaming implements ShouldQueue
      */
     public function handle()
     {
-        $hash = random_bytes(10);
-
         $thumbnail_path = Video::$thumbnail_directory . $this->video->id . '.jpg';
         $playlist_path = Video::$video_directory . $this->video->id . '/playlist.m3u8';
-        // $playlist_path = Video::$video_directory . $hash . '.m3u8';
 
         $lowBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(200)->setAdditionalParameters(
           ["-preset", "ultrafast"]

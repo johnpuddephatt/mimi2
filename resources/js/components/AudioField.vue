@@ -57,6 +57,7 @@ export default {
   },
   data() {
     return {
+      shouldStop: false,
       audioCtx: null,
       analyser: null,
       chunks: [],
@@ -101,6 +102,10 @@ export default {
     this.setup();
   },
 
+  beforeDestroy() {
+    this.shouldStop = true;
+  },
+
   methods: {
 
     setup() {
@@ -132,7 +137,7 @@ export default {
         this.mediaRecorder.stop();
         // Timeout fallback for Safari, which only fires the dataavailable event once on stop
         setTimeout(() => {
-          if (this.mediaRecorder &&   this.mediaRecorder.state == 'recording') {
+          if (this.mediaRecorder && this.mediaRecorder.state == 'recording') {
             this.mediaRecorder.stop();
           }
         }, 1000);
@@ -156,11 +161,11 @@ export default {
     },
 
     onSuccess(stream) {
-      this.mediaRecorder = new MediaRecorder(stream);
+      this.mediaRecorder = new MediaRecorder(stream, this.options);
       this.visualize(stream);
 
       this.mediaRecorder.onstop = (e) => {
-        const blob = new Blob(this.chunks, { 'type' : 'audio/ogg; codecs=opus' });
+        const blob = new Blob(this.chunks, { 'type' : this.mediaRecorder.mimeType });
         this.chunks = [];
         this.mediaRecorder = null;
         this.audioCtx = null;
@@ -193,7 +198,7 @@ export default {
     },
 
     requestDraw() {
-      if(!this.value) {
+      if(!this.value && !this.shouldStop) {
         window.requestAnimationFrame(this.requestDraw);
         this.visCircle();
       }

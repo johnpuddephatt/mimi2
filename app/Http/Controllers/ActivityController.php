@@ -16,8 +16,8 @@ class ActivityController extends Controller
     $activities = Activity::orderBy('id','DESC')
       ->with(['subject' => function (MorphTo $morphTo) {
         $morphTo->morphWith([
-            Comment::class => ['reply.user:id','reply.lesson.course:id'],
-            Reply::class => ['reply.lesson.course:id','lesson.course:id'],
+            Comment::class => ['reply.user:id','reply.lesson.week.course:id'],
+            Reply::class => ['reply.lesson.week.course:id','lesson.week.course:id'],
         ]);
       }])
       ->with('causer:id,first_name,photo')

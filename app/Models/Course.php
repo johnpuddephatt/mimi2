@@ -10,12 +10,13 @@ class Course extends Model
   use HasFactory;
 
   protected $fillable = [
-      'title', 'description', 'archived', 'is_open'
+      'title', 'description', 'archived', 'is_open', 'live'
   ];
 
   protected $casts = [
     'archived' => 'boolean',
-    'is_open' => 'boolean'
+    'is_open' => 'boolean',
+    'live' => 'boolean'
   ];
 
   protected $appends = [

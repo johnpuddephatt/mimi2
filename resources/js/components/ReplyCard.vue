@@ -1,18 +1,18 @@
 <template>
 <transition name="fade-out">
-  <div v-if="reply.type == 'audio' || reply.video.converted_for_streaming_at || reply.user_id == $user.id" class="column is-full is-half-widescreen is-relative">
+  <div v-if="reply.audio || reply.video.converted_for_streaming_at || reply.user_id == $user.id" class="column is-full is-half-widescreen is-relative">
 
     <div class="admin-reply" v-if="$user.is_admin">
-      <b-tooltip v-if="reply.feedback && reply.feedback.id && !feedbackIsDeleted" label="You’ve replied to this" type="is-dark" animated position="is-left" :delay="1000" class="admin-check-button--tooltip">
+      <b-tooltip v-if="reply.feedback && !feedbackIsDeleted" label="You’ve replied to this" type="is-dark" animated position="is-left" :delay="1000" class="admin-check-button--tooltip">
         <b-icon class="admin-check-button" type="is-light" icon="check" />
       </b-tooltip>
-      <create-reply v-else-if="open_reply_modal" :reply_id="reply.id" :should_open="open_reply_modal"></create-reply>
+      <create-reply :$user="$user" :mode="reply.audio ? 'audio' : 'video'" :reply_id="reply.id" :should_open="open_reply_modal"></create-reply>
     </div>
 
     <div class="card reply-card">
       <div class="card-image" :class="{'loaded' : reply.audio || reply.video.converted_for_streaming_at}" @click="is_open = true">
-        <figure class="image is-square m-0">
-          <div v-if="reply.audio">Audio preview</div>
+        <figure class="image is-square m-0" :class="{'audio-preview' : reply.audio}">
+          <div v-if="reply.audio"></div>
           <img v-else-if="reply.video && reply.video.converted_for_streaming_at" :src="reply.video.thumbnail_path" alt="">
           <b-loading v-else :is-full-page="false" :active="true"></b-loading>
         </figure>
@@ -56,10 +56,11 @@
         <b-carousel animated="fade" @change="updateSlide($event)" :arrow="false" :indicator="false" :has-drag="false" v-model="currentSlide" :autoplay="false" icon-size="is-medium">
           <b-carousel-item key="reply">
             <video-player v-if="reply.video" @playing="video_stopped = null" @stopped="video_stopped = 'reply'" :should_autoplay="currentSlide == 0" :source="reply.video.playlist_path" :poster="reply.video.thumbnail_path" type="application/x-mpegURL"></video-player>
-            <div v-else>Audio player</div>
+            <audio-player :source="reply.audio" v-else />
           </b-carousel-item>
-          <b-carousel-item v-if="reply.feedback && reply.feedback.playlist && !feedbackIsDeleted" key="feedback">
-            <video-player @playing="video_stopped = null" @stopped="video_stopped = 'feedback'" :should_autoplay="currentSlide == 1" :source="reply.feedback.playlist_path" :poster="reply.feedback.thumbnail_path" type="application/x-mpegURL"></video-player>
+          <b-carousel-item v-if="reply.feedback && (reply.feedback.playlist || reply.feedback.audio) && !feedbackIsDeleted" key="feedback">
+            <video-player v-if="reply.feedback.playlist" @playing="video_stopped = null" @stopped="video_stopped = 'feedback'" :should_autoplay="currentSlide == 1" :source="reply.feedback.playlist_path" :poster="reply.feedback.thumbnail_path" type="application/x-mpegURL"></video-player>
+            <audio-player v-else :source="reply.audio" />
           </b-carousel-item>
         </b-carousel>
       </div>
@@ -85,7 +86,7 @@
             </button>
             <b-dropdown-item @click="confirmDelete(reply.id)" aria-role="listitem">Delete</b-dropdown-item>
             <b-dropdown-item v-if="$user.is_admin && reply.feedback && reply.feedback.id" @click="confirmDelete(reply.feedback.id)" aria-role="listitem">Delete feedback</b-dropdown-item>
-            <b-dropdown-item v-if="$user.is_admin && reply.feedback && !reply.feedback.id" @click="openReplyModal" aria-role="listitem">Add feedback</b-dropdown-item>
+            <b-dropdown-item v-if="$user.is_admin && !reply.feedback" @click="openReplyModal" aria-role="listitem">Add feedback</b-dropdown-item>
           </b-dropdown>
           <button class="button reply-card-modal__close is-light" @click="is_open = false">
             <b-icon icon="close"></b-icon>
@@ -216,6 +217,14 @@ export default {
 <style lang="scss">
 @import "../../sass/variables";
 
+.audio-preview {
+  background-color: lighten($success, 35%);
+  background-image: url(/images/sine.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
 .reply-card {
 
     .loading-overlay {
@@ -227,24 +236,24 @@ export default {
         background-color: $grey-lighter;
 
         &.loaded {
-            &::before {
-                content: "\F101";
-                font-size: 2.5em;
-                background-color: transparentize($turquoise,0.3);
-                color: white;
-                height: 1.5em;
-                width: 1.5em;
-                line-height: 1.5em;
-                text-align: center;
-                border-radius: 9999px;
-                z-index: 9;
-                font-family: 'VideoJS';
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%,-50%);
-                transition: background-color 1s;
-            }
+          &::before {
+            content: "\F101";
+            font-size: 2.5em;
+            background-color: transparentize($turquoise,0.3);
+            color: white;
+            height: 1.5em;
+            width: 1.5em;
+            line-height: 1.5em;
+            text-align: center;
+            border-radius: 9999px;
+            z-index: 9;
+            font-family: 'VideoJS';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            transition: background-color 1s;
+          }
         }
         &:hover {
             &::before {

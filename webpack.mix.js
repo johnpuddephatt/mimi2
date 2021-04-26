@@ -24,7 +24,7 @@ mix
   .sourceMaps()
   .sass('resources/sass/app.scss', 'public/css')
   .browserSync({
-   proxy: 'public.mimi2.localhost',
+   proxy: 'public.mimi.localhost',
    files: [
       'app/**/*.php',
       'resources/views/**/*.php',

@@ -19,8 +19,9 @@
             <tip-tap v-model="form.description"/>
           </b-field>
 
-          <b-checkbox v-if="data" v-model="form.archived">Archive this course?</b-checkbox>
 
+          <b-checkbox v-if="data" v-model="form.archived">Archive this course?</b-checkbox><br>
+          <b-checkbox v-model="form.live">Make this course live?</b-checkbox><br>
           <b-checkbox v-model="form.is_open">Make this course open to all?</b-checkbox>
 
 
@@ -139,7 +140,8 @@ export default {
         title: this.data?.title ?? null,
         description: this.data?.description ?? null,
         archived: this.data?.archived ?? false,
-        is_open: this.data?.is_open ?? false
+        is_open: this.data?.is_open ?? false,
+        live: this.data?.live ?? false
 
       }),
       destroyWeekForm: this.$inertia.form(),

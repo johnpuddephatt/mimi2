@@ -2,16 +2,16 @@
 <div v-if="!isSaved" :class="reply_id ? '' : 'column is-full is-half-widescreen'">
 
   <b-tooltip v-if="reply_id" label="Record admin reply" type="is-dark" animated position="is-left" :delay="1000" class="admin-reply-button--tooltip">
-    <b-button class="admin-reply-button" @click="openModal('video')" size="is-light" icon-right="reply" />
+    <b-button class="admin-reply-button" @click="openModal(mode == 'audio' ? 'audio' : 'video')" size="is-light" icon-right="reply" />
   </b-tooltip>
 
   <div v-else class="card reply-card reply-card__add">
     <b-button class="reply-button" @click="openModal('video')" expanded size="is-medium is-primary" icon-right="plus-circle">
       Add your video
     </b-button>
-    <!-- <b-button class="reply-button" @click="openModal('audio')" expanded size="is-medium is-primary" icon-right="plus-circle">
+    <b-button class="reply-button" @click="openModal('audio')" expanded size="is-medium is-primary" icon-right="plus-circle">
       Add your audio
-    </b-button> -->
+    </b-button>
   </div>
 
   <b-modal custom-class="create-reply-modal" :active.sync="isReplyModalActive" has-modal-card trap-focus :can-cancel="!reply.video && !isRecording" :destroy-on-hide="true" aria-role="dialog" width="420px" aria-modal>
@@ -59,7 +59,7 @@ import CameraField from '@/components/CameraField';
 import AudioField from '@/components/AudioField';
 
 export default {
-  props: ['$parameters', '$user', 'reply_id', 'should_open'],
+  props: ['$parameters', '$user', 'reply_id', 'mode', 'should_open'],
   components: {
     AudioField,
     CameraField

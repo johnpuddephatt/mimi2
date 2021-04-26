@@ -11,6 +11,7 @@ use App\Models\Video;
 use App\Http\Requests\StoreReply;
 use Illuminate\Support\Facades\Storage;
 use App\Jobs\ConvertReplyVideoForStreaming;
+use App\Jobs\ConvertReplyAudioForStreaming;
 
 class ReplyController extends Controller
 {
@@ -37,7 +38,6 @@ class ReplyController extends Controller
     public function store(StoreReply $request, Lesson $lesson) {
 
       if($request->video) {
-        $type = 'video';
         $video = Video::create([
           'disk'              => 'public',
           'unprocessed_path'  => $request->video->store(Video::$unprocessed_directory, 'public'),
@@ -45,23 +45,23 @@ class ReplyController extends Controller
 
         $this->dispatch(new ConvertReplyVideoForStreaming($video));
       }
-      elseif($request->audio) {
-        $type = 'audio';
-        if($request->audio) {
-          $audio_path = Reply::$audio_directory . $request->audio->hashName();
-          Storage::cloud()->put($audio_path, $request->audio);
-        }
-      }
 
-      Reply::create([
+
+      $reply = Reply::create([
           'user_id' => $request->user_id,
           'reply_id' => null,
           'lesson_id' => $request->reply_id ? null : $lesson->id,
-          'video_id' => ($type == 'video') ? $video->id : null,
-          'audio' => ($type == 'audio') ? $audio_path : null,
-          'text' => ($type == 'text') ? $request->text : null,
-          'type' => $type
+          'video_id' => $request->video ? $video->id : null,
+          'text' => $request->text,
+          'type' => $request->audio ? 'audio' :
+                      ($request->video ? 'video' : 'text')
       ]);
+
+
+      if($request->audio) {
+        $unprocessed_audio = $request->audio->store(Reply::$unprocessed_audio_directory, 'public');
+        $this->dispatch(new ConvertReplyAudioForStreaming($reply, $unprocessed_audio));
+      }
 
       return redirect()->back();
 

@@ -28,10 +28,16 @@
                         <div class="is-italic is-size-7 mb-2">{!!$activity->properties['attributes']['value'] !!}</div>
                         <timeago class="is-size-7 has-text-grey" datetime="{{$activity->created_at}}" :auto-update="60"></timeago>
                     </div>
-                    <a class="button" href="{{ route('lesson.reply', [
-                      'course' => $activity->subject->reply->lesson->course->id,
-                      'lesson' => $activity->subject->reply->lesson->id,
-                      'reply_id' => $activity->subject->reply->id ]) }}">View</a>
+                    @if($activity->subject)
+                      <a class="button" href="{{ route('section.reply', [
+                        'course' => $activity->subject->reply->lesson->week->course->id,
+                        'lesson' => $activity->subject->reply->lesson->id,
+                        'week' => $activity->subject->reply->lesson->week,
+                        'section' => $activity->subject->reply->lesson->sections->where('is_chatroom', true)->first()->id,
+                        'reply' => $activity->subject->reply->id ]) }}">View</a>
+                    @else
+                      This entry has since been deleted
+                    @endif
 
                   @endif
 
@@ -45,11 +51,17 @@
                           <p><strong>{{ $activity->subject->user->first_name }}</strong> gave feedback to {{ $activity->subject->reply->user->first_name }}</strong></p>
                           <timeago class="is-size-7 has-text-grey" datetime="{{$activity->created_at}}" :auto-update="60"></timeago>
                       </div>
-                      <a class="button" href="{{ route('lesson.reply', [
-                        'course' => $activity->subject->reply->lesson->course->id,
-                        'lesson' => $activity->subject->reply->lesson->id,
-                        'reply_id' => $activity->subject->reply->id,
-                        'show_feedback' => true ]) }}">View</a>
+                      @if($activity->subject)
+                        <a class="button" href="{{ route('section.reply', [
+                          'course' => $activity->subject->reply->lesson->week->course->id,
+                          'week' => $activity->subject->reply->lesson->week,
+                          'lesson' => $activity->subject->reply->lesson->id,
+                          'section' => $activity->subject->reply->lesson->sections->where('is_chatroom', true)->first()->id,
+                          'reply' => $activity->subject->reply->id,
+                          'show_feedback' => true ]) }}">View</a>
+                      @else
+                        This entry has since been deleted
+                      @endif
 
                     @else
                       {{-- STUDENT REPLY --}}
@@ -60,11 +72,18 @@
                           <p><strong>{{ $activity->subject->user->first_name }}</strong> posted a reply</p>
                           <timeago class="is-size-7 has-text-grey" datetime="{{$activity->created_at}}" :auto-update="60"></timeago>
                       </div>
-                      <a class="button" href="{{ route('lesson.reply', [
-                        'course' => $activity->subject->lesson->course->id,
-                        'lesson' => $activity->subject->lesson->id,
-                        'reply_id' => $activity->subject->id,
-                        'show_feedback' => false ]) }}">View</a>
+
+                      @if($activity->subject)
+                        <a class="button" href="{{ route('section.reply', [
+                          'course' => $activity->subject->lesson->week->course->id,
+                          'lesson' => $activity->subject->lesson->id,
+                          'week' => $activity->subject->lesson->week,
+                          'section' => $activity->subject->lesson->sections->where('is_chatroom', true)->first()->id,
+                          'reply' => $activity->subject->id,
+                          'show_feedback' => false ]) }}">View</a>
+                        @else
+                          This entry has since been deleted
+                        @endif
                     @endif
                   @endif
                 </div>
