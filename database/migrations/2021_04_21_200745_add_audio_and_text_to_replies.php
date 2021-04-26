@@ -14,7 +14,7 @@ class AddAudioAndTextToReplies extends Migration
     public function up()
     {
         Schema::table('replies', function (Blueprint $table) {
-          $table->integer('audio_id')->nullable();
+          $table->text('audio')->nullable();
           $table->text('text')->nullable();
         });
     }
