@@ -9,9 +9,9 @@
     <b-button class="reply-button" @click="openModal('video')" expanded size="is-medium is-primary" icon-right="plus-circle">
       Add your video
     </b-button>
-    <b-button class="reply-button" @click="openModal('audio')" expanded size="is-medium is-primary" icon-right="plus-circle">
+    <!-- <b-button class="reply-button" @click="openModal('audio')" expanded size="is-medium is-primary" icon-right="plus-circle">
       Add your audio
-    </b-button>
+    </b-button> -->
   </div>
 
   <b-modal custom-class="create-reply-modal" :active.sync="isReplyModalActive" has-modal-card trap-focus :can-cancel="!reply.video && !isRecording" :destroy-on-hide="true" aria-role="dialog" width="420px" aria-modal>
