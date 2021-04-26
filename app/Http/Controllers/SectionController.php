@@ -29,6 +29,10 @@ class SectionController extends Controller
 
     public function show(Request $request, Course $course, Week $week, Lesson $lesson, Section $section, Reply $reply = null) {
 
+        if(!$lesson->live && !\Auth::user()->is_admin) {
+          return back()->with('message', 'This lesson is not live yet.');
+        }
+
         return Inertia::render('Section/Show', [
           'course' => $course->only('id','title','archived'),
           'week' => $week->only('id','name','number'),

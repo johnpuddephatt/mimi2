@@ -36,6 +36,9 @@
             <b-field label="Instructions" :message="errors.instructions" :type="errors.instructions ? 'is-danger' : null">
               <tip-tap v-model="form.instructions" />
             </b-field>
+
+            <b-checkbox v-model="form.live">Make this lesson live?</b-checkbox>
+
           </b-tab-item>
           <b-tab-item label="Sections">
             <h3 class="label is-flex is-justify-between">
@@ -96,7 +99,8 @@ export default {
         title: this.data?.title ?? null,
         instructions: this.data?.instructions ?? null,
         day: this.data?.day ?? this.latest_lesson_number + 1,
-        sections: this.data?.sections ?? []
+        sections: this.data?.sections ?? [],
+        live: this.data?.live ?? true
       }),
       destroySectionForm: this.$inertia.form(),
     }

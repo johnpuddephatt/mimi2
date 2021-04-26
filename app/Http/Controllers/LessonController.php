@@ -34,6 +34,7 @@ class LessonController extends Controller
       $lesson = Lesson::create([
           'title' => $request->title,
           'instructions' => $request->instructions,
+          'live' => $request->live,
           'day' => $request->day,
           'week_id' => $week->id,
       ]);
@@ -49,6 +50,7 @@ class LessonController extends Controller
       $lesson->update([
         'title' => $request->title,
         'instructions' => $request->instructions,
+        'live' => $request->live,
         'day' => $request->day,
         'week_id' => $week->id
       ]);
@@ -62,6 +64,9 @@ class LessonController extends Controller
 
 
     public function show(Course $course, Week $week, Lesson $lesson) {
+      if(!$lesson->live && !\Auth::user()->is_admin) {
+        return back()->with('message', 'This lesson is not live yet.');
+      }
       $section = $lesson->sections()->firstOrFail();
       return Redirect::route('section.show', [
         'course' => $course,

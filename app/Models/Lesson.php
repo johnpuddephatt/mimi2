@@ -15,12 +15,14 @@ class Lesson extends Model
         'title',
         'instructions',
         'day',
-        'week_id'
+        'week_id',
+        'live'
     ];
 
     protected $casts = [
       'week_id' => 'integer',
-      'day' => 'integer'
+      'day' => 'integer',
+      'live' => 'boolean'
     ];
 
     protected static function boot() {
