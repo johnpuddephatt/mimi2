@@ -18,7 +18,7 @@
             >
             <span class="text-overflow-ellipsis">{{ course.title }}</span>
             <span v-if="course.archived" class="tag is-light ml-2">Archived</span>
-            <b-icon v-if="!course.live" icon="arrow-right" />
+            <b-icon v-if="course.live" icon="arrow-right" />
             <span v-else class="tag is-primary ml-2">Coming soon</span>
 
           </inertia-link>
