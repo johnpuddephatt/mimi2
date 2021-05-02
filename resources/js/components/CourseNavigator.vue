@@ -8,21 +8,23 @@
           <h3 class="title is-5">{{ course.title }}</h3>
           <input v-model="search" @click.stop class="input" type="text" placeholder="Search...">
           <div v-for="week in filteredData" :key="week.id">
-            <p class="has-text-weight-bold is-size-6 mt-4 mb-2">
-              {{ week.name}}
-            </p>
-            <ul class="menu-list">
-              <li v-for="lesson in week.lessons" :key="lesson.id" :class="{'is-current' : (lesson.id == $parameters.lesson) }">
-                <a class="menu-heading" @click="open = lesson.id" >{{ lesson.title }}</a>
+            <div v-if="week.live">
+              <p class="has-text-weight-bold is-size-6 mt-4 mb-2">
+                {{ week.name}}
+              </p>
+              <ul class="menu-list">
+                <li v-for="lesson in week.lessons" :key="lesson.id" :class="{'is-current' : (lesson.id == $parameters.lesson) }">
+                  <a class="menu-heading" @click="open = lesson.id" >{{ lesson.title }}</a>
 
-                <ul v-if="(lesson.id == open) || (lesson.id == $parameters.lesson) || search">
-                  <li v-for="section in lesson.sections">
-                    <inertia-link :class="{'is-active' : (lesson.id == $parameters.lesson && section.id == $parameters.section) }" :href="route('section.show', {course: course.id, week: week.number, lesson: lesson.id, section: section.id })">{{ section.title }}</inertia-link>
-                  </li>
-                  <li v-if="!lesson.sections.length" class="notification is-size-7">No sections in this lesson</li>
-                </ul>
-              </li>
-            </ul>
+                  <ul v-if="(lesson.id == open) || (lesson.id == $parameters.lesson) || search">
+                    <li v-for="section in lesson.sections">
+                      <inertia-link :class="{'is-active' : (lesson.id == $parameters.lesson && section.id == $parameters.section) }" :href="route('section.show', {course: course.id, week: week.number, lesson: lesson.id, section: section.id })">{{ section.title }}</inertia-link>
+                    </li>
+                    <li v-if="!lesson.sections.length" class="notification is-size-7">No sections in this lesson</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         <b-loading v-else />

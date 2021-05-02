@@ -115,7 +115,7 @@ class CourseController extends Controller
 
     public function map(Course $course) {
       // Must have foreign key for load to only select specific columns (i.e. lesson_id in this case)
-      $course->load(  'weeks.lessons.sections:id,title,lesson_id');
+      $course->load('weeks.lessons.sections:id,title,lesson_id');
       return $course;
     }
 
