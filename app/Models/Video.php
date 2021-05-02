@@ -37,12 +37,10 @@ class Video extends Model
 
     protected static function boot() {
         parent::boot();
-        // static::addGlobalScope('processed', function (Builder $builder) {
-        //     $builder->whereNotNull('converted_for_streaming_at');
-        // });
+        static::addGlobalScope('processed', function (Builder $builder) {
+            $builder->whereNotNull('converted_for_streaming_at');
+        });
    }
-
-
 
    public function getTimeToConvertAttribute() {
       return Carbon::parse($this->created_at)->diffInSeconds(Carbon::parse($this->converted_for_streaming_at));

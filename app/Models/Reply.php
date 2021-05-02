@@ -27,6 +27,7 @@ class Reply extends Model
         'audio',
         'text',
         'lesson_id',
+        'section_id',
         'reply_id',
         'user_id',
         'type'
@@ -35,11 +36,12 @@ class Reply extends Model
     protected $casts = [
       'user_id' => 'integer',
       'lesson_id' => 'integer',
+      'section_id' => 'integer',
       'reply_id' => 'integer',
       'video_id' => 'integer',
     ];
 
-    protected $with = ['user'];
+    // protected $with = ['user'];
 
     protected $withCount = ['comments'];
 
@@ -52,9 +54,9 @@ class Reply extends Model
 
       static::created(function($reply){
 
-        // if($reply->reply_id) {
-        //   $reply->sendFeedbackNotification();
-        // }
+        if($reply->reply_id) {
+          $reply->sendFeedbackNotification();
+        }
 
         // Notify admins
         // else {
@@ -66,6 +68,10 @@ class Reply extends Model
 
     public function scopeAudioOrVideo($query){
       return $query->where('type', 'video')->orWhere('type', 'audio');
+    }
+
+    public function scopeText($query){
+      return $query->where('type', 'text');
     }
 
     public function scopeFeedbackless($query) {

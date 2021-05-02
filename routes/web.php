@@ -29,8 +29,11 @@ Route::get('/terms', function(){
 
 Route::get('/', 'CourseController@index')->name('home')->middleware('auth');
 
-Route::get('/profile', 'UserController@showProfile')->name('profile.show')->middleware('auth');
-Route::put('/profile', 'UserController@updateProfile')->name('profile.update')->middleware('auth');
+Route::get('user/profile', 'UserController@showProfile')->name('profile.show')->middleware('auth');
+Route::put('user/profile', 'UserController@updateProfile')->name('profile.update')->middleware('auth');
+
+Route::get('user/chatrooms', 'UserController@chatrooms')->name('user.chatrooms')->middleware('auth');
+Route::get('user/chatrooms/course/{course}', 'UserController@chatroomCourse')->name('user.chatroom.course')->middleware('auth');
 
 Route::middleware(['nonpaying'])->group(function () {
 
@@ -88,8 +91,9 @@ Route::get('course/{course}/week/{week:number}', 'WeekController@show')->name('w
 
 
 Route::get('course/{course}/week/{week:number}/lesson/{lesson}', 'LessonController@show')->name('lesson.show')->middleware('auth','enrolled');
+Route::get('course/{course}/week/{week:number}/lesson/{lesson}/print', 'LessonController@print')->name('lesson.print')->middleware('auth','enrolled');
 
-Route::post('lesson/{lesson}/reply', 'ReplyController@store')->name('reply.create')->middleware('auth','enrolled');
+Route::post('lesson/{lesson}/section/{section}/reply', 'ReplyController@store')->name('reply.create')->middleware('auth','enrolled');
 Route::delete('lesson/{lesson}/reply/{reply}/delete', 'ReplyController@destroy')->name('reply.delete')->middleware('auth','owner');
 
 Route::post('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}/reply/{reply}/comment', 'CommentController@store')->name('comment.create')->middleware('auth','enrolled');
@@ -99,6 +103,11 @@ Route::delete('course/{course}/week/{week:number}/lesson/{lesson}/section/{secti
 Route::get('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}', 'SectionController@show')->name('section.show')->middleware('auth','enrolled');
 Route::get('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}/reply/{reply}/{show_feedback?}', 'SectionController@show')->name('section.reply')->middleware('auth','enrolled');
 Route::get('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}/delete', 'SectionController@delete')->name('section.delete')->middleware('auth','enrolled');
+
+
+Route::get('admin/chatroom/', 'ChatroomController@index')->name('chatroom.index')->middleware('admin');
+Route::get('admin/chatroom/course/{course}', 'ChatroomController@course')->name('chatroom.course')->middleware('admin');
+Route::get('admin/chatroom/course/{course}/lesson/{lesson}', 'ChatroomController@lesson')->name('chatroom.lesson')->middleware('admin');
 
 
 Route::get('admin/courses', 'CourseController@manage')->name('courses.manage')->middleware('admin');

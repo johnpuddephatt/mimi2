@@ -15,11 +15,13 @@ class Week extends Model
         'description',
         'course_id',
         'number',
+        'live'
     ];
 
     protected $casts = [
       'course_id' => 'integer',
-      'number' => 'integer'
+      'number' => 'integer',
+      'live' => 'boolean'
     ];
 
     protected static function boot() {
@@ -37,5 +39,10 @@ class Week extends Model
     public function lessons()
     {
       return $this->hasMany(\App\Models\Lesson::class);
+    }
+
+    public function sections()
+    {
+        return $this->hasManyThrough(\App\Models\Section::class, \App\Models\Lesson::class);
     }
 }

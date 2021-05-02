@@ -1,49 +1,52 @@
 <template>
 <app-layout>
-  <div class="column is-10-tablet is-8-desktop is-7-widescreen">
-    <div class="breadcrumb-wrapper">
-      <div>
-        <inertia-link class="back-link mb-0 has-text-dark" :href="route('course.show', {'course': $parameters.course })">{{ course.title }}</inertia-link> &gt; <inertia-link class="back-link mb-0 has-text-dark" accesskey="":href="route('week.show', {'course': $parameters.course, 'week': $parameters.week })">{{ week.name }}</inertia-link>
+  <div class="columns is-centered">
+    <div class="column is-10-tablet is-8-desktop is-7-widescreen">
+      <div class="breadcrumb-wrapper">
+        <div>
+          <inertia-link class="back-link mb-0 has-text-dark" :href="route('course.show', {'course': $parameters.course })">{{ course.title }}</inertia-link> &gt; <inertia-link class="back-link mb-0 has-text-dark" accesskey="":href="route('week.show', {'course': $parameters.course, 'week': $parameters.week })">{{ week.name }}</inertia-link>
+        </div>
+        <course-navigator :$parameters="$parameters" :course_id="$parameters.course"></course-navigator>
       </div>
-      <course-navigator :$parameters="$parameters" :course_id="$parameters.course"></course-navigator>
-    </div>
-    <div class="box section-content">
+      <div class="box section-content">
 
-      <h3 class="title is-2 has-text-weight-bold mt-4 mb-6">{{ section.title }}</h3>
+        <h3 class="title is-2 has-text-weight-bold mt-4 mb-6">{{ section.title }}</h3>
 
-      <div v-if="lesson.sections.length > 1" class="sections-box box p-4">
-        <h3 class="has-text-weight-bold is-size-4 mt-0">Today’s lesson 🧑‍🏫</h3>
-        <inertia-link v-for="section in lesson.sections" :key="section.id" :href="route('section.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': $parameters.lesson, 'section': section.id })" class="lesson-button mt-3 is-block p-2 is-bordered has-text-black is-outlined is-fullwidth">{{ section.title }}</inertia-link>
+        <div v-if="lesson.sections.length > 1" class="sections-box box p-4">
+          <h3 class="has-text-weight-bold is-size-4 mt-0">Today’s lesson 🧑‍🏫</h3>
+          <inertia-link v-for="section in lesson.sections" :key="section.id" :href="route('section.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': $parameters.lesson, 'section': section.id })" class="lesson-button mt-3 is-block p-2 is-bordered has-text-black is-outlined is-fullwidth">{{ section.title }}</inertia-link>
+          <a class="mt-4 button is-small is-fullwidth" target="_blank" :href="route('lesson.print', {'course': $parameters.course, 'week': $parameters.week, 'lesson': $parameters.lesson })">🖨 Print this lesson</a>
+        </div>
+
+        <div v-if="section.order == 1 && lesson.instructions && lesson.instructions.length && lesson.instructions != '<p></p>'">
+          <h3 class="has-text-weight-bold is-size-4">Instructions</h3>
+          <div class="content" v-html="lesson.instructions"></div>
+        </div>
+
+        <div class="container content" :class="{'clear-both': section.order == 1 && lesson.instructions && lesson.instructions.length }">
+
+          <div :is="dynamicComponent"></div>
+
+          <!-- <div v-if="wordList.length">
+            <div class="editor-js-block editor-js-block__paired-heading">
+              <h2>Impare le parole 🔎</h2>
+              <h3>Learn the words</h3>
+            </div>
+            <ul>
+              <li v-for="word in wordList"><strong>{{word.word}}:</strong> {{ word.translation}}</li>
+            </ul>
+          </div> -->
+
+        </div>
+
+        <Chatroom class="negative-margin" v-if="section.is_chatroom" :replies="replies" :$user="$user" :comments="comments" :$parameters="$parameters"></Chatroom>
+
+        <div class="section-footer container is-flex mt-5 pt-4">
+          <inertia-link class="button is-medium " v-if="previousSectionID" :href="route('section.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': $parameters.lesson, 'section': previousSectionID })">Previous</inertia-link>
+          <inertia-link class="button is-medium ml-a" v-if="nextSectionID" :href="route('section.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': $parameters.lesson, 'section': nextSectionID })">Next</inertia-link>
+        </div>
+
       </div>
-
-      <div v-if="section.order == 1 && lesson.instructions && lesson.instructions.length && lesson.instructions != '<p></p>'">
-        <h3 class="has-text-weight-bold is-size-4">Instructions</h3>
-        <div class="content" v-html="lesson.instructions"></div>
-      </div>
-
-      <div class="container content" :class="{'clear-both': section.order == 1 && lesson.instructions && lesson.instructions.length }">
-
-        <div :is="dynamicComponent"></div>
-
-        <!-- <div v-if="wordList.length">
-          <div class="editor-js-block editor-js-block__paired-heading">
-            <h2>Impare le parole 🔎</h2>
-            <h3>Learn the words</h3>
-          </div>
-          <ul>
-            <li v-for="word in wordList"><strong>{{word.word}}:</strong> {{ word.translation}}</li>
-          </ul>
-        </div> -->
-
-      </div>
-
-      <Chatroom v-if="section.is_chatroom" :replies="replies" :$user="$user" :comments="comments" :$parameters="$parameters"></Chatroom>
-
-      <div class="container is-flex mt-5">
-        <inertia-link class="button" v-if="previousSectionID" :href="route('section.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': $parameters.lesson, 'section': previousSectionID })">Previous</inertia-link>
-        <inertia-link class="button ml-a" v-if="nextSectionID" :href="route('section.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': $parameters.lesson, 'section': nextSectionID })">Next</inertia-link>
-      </div>
-
     </div>
   </div>
 </app-layout>
@@ -56,7 +59,7 @@ export default {
   props: ['blocks_prerendered', 'comments', 'replies', 'course', 'week', 'lesson', 'section', '$parameters', '$user'],
 
   components: {
-    Chatroom
+    Chatroom,
   },
 
   data() {
@@ -148,4 +151,5 @@ export default {
     flex-direction: column;
   }
 }
+
 </style>

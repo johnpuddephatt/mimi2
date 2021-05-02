@@ -9,6 +9,7 @@ use App\Models\Lesson;
 use App\Models\Course;
 use App\Models\Week;
 use Redirect;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Section;
 use App\Http\Requests\StoreLesson;
 use Illuminate\Support\Facades\Storage;
@@ -65,7 +66,7 @@ class LessonController extends Controller
 
     public function show(Course $course, Week $week, Lesson $lesson) {
       if(!$lesson->live && !\Auth::user()->is_admin) {
-        return back()->with('message', 'This lesson is not live yet.');
+        return back()->with('message', 'Sorry, this lesson isn’t live yet.');
       }
       $section = $lesson->sections()->firstOrFail();
       return Redirect::route('section.show', [
@@ -73,6 +74,25 @@ class LessonController extends Controller
         'week' => $week,
         'lesson' => $lesson,
         'section' => $section->id
+      ]);
+    }
+
+    public function print(Course $course, Week $week, Lesson $lesson) {
+      if(!$lesson->live && !\Auth::user()->is_admin) {
+        return back()->with('message', 'Sorry, this lesson isn’t live yet.');
+      }
+      $sections = $lesson->sections()->get();
+
+      foreach($sections as $key => $section) {
+         $blocks_prerendered[$key] = Cache::rememberForever('section_' . $section->id, function() use($section) {
+           return view('editorjs', ['blocks' => $section->getBlocks()])->render();
+         });
+      }
+
+      return Inertia::render('Lesson/Print', [
+        'course' => $course->only('id','title','archived'),
+        'lesson' => $lesson->load('sections:id,order,title,lesson_id')->only('id','title','instructions','day','sections'),
+        'blocks_prerendered' => $blocks_prerendered
       ]);
     }
 

@@ -47,7 +47,7 @@ Vue.component('create-reply', require('./components/CreateReply.vue').default);
 Vue.component('reply-card', require('./components/ReplyCard.vue').default);
 
 InertiaProgress.init({
-  delay: 0,
+  delay: 250,
   color: '#33C2CF',
   includeCSS: true,
 });

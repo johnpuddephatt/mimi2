@@ -60,7 +60,6 @@ class RegisterController extends Controller
         else {
           return Inertia::render('Registration', ['course' => $request->query('course')]);
         }
-
      }
 
 
@@ -107,6 +106,7 @@ class RegisterController extends Controller
         ]);
 
         if(isset($data['course'])) {
+
           $user->courses()->attach(\Hashids::decode($data['course']));
         }
 

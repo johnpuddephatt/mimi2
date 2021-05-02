@@ -1,14 +1,16 @@
 <template>
   <app-layout>
-    <div class="column is-7-tablet is-6-desktop is-5-widescreen is-paddingless">
-      <div class="box">
-        <h3 class="title has-text-centered">Statistics 📈</h3>
-        <p class="subtitle has-text-centered">With great power comes great responsibility</p>
-        <chart-teacher-monthly></chart-teacher-monthly>
-        <br><br>
-        <chart-teacher-weekly></chart-teacher-weekly>
-        <br><br>
-        <chart-replies-monthly></chart-replies-monthly>
+    <div class="columns is-centered">
+      <div class="column is-7-tablet is-6-desktop is-5-widescreen is-paddingless">
+        <div class="box">
+          <h3 class="title has-text-centered">Statistics 📈</h3>
+          <p class="subtitle has-text-centered">With great power comes great responsibility</p>
+          <chart-teacher-monthly></chart-teacher-monthly>
+          <br><br>
+          <chart-teacher-weekly></chart-teacher-weekly>
+          <br><br>
+          <chart-replies-monthly></chart-replies-monthly>
+        </div>
       </div>
     </div>
   </app-layout>

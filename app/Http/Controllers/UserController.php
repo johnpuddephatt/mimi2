@@ -52,7 +52,42 @@ class UserController extends Controller
             'description' => $request->description,
         ]);
 
-        return Inertia::render('Profile', ['user' => \Auth::user()]);
+        return Inertia::render('User/Profile', ['user' => \Auth::user()]);
+    }
+
+    public function chatrooms() {
+      $courses = \Auth::User()->courses;
+      $courses = $courses->merge(Course::open()->get());
+
+      return redirect()->route('user.chatroom.course', [
+        'course' => $courses->first()
+      ]);
+
+    }
+
+    public function chatroomCourse(Course $course) {
+
+      $courses = \Auth::User()->courses;
+      $courses = $courses->merge(Course::open()->get());
+
+      $lessons = $course->lessons()->whereHas('sections', function ($query) {
+        $query->where('is_chatroom', '=', true);
+      })->with('week:id,number')->get();
+
+
+      $lessons->load(['sections' => function ($query) {
+        $query->where('is_chatroom', '=', true)->select(['lesson_id','id']);
+      }]);
+
+
+      $replies = \Auth::User()->replies()->select(['id','lesson_id'])->get()->toArray();
+
+      return Inertia::render('User/Chatrooms', [
+        'course' => $course,
+        'courses' => $courses,
+        'lessons' => $lessons,
+        'replies' => $replies
+      ]);
     }
 
 }

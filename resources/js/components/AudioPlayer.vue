@@ -1,7 +1,7 @@
 <template>
   <div class="video-player--wrapper">
     <div class="has-square-media audio-background">
-      <audio class="audio-player" :src="source" controls />
+      <audio ref="audioPlayer" class="audio-player" :src="source" :autoplay="should_autoplay" controls />
     </div>
   </div>
 </div>
@@ -10,17 +10,27 @@
 <script>
 
 export default {
-  props: ['source'],
+  props: ['source', 'should_autoplay'],
   data() {
     return {
     };
   },
 
-  watch: {
+  mounted() {
 
   },
 
-  mounted() {
+  watch: {
+    should_autoplay: function(val) {
+      if(val) {
+        this.$refs.audioPlayer.play();
+      }
+      else {
+        this.$refs.audioPlayer.pause();
+        this.$refs.audioPlayer.currentTime = 0;
+
+      }
+    },
 
   },
 
@@ -48,7 +58,7 @@ export default {
   position: absolute;
   bottom: 1em;
   left: 50%;
-  max-width: 90%;
+  width: 90%;
   transform: translateX(-50%);
 }
 </style>

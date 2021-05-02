@@ -4,7 +4,7 @@
 
   <!-- Audio preview -->
   <div v-if="value">
-    <div class="has-square-media">
+    <div class="has-square-media audio-preview">
       <audio controls :src="dataUrl" />
     </div>
 
@@ -21,7 +21,7 @@
         <span v-if="isRecording"  class="recording-indicator tag" :class="timeRemaining < 30 ? 'is-red': 'is-black'">{{ timeRemaining > 30 ? 'Rec' : timeRemaininginMinutes }}</span>
         <b-notification type="is-dark" v-if="mode == 'video' && isLoaded" class="recording-instructions" v-model="showInstructions" aria-close-label="Close instructions">
           <p class="is-size-7"><b-icon icon="alarm" />Aim for a reply between 30 seconds and two minutes long. Five minutes is the maximum.</p>
-          <p class="is-size-7"><b-icon icon="restart" />You’ll be able to play your video back before uploading, and re-record it if you want to.</p>
+          <p class="is-size-7"><b-icon icon="restart" />You’ll be able to play your audio back before uploading, and re-record it if you want to.</p>
         </b-notification>
 
         <canvas width="420" height="420" ref="canvas" class="visualizer"></canvas>
@@ -210,7 +210,7 @@ export default {
       const colBar1 = 'rgba(255, 255, 255, 0.5)';
       const colBar2 = 'rgba(233, 169, 70, 0.8)';
 
-      const barWidth   = 5;
+      const barWidth   = 8;
       const barLength  = 0.1;
       const bassFactor = 1.2;
 
@@ -253,6 +253,22 @@ export default {
 
 
 <style lang="scss">
+@import "../../sass/variables";
+
+.audio-preview {
+  background-color: lighten($success, 35%);
+  background-image: url(/images/sine.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+
+  audio {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
 
   .visualizer {
     position: fixed;

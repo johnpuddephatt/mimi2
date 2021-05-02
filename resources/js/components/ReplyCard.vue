@@ -1,19 +1,23 @@
 <template>
 <transition name="fade-out">
-  <div v-if="reply.audio || reply.video.converted_for_streaming_at || reply.user_id == $user.id" class="column is-full is-half-widescreen is-relative">
+  <div class="column is-full is-half-widescreen is-relative">
 
     <div class="admin-reply" v-if="$user.is_admin">
-      <b-tooltip v-if="reply.feedback && !feedbackIsDeleted" label="You’ve replied to this" type="is-dark" animated position="is-left" :delay="1000" class="admin-check-button--tooltip">
-        <b-icon class="admin-check-button" type="is-light" icon="check" />
+      <b-tooltip v-if="reply.feedback" label="You’ve replied to this" type="is-dark" animated position="is-left" :delay="1000" class="admin-check-button--tooltip">
+        <b-button class="admin-check-button" rounded type="is-light" icon-left="check">
+        </b-button>
       </b-tooltip>
-      <create-reply :$user="$user" :mode="reply.audio ? 'audio' : 'video'" :reply_id="reply.id" :should_open="open_reply_modal"></create-reply>
+      <create-reply v-else :$user="$user" :$parameters="$parameters" :mode="reply.type" :reply_id="reply.id" :should_open="open_reply_modal"></create-reply>
     </div>
 
     <div class="card reply-card">
-      <div class="card-image" :class="{'loaded' : reply.audio || reply.video.converted_for_streaming_at}" @click="is_open = true">
+      <div class="card-image" :class="{'loaded' : reply.audio || reply.video}" @click="is_open = true">
         <figure class="image is-square m-0" :class="{'audio-preview' : reply.audio}">
           <div v-if="reply.audio"></div>
-          <img v-else-if="reply.video && reply.video.converted_for_streaming_at" :src="reply.video.thumbnail_path" alt="">
+          <img v-else-if="reply.video" :src="reply.video.thumbnail_path" alt="">
+          <div class="text-preview" v-else-if="reply.text">
+            <div class="text-preview--inner-preview" v-html="reply.text.replace(/(<([^>]+)>)/gi, '').substr(0,75) + '...'"></div>
+          </div>
           <b-loading v-else :is-full-page="false" :active="true"></b-loading>
         </figure>
       </div>
@@ -25,9 +29,7 @@
           <p>
             <span class="is-size-6">{{ reply.user.first_name}}</span>
             <span class="is-size-7">
-              <timeago v-if="reply.video && reply.video.converted_for_streaming_at" :datetime="reply.video.converted_for_streaming_at" :auto-update="60"></timeago>
-              <timeago v-else-if="reply.audio" :datetime="reply.created_at" :auto-update="60"></timeago>
-              <span v-else class="tag is-light">Processing</span>
+              <timeago :datetime="reply.created_at" :auto-update="60"></timeago>
             </span>
           </p>
         </div>
@@ -39,7 +41,7 @@
     <b-modal custom-class="has-background-white-bis reply-card-modal" :active.sync="is_open" has-modal-card trap-focus :destroy-on-hide="true" animation="zoom-in" aria-role="dialog" width="840px" aria-modal>
 
       <div class="carousel-wrapper column is-two-thirds is-paddingless">
-        <div v-if="reply.feedback && reply.feedback.playlist_path && !feedbackIsDeleted" class="feedback-toggle field has-addons">
+        <div v-if="reply.feedback" class="feedback-toggle field has-addons">
           <p class="control">
             <button class="button is-small" :class="currentSlide == 0 ? 'is-selected is-success' : ''" @click.prevent="currentSlide = 0">Student response</button>
           </p>
@@ -48,19 +50,29 @@
           </p>
         </div>
         <transition name="fade-up">
-          <b-button type="is-primary" icon-right="play" v-if="video_stopped && reply.feedback && reply.feedback.playlist_path && !feedbackIsDeleted && (currentSlide == 0)" @click.prevent="currentSlide = 1" size="is-medium" class="feedback-button">
-            Watch teacher feedback
+          <b-button type="is-primary" icon-right="play" v-if="media_stopped && reply.feedback && (currentSlide == 0)" @click.prevent="currentSlide = 1" size="is-medium" class="feedback-button">
+            See teacher feedback
           </b-button>
         </transition>
 
         <b-carousel animated="fade" @change="updateSlide($event)" :arrow="false" :indicator="false" :has-drag="false" v-model="currentSlide" :autoplay="false" icon-size="is-medium">
           <b-carousel-item key="reply">
-            <video-player v-if="reply.video" @playing="video_stopped = null" @stopped="video_stopped = 'reply'" :should_autoplay="currentSlide == 0" :source="reply.video.playlist_path" :poster="reply.video.thumbnail_path" type="application/x-mpegURL"></video-player>
-            <audio-player :source="reply.audio" v-else />
+            <video-player v-if="reply.video" @playing="media_stopped = null" @stopped="media_stopped = 'reply'" :should_autoplay="currentSlide == 0" :source="reply.video.playlist_path" :poster="reply.video.thumbnail_path" type="application/x-mpegURL"></video-player>
+            <audio-player v-else-if="reply.audio" :source="reply.audio" @playing="media_stopped = null" @stopped="media_stopped = 'reply'" :should_autoplay="currentSlide == 0" v-else />
+            <div class="image is-square m-0" v-else>
+              <div class="text-preview">
+                <div v-html="reply.text" class="content text-preview--inner"></div>
+              </div>
+            </div>
           </b-carousel-item>
-          <b-carousel-item v-if="reply.feedback && (reply.feedback.playlist || reply.feedback.audio) && !feedbackIsDeleted" key="feedback">
-            <video-player v-if="reply.feedback.playlist" @playing="video_stopped = null" @stopped="video_stopped = 'feedback'" :should_autoplay="currentSlide == 1" :source="reply.feedback.playlist_path" :poster="reply.feedback.thumbnail_path" type="application/x-mpegURL"></video-player>
-            <audio-player v-else :source="reply.audio" />
+          <b-carousel-item v-if="reply.feedback" key="feedback">
+            <video-player v-if="reply.feedback.video && reply.feedback.video.playlist_path" @playing="media_stopped = null" @stopped="media_stopped = 'feedback'" :should_autoplay="currentSlide == 1" :source="reply.feedback.video.playlist_path" :poster="reply.feedback.video.thumbnail_path" type="application/x-mpegURL"></video-player>
+            <audio-player v-else-if="reply.feedback.audio" :source="reply.feedback.audio" @playing="media_stopped = null" @stopped="media_stopped = 'feedback'" :should_autoplay="currentSlide == 1" />
+            <div class="image is-square m-0" v-else>
+              <div class="text-preview">
+                <div v-html="reply.feedback.text" class="content text-preview--inner"></div>
+              </div>
+            </div>
           </b-carousel-item>
         </b-carousel>
       </div>
@@ -74,8 +86,7 @@
             <p>
               <span class="is-size-6">{{ reply.user.first_name }}</span>
               <span class="is-size-7">
-                <timeago v-if="reply.video" :datetime="reply.video.converted_for_streaming_at" :auto-update="60"></timeago>
-                <timeago v-else :datetime="reply.created_at" :auto-update="60"></timeago>
+                <timeago :datetime="reply.created_at" :auto-update="60"></timeago>
               </span>
             </p>
           </div>
@@ -95,6 +106,7 @@
         <comments :$parameters="$parameters" :preloadedComments="comments" :$user="$user" :reply="reply"></comments>
       </div>
     </b-modal>
+
     <b-modal v-model="isUserModalOpen" :width="480" scroll="keep">
       <div class="card">
         <div class="card-content">
@@ -133,8 +145,7 @@ export default {
       is_open: false,
       currentSlide: null,
       isDeleted: false,
-      feedbackIsDeleted: false,
-      video_stopped: null,
+      media_stopped: null,
       open_reply_modal: false,
       isUserModalOpen: false
     }
@@ -167,10 +178,8 @@ export default {
       this.open_reply_modal = true;
     },
 
-    updateProgress(progress) {},
-
     updateSlide(value) {
-      this.video_stopped = null;
+      this.media_stopped = null;
       this.currentSlide = value;
     },
 
@@ -217,6 +226,62 @@ export default {
 <style lang="scss">
 @import "../../sass/variables";
 
+.text-preview {
+  background-color: lighten($primary, 35%);
+  overflow-y: auto;
+  line-height: 1.75;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto 0;
+  display: flex;
+  flex-direction: column;
+  font-size: $size-5;
+  font-weight: 500;
+
+  &--inner-preview {
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 3rem;
+    cursor: default;
+
+    &::before,
+    &::after {
+      content: close-quote;
+      font-size: $size-3;
+      color: lighten($primary, 15%);
+      line-height: 0;
+    }
+    &::before {
+      content: open-quote;
+      margin-left: -0.35em;
+    }
+  }
+
+  &--inner {
+
+    padding: 7.5rem 5rem;
+    &::before,
+    &::after {
+      display: inline-block;
+      content: close-quote;
+      font-size: 5rem;
+      font-weight: 900;
+      color: lighten($primary, 15%);
+      line-height: 0;
+      float: right;
+    }
+
+    &::before {
+      content: open-quote;
+      margin-left: -0.5em;
+      float: left;
+    }
+  }
+}
+
 .audio-preview {
   background-color: lighten($success, 35%);
   background-image: url(/images/sine.svg);
@@ -233,7 +298,6 @@ export default {
 
     .card-image {
         position: relative;
-        background-color: $grey-lighter;
 
         &.loaded {
           &::before {

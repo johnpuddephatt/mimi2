@@ -1,21 +1,27 @@
 <template>
-<div v-if="!isSaved" :class="reply_id ? '' : 'column is-full is-half-widescreen'">
+<div v-if="!isSaved">
 
   <b-tooltip v-if="reply_id" label="Record admin reply" type="is-dark" animated position="is-left" :delay="1000" class="admin-reply-button--tooltip">
-    <b-button class="admin-reply-button" @click="openModal(mode == 'audio' ? 'audio' : 'video')" size="is-light" icon-right="reply" />
+    <b-button class="admin-reply-button" @click="openModal(mode)" size="is-light" icon-right="reply" />
   </b-tooltip>
 
-  <div v-else class="card reply-card reply-card__add">
-    <b-button class="reply-button" @click="openModal('video')" expanded size="is-medium is-primary" icon-right="plus-circle">
-      Add your video
-    </b-button>
-    <!-- <b-button class="reply-button" @click="openModal('audio')" expanded size="is-medium is-primary" icon-right="plus-circle">
-      Add your audio
-    </b-button> -->
-  </div>
+  <button v-else @click="openModal()" class="button is-primary">Add your reply</button>
 
   <b-modal custom-class="create-reply-modal" :active.sync="isReplyModalActive" has-modal-card trap-focus :can-cancel="!reply.video && !isRecording" :destroy-on-hide="true" aria-role="dialog" width="420px" aria-modal>
-    <div v-if="isSaving" class="modal-card">
+
+    <div v-if="!replyMode">
+      <b-button class="reply-button" @click="replyMode = 'video'" expanded size="is-medium is-primary" icon-right="plus-circle">
+        Add video reply
+      </b-button>
+      <b-button class="reply-button" @click="replyMode = 'audio'" expanded size="is-medium is-primary" icon-right="plus-circle">
+        Add audio reply
+      </b-button>
+      <b-button class="reply-button" @click="replyMode = 'text'" expanded size="is-medium is-primary" icon-right="plus-circle">
+        Add text reply
+      </b-button>
+    </div>
+
+    <div v-else-if="isSaving" class="modal-card">
       <section class="modal-card-body has-text-centered">
         <div v-if="isSaved">
           <h3 class="title">Ottimo <span class="emoji">✨</span></h3>
@@ -41,11 +47,12 @@
     <div v-else class="modal-card">
       <section class="modal-card-body is-paddingless" style="overflow: visible;">
         <camera-field v-if="replyMode == 'video'" @is-recording="isRecording = $event" v-model="reply.video" mode="video"></camera-field>
-        <audio-field v-else v-model="reply.audio" ></audio-field>
+        <audio-field v-else-if="replyMode == 'audio'" v-model="reply.audio" ></audio-field>
+        <tip-tap :max_height="360" v-else v-model="reply.text"></tip-tap>
       </section>
       <footer class="modal-card-foot has-background-light">
-        <b-button v-if="reply.video || reply.audio" expanded type="is-primary" size="is-medium" @click.prevent="onSubmit" :loading="isSaving">Upload your reply</b-button>
-        <p class="is-size-7" v-else>Start and stop recording with the red record button.</p>
+        <b-button :disabled="!(reply.video || reply.audio || reply.text)" expanded type="is-primary" size="is-medium" @click.prevent="onSubmit" :loading="isSaving">Post your reply</b-button>
+        <p v-if="replyMode != 'text'" class="is-size-7">Start and stop recording with the red record button.</p>
       </footer>
     </div>
   </b-modal>
@@ -57,10 +64,13 @@ import NoSleep from 'nosleep.js';
 var platform = require('platform');
 import CameraField from '@/components/CameraField';
 import AudioField from '@/components/AudioField';
+import TipTap from '@/components/TipTap';
+
 
 export default {
   props: ['$parameters', '$user', 'reply_id', 'mode', 'should_open'],
   components: {
+    TipTap,
     AudioField,
     CameraField
   },
@@ -79,6 +89,7 @@ export default {
         id: null,
         audio: null,
         video: null,
+        text: null,
         reply_id: this.reply_id ?? null,
         user_id: this.$user.id
       }
@@ -93,6 +104,12 @@ export default {
     }
   },
 
+  mounted() {
+    if(this.mode) {
+      this.replyMode = this.mode;
+    }
+  },
+
   methods: {
 
     openModal(type) {
@@ -104,7 +121,9 @@ export default {
       this.isSaving = true;
       var noSleep = new NoSleep();
       noSleep.enable();
-      axios.post('/log', { 'error': `BEGINNING ${this.replyMode } UPLOAD, ${ platform.description }, size: ${Math.floor(this.replyMode == 'video' ? this.reply.video.size/1024 : this.reply.audio.size/1024)}kB, ` });
+      if(this.mode != 'text') {
+        axios.post('/log', { 'error': `BEGINNING ${this.replyMode } UPLOAD, ${ platform.description }, size: ${Math.floor(this.replyMode == 'video' ? this.reply.video.size/1024 : (this.replyMode == 'audio' ? this.reply.audio.size/1024 : 'N/A'))}kB, ` });
+      }
 
       const data = new FormData();
       for (let [key, value] of Object.entries(this.reply)) {
@@ -113,7 +132,7 @@ export default {
 
       axios({
           method: 'post',
-          url: route('reply.create', { lesson: this.$parameters.lesson }),
+          url: route('reply.create', { lesson: this.$parameters.lesson, section: this.$parameters.section }),
           data: data,
           headers: {
             'Content-Type': `multipart/form-data; boundary=${data._boundary}`
@@ -124,7 +143,7 @@ export default {
           timeout: 600000 // 10 minutes, matches Nginx and PHP config
         })
         .then(response => {
-          axios.post('/log', {'error': `${this.replyMode } UPLOAD COMPLETE, ${ platform.description }, size: ${Math.floor(this.replyMode == 'video' ? this.reply.video.size/1024 : this.reply.audio.size/1024)}kB, `});
+          axios.post('/log', {'error': `${this.replyMode } UPLOAD COMPLETE, ${ platform.description }, size: ${Math.floor(this.replyMode == 'video' ? this.reply.video.size/1024 : (this.replyMode == 'audio' ? this.reply.audio.size/1024 : 'N/A'))}kB, `});
           this.reply = response.data;
           noSleep.disable();
           this.isSaved = true;

@@ -38,13 +38,12 @@ class SectionController extends Controller
           'week' => $week->only('id','name','number'),
           'lesson' => $lesson->load('sections:id,title,lesson_id')->only('id','title','instructions','day','sections'),
           'section' => $section->only('id','title','order','is_chatroom'),
-          'replies' => $section->is_chatroom ? fn () => $lesson->replies()->with('video')->get() : null,
+          'replies' => $section->is_chatroom ? fn () => $lesson->replies()->with('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video')->get() : null,
           'comments' => $reply ? $reply->parent_comments : null,
           'blocks_prerendered' => Cache::rememberForever('section_' . $section->id, function() use($section) {
             return view('editorjs', ['blocks' => $section->getBlocks()])->render();
           })
         ]);
-
     }
 
 

@@ -1,76 +1,79 @@
 <template>
 <app-layout>
-  <div class="column is-7-tablet is-6-desktop is-5-widescreen">
+  <div class="columns is-centered">
 
-    <form ref="form" class="box register-form">
+    <div class="column is-7-tablet is-6-desktop is-5-widescreen">
 
-      <div v-if="payment.is_cancelled">
-        <h3 class="title has-text-centered">Payment Cancelled <span class="emoji">🚦</span></h3>
-        <p class="subtitle has-text-centered">This payment was cancelled.</p>
+      <form ref="form" class="box register-form">
 
-        <p>The transaction has been cancelled, no payment has been taken.</p>
-        <p>If you did not intend to cancel the payment, please try again from the beginning.</p>
+        <div v-if="payment.is_cancelled">
+          <h3 class="title has-text-centered">Payment Cancelled <span class="emoji">🚦</span></h3>
+          <p class="subtitle has-text-centered">This payment was cancelled.</p>
 
-      </div>
+          <p>The transaction has been cancelled, no payment has been taken.</p>
+          <p>If you did not intend to cancel the payment, please try again from the beginning.</p>
 
-      <div v-else>
-        <h3 class="title has-text-centered">Verifica necessaria <span class="emoji">🚦</span></h3>
-        <p class="subtitle has-text-centered">Please verify your payment</p>
-
-        <b-notification
-          v-if="errorMessage"
-          type="is-danger"
-          has-icon
-          role="alert"
-          :closable="false"
-          :message="errorMessage">
-        </b-notification>
-
-        <div v-if="!paymentProcessed" id="payment-elements">
-
-            <div v-show="requiresPaymentMethod">
-
-              <p>We were unable to process your payment of {{ payment.amount}}. Please try again.</p>
-
-              <hr>
-
-              <b-field label="Cardholder name">
-                <b-input id="cardholder-name" required v-model="name" type="text">
-                </b-input>
-              </b-field>
-
-              <b-field label="Card details">
-                <div id="card-element"></div>
-              </b-field>
-
-              <button
-                class="button is-primary"
-                id="card-button"
-                @click="addPaymentMethod"
-                :disabled="paymentProcessing">
-                Pay now
-              </button>
-            </div>
-
-            <div v-show="requiresAction || requiresConfirmation">
-
-              <p>You are about to make a payment of {{ payment.amount}}, click the button below to proceed. You may be prompted for additional verification for security purposes.</p>
-
-              <button
-                class="button is-primary is-fullwidth mt-4"
-                id="card-button"
-                @click="confirmPaymentMethod"
-                :disabled="paymentProcessing">
-                Confirm payment
-              </button>
-            </div>
         </div>
 
-      </div>
+        <div v-else>
+          <h3 class="title has-text-centered">Verifica necessaria <span class="emoji">🚦</span></h3>
+          <p class="subtitle has-text-centered">Please verify your payment</p>
 
-    </form>
+          <b-notification
+            v-if="errorMessage"
+            type="is-danger"
+            has-icon
+            role="alert"
+            :closable="false"
+            :message="errorMessage">
+          </b-notification>
+
+          <div v-if="!paymentProcessed" id="payment-elements">
+
+              <div v-show="requiresPaymentMethod">
+
+                <p>We were unable to process your payment of {{ payment.amount}}. Please try again.</p>
+
+                <hr>
+
+                <b-field label="Cardholder name">
+                  <b-input id="cardholder-name" required v-model="name" type="text">
+                  </b-input>
+                </b-field>
+
+                <b-field label="Card details">
+                  <div id="card-element"></div>
+                </b-field>
+
+                <button
+                  class="button is-primary"
+                  id="card-button"
+                  @click="addPaymentMethod"
+                  :disabled="paymentProcessing">
+                  Pay now
+                </button>
+              </div>
+
+              <div v-show="requiresAction || requiresConfirmation">
+
+                <p>You are about to make a payment of {{ payment.amount}}, click the button below to proceed. You may be prompted for additional verification for security purposes.</p>
+
+                <button
+                  class="button is-primary is-fullwidth mt-4"
+                  id="card-button"
+                  @click="confirmPaymentMethod"
+                  :disabled="paymentProcessing">
+                  Confirm payment
+                </button>
+              </div>
+          </div>
+
+        </div>
+
+      </form>
 
 
+    </div>
   </div>
 </app-layout>
 </template>

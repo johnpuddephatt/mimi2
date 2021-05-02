@@ -53,7 +53,7 @@ export default {
     EditorContent,
     EditorMenuBar
   },
-  props: ['value'],
+  props: ['value', 'max_height'],
   data() {
     return {
       editor: new Editor({
@@ -76,6 +76,11 @@ export default {
   },
   mounted() {
       let editorClasses = ['p-4', 'content'];
+      if(this.max_height) {
+        this.editor.view.dom.style.maxHeight = `${this.max_height}px`;
+        this.editor.view.dom.style.overflowY = 'auto';
+      }
+
       this.editor.view.dom.classList.add(...editorClasses);
   },
   beforeDestroy() {

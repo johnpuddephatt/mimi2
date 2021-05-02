@@ -75,4 +75,13 @@ class Section extends Model implements Sortable
   {
     return $this->belongsTo(\App\Models\Week::class);
   }
+
+  public function feedbackless_reply_count() {
+    return $this->replies()->feedbackless()->count();
+  }
+
+  public function replies()
+  {
+    return $this->hasMany(\App\Models\Reply::class);
+  }
 }

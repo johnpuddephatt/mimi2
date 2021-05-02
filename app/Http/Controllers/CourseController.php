@@ -40,7 +40,9 @@ class CourseController extends Controller
       if(!$course->live && !\Auth::user()->is_admin) {
         return back()->with('message', 'This course is not live yet.');
       }
-      $course->load('weeks');
+      $course->load(['weeks' => function ($query) {
+        $query->where('live', true);
+      }]);
       return Inertia::render('Course/Show', ['course' => $course]);
     }
 

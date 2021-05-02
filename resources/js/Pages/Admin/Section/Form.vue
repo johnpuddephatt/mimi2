@@ -1,22 +1,23 @@
 <template>
 <app-layout>
-  <div class="column is-9-tablet is-9-desktop is-7-widescreen">
-    <a class="back-link has-text-dark" @click="confirmClose">&larr; Back to lesson</a>
+  <div class="columns is-centered">
+    <div class="column is-9-tablet is-9-desktop is-7-widescreen">
+      <a class="back-link has-text-dark" @click="confirmClose">&larr; Back to lesson</a>
 
-    <div class="box p-5">
-      <div class="mt-6 mb-5 is-flex is-align-items-center" style="max-width: 650px; margin-left: auto; margin-right: auto;">
-        <b-input type="textarea" rows="2" @input="isDirty = true" v-model="form.title" custom-class="no-resize p-0 f-0 is-size-2 has-text-weight-semibold is-borderless modal-card-title" style="width: 100%;" placeholder="Enter section title..."/>
+      <div class="box p-5">
+        <div class="mt-6 mb-5 is-flex is-align-items-center" style="max-width: 650px; margin-left: auto; margin-right: auto;">
+          <b-input type="textarea" rows="2" @input="isDirty = true" v-model="form.title" custom-class="no-resize p-0 f-0 is-size-2 has-text-weight-semibold is-borderless modal-card-title" style="width: 100%;" placeholder="Enter section title..."/>
+        </div>
+        <div class="mt-6 mb-0" id="editorjs" spellcheck="false"></div>
       </div>
-      <div class="mt-6 mb-0" id="editorjs" spellcheck="false"></div>
-    </div>
 
-    <div class="section-controls is-fixed-bottom py-3 has-background-white">
-      <div class="container fields is-flex is-justify-content-flex-end is-align-content-center">
-        <b-checkbox @input="isDirty = true" v-model="form.is_chatroom">Enable chatroom?</b-checkbox>
-        <b-button label="Save" type="is-primary is-medium" :loading="form.processing" :disabled="!form.title || !isDirty" class="ml-2" @click.prevent="onSubmit" />
+      <div class="section-controls is-fixed-bottom py-3 has-background-white">
+        <div class="container fields is-flex is-justify-content-flex-end is-align-content-center">
+          <b-checkbox @input="isDirty = true" v-model="form.is_chatroom">Enable chatroom?</b-checkbox>
+          <b-button label="Save" type="is-primary is-medium" :loading="form.processing" :disabled="!form.title || !isDirty" class="ml-2" @click.prevent="onSubmit" />
+        </div>
       </div>
     </div>
-
   </div>
 </app-layout>
 </template>

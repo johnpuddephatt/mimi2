@@ -30,6 +30,7 @@ class StoreWeek extends FormRequest
       return [
         'name' => 'required|max:255',
         'description' => 'nullable',
+        'live' => 'boolean',
         'number' => Rule::unique('weeks')->ignore($week ? $week->id : null)->where(function ($query) use ($course_id) {
           return $query->where('course_id', $course_id);
         })

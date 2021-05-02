@@ -1,9 +1,20 @@
 <template>
-  <section class="section is-medium">
+  <section class="section" :class="{'is-medium' : padded}">
     <div class="container">
-      <div class="columns is-centered">
-        <slot></slot>
-      </div>
+      <slot></slot>
     </div>
   </section>
 </template>
+
+<script>
+
+export default {
+  props: {
+    padded: {
+      type: Boolean,
+      default: true
+    }
+  }
+}
+
+</script>

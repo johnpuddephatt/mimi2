@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Reply;
 use App\Models\Lesson;
+use App\Models\Section;
 use App\Models\Video;
 
 use App\Http\Requests\StoreReply;
@@ -35,7 +36,7 @@ class ReplyController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function store(StoreReply $request, Lesson $lesson) {
+    public function store(StoreReply $request, Lesson $lesson, Section $section) {
 
       if($request->video) {
         $video = Video::create([
@@ -49,8 +50,9 @@ class ReplyController extends Controller
 
       $reply = Reply::create([
           'user_id' => $request->user_id,
-          'reply_id' => null,
+          'reply_id' => $request->reply_id,
           'lesson_id' => $request->reply_id ? null : $lesson->id,
+          'section_id' => $request->reply_id ? null : $section->id,
           'video_id' => $request->video ? $video->id : null,
           'text' => $request->text,
           'type' => $request->audio ? 'audio' :
@@ -66,5 +68,4 @@ class ReplyController extends Controller
       return redirect()->back();
 
     }
-
 }

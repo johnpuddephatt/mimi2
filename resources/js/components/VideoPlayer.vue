@@ -2,7 +2,7 @@
   <div class="video-player--wrapper">
     <div :class="ratio ? `has-${ ratio }-media` : 'has-square-media'">
     <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
-    <video class="video-js vjs-big-play-centered" controls :preload="autoplay? 'auto' : 'none'" width="640" height="264" :autoplay="autoplay" :poster="poster" playsinline ref="player">
+    <video class="video-js vjs-big-play-centered" controls :preload="should_autoplay? 'auto' : 'none'" width="640" height="264" :poster="poster" playsinline ref="player">
       <source :src="source" :type="type" />
       <p class="vjs-no-js">
         To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
@@ -21,26 +21,20 @@ export default {
     return {
       isLoading: true,
       player: null,
-      autoplay: false,
-      should_stop: false,
     };
   },
 
   watch: {
-    autoplay: function(val) {
-      if(val && (!this.isLoading) && (!this.should_stop)) {
+    should_autoplay: function(val) {
+      if(val && !this.isLoading) {
         this.player.play();
       }
       else {
         this.player.pause();
+        this.player.currentTime(0);
       }
     },
-    should_stop: function(val) {
-      if(val) {
-        this.autoplay = false;
-        this.player.pause();
-      }
-    }
+
   },
 
   mounted() {
@@ -52,9 +46,9 @@ export default {
 
     this.player.ready(() => {
       this.isLoading = false;
-      if(this.should_autoplay && !this.should_stop) {
-        this.autoplay = true;
-        // this.player.play();
+      if(this.should_autoplay) {
+        this.should_autoplay = true;
+        this.player.play();
       }
     });
 
@@ -71,7 +65,6 @@ export default {
       if (this.player.currentTime() === 0) {
         this.player.currentTime(0);
       }
-      // this.player.currentTime(this.player.currentTime());
       this.$emit('playing');
     },
     onEnded() {
