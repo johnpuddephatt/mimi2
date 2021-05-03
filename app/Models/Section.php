@@ -71,13 +71,17 @@ class Section extends Model implements Sortable
     }
   }
 
-  public function week()
-  {
-    return $this->belongsTo(\App\Models\Week::class);
+  public function is_last() {
+    return $this->id == $this->lesson->sections->last()->id;
   }
 
-  public function feedbackless_reply_count() {
-    return $this->replies()->feedbackless()->count();
+  public function week()
+  {
+    return $this->hasOneThrough(\App\Models\Week::class, \App\Models\Lesson::class);
+  }
+
+  public function lesson() {
+    return $this->belongsTo(\App\Models\Lesson::class);
   }
 
   public function replies()

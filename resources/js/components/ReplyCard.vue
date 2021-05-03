@@ -261,7 +261,7 @@ export default {
   }
 
   &--inner {
-
+    user-select: text;
     padding: 7.5rem 5rem;
     &::before,
     &::after {

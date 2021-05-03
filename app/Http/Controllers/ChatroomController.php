@@ -20,7 +20,7 @@ class ChatroomController extends Controller
 
     $lessons = $course->lessons()->whereHas('sections', function ($query) {
       $query->where('is_chatroom', '=', true);
-    })->get();
+    })->with('week:id,name')->get();
 
     if($lessons->count()) {
       return redirect()->route('chatroom.lesson', ['course' => $course, 'lesson' => $lessons->first()]);
@@ -37,14 +37,16 @@ class ChatroomController extends Controller
 
     $lessons = $course->lessons()->whereHas('sections', function ($query) {
       $query->where('is_chatroom', '=', true);
-    })->get();
+    })->with('week:id,name')->get();
 
     $already_replied_to = ($request->already_replied_to == 'true');
+
+    $lessons->each->append('feedbackless_reply_count');
 
     return Inertia::render('Admin/Chatroom/Lesson', [
       'courses' => Course::all(),
       'course' => $course,
-      'lesson' => $lesson,
+      'lesson' => $lesson->load('week'),
       'lessons' => $lessons,
       'include_already_replied_to' => $already_replied_to,
       'replies' => $already_replied_to ?

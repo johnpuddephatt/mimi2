@@ -21,7 +21,8 @@
           @typing="getFilteredUsers"
         >
           <template slot-scope="props">
-            {{ props.option.first_name }} {{ props.option.last_name }}
+            <div>{{ props.option.first_name }} {{ props.option.last_name }}</div>
+            <div class="is-size-7">{{ props.option.email}}</div>
           </template>
         </b-taginput>
         <p class="control">
@@ -29,7 +30,13 @@
         </p>
       </b-field>
 
-      <div class="panel-block is-justify-between mb-4" v-for="user in enrolledUsers" :key="user.id">{{ user.first_name }} {{ user.last_name }} <button class="button is-small" @click="onUnenroll(user.id)">Unenroll</button></div>
+      <div class="panel-block is-justify-between mb-4" v-for="user in enrolledUsers" :key="user.id">
+        <div>
+          <p>{{ user.first_name }} {{ user.last_name }}</p>
+          <p class="is-size-7">{{ user.email }}</p>
+        </div>
+        <button class="button is-small" @click="onUnenroll(user.id)">Unenroll</button>
+      </div>
 
     </div>
 
@@ -98,7 +105,11 @@ export default {
               (user.first_name + ' ' + user.last_name)
                 .toString()
                 .toLowerCase()
-                .indexOf(text.toLowerCase()) >= 0)
+                .indexOf(text.toLowerCase()) >= 0
+                || user.email.toString()
+                    .toLowerCase()
+                    .indexOf(text.toLowerCase()) >= 0
+              )
         })
     },
 
@@ -131,6 +142,7 @@ export default {
           setTimeout(()=>{
             this.isSaving = false;
           }, 2000);
+          console.log('User removed');
           this.enrolledUsers = this.enrolledUsers.filter(user => user.id != user_id);
         })
         .catch(error => {

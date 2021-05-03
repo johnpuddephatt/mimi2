@@ -31,6 +31,11 @@ class Week extends Model
       });
     }
 
+    public function next() {
+      return $this->course->weeks->where('number', '>', $this->number)->first()->only('id','name','number');
+
+    }
+
     public function course()
     {
       return $this->belongsTo(\App\Models\Course::class);

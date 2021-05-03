@@ -45,12 +45,24 @@
               <create-reply @uploaded="startRefreshing" :$parameters="$parameters" :$user="$user"/>
           </p>
         </div>
-
-
     </div>
 
     <div class="chatroom-body container is-flex is-flex-wrap-wrap">
+
       <reply-card v-for="reply in sortedReplies" :reply="reply" :key="reply.id" :$parameters="$parameters" :$user="$user" :comments="$parameters.reply == reply.id ? comments : null"/>
+
+      <div v-if="!replies.length" class="message is-fullwidth mt-4 is-success">
+        <div class="message-body section is-medium has-text-centered">
+          🧐 Looks like no one’s added a reply yet.
+        </div>
+      </div>
+
+      <div v-else-if="!sortedReplies.length" class="message is-fullwidth mt-4 is-success">
+        <div class="message-body section is-medium has-text-centered">
+          🔍 No results match your filters.
+        </div>
+      </div>
+
     </div>
   </div>
 </template>

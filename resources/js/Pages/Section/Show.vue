@@ -1,4 +1,4 @@
-<template>
+  <template>
 <app-layout>
   <div class="columns is-centered">
     <div class="column is-10-tablet is-8-desktop is-7-widescreen">
@@ -9,8 +9,9 @@
         <course-navigator :$parameters="$parameters" :course_id="$parameters.course"></course-navigator>
       </div>
       <div class="box section-content">
+        <h3 class="subtitle is-4 has-text-grey mt-3 mb-0">{{ lesson.title }}</h3>
 
-        <h3 class="title is-2 has-text-weight-bold mt-4 mb-6">{{ section.title }}</h3>
+        <h3 class="title is-2 has-text-weight-bold mt-0 mb-6">{{ section.title }}</h3>
 
         <div v-if="lesson.sections.length > 1" class="sections-box box p-4">
           <h3 class="has-text-weight-bold is-size-4 mt-0">Today’s lesson 🧑‍🏫</h3>
@@ -41,9 +42,52 @@
 
         <Chatroom class="negative-margin" v-if="section.is_chatroom" :replies="replies" :$user="$user" :comments="comments" :$parameters="$parameters"></Chatroom>
 
-        <div class="section-footer container is-flex mt-5 pt-4">
-          <inertia-link class="button is-medium " v-if="previousSectionID" :href="route('section.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': $parameters.lesson, 'section': previousSectionID })">Previous</inertia-link>
-          <inertia-link class="button is-medium ml-a" v-if="nextSectionID" :href="route('section.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': $parameters.lesson, 'section': nextSectionID })">Next</inertia-link>
+        <div class="section-footer container is-flex">
+          <inertia-link class="button is-primary is-light is-fat has-text-left is-justify-content-flex-start is-medium " v-if="previousSection" :href="route('section.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': $parameters.lesson, 'section': previousSection.id })">
+            <b-icon icon="arrow-left" />
+            <div class="mb-a">
+              <h4 class="heading">Previous page:</h4>
+              <p>{{ previousSection.title }}</p>
+            </div>
+          </inertia-link>
+          <inertia-link class="button is-primary is-light is-fat is-justify-content-space-between has-text-left is-medium ml-a" v-if="nextSection" :href="route('section.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': $parameters.lesson, 'section': nextSection.id })">
+            <div class="mb-a">
+              <h4 class="heading">Next page:</h4>
+              <p>{{ nextSection.title }}</p>
+            </div>
+            <b-icon icon="arrow-right" />
+          </inertia-link>
+        </div>
+
+        <div v-if="next_lesson">
+          <div class="message mt-4 is-success">
+            <div class="message-body p-5 has-text-centered">
+              <h3 class="title mt-3 is-4">{{ randomGreeting }}</h3>
+              <p class="subtitle">You’ve reached the end of this lesson.</p>
+              <inertia-link :href="route('lesson.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': next_lesson.id })" class="button is-fat has-text-left is-success is-medium">
+                <div>
+                  <h3 class="heading">Go to the next lesson:</h3>
+                  <p>{{ next_lesson.title }}</p>
+                </div>
+                <b-icon class="ml-1" icon="arrow-right" />
+              </inertia-link>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="next_week">
+          <div class="message mt-4 is-success">
+            <div class="message-body p-5 has-text-centered">
+              <h3 class="title mt-3 is-4">{{ randomGreeting }}</h3>
+              <p class="subtitle">You’ve reached the end of this week.</p>
+              <inertia-link :href="route('week.show', {'course': $parameters.course, 'week': next_week.number })" class="button is-fat has-text-left is-success is-medium">
+                <div>
+                  <h3 class="heading">Next week:</h3>
+                  <p>{{ next_week.name }}</p>
+                </div>
+                <b-icon class="ml-1" icon="arrow-right" /></inertia-link>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -56,7 +100,7 @@
 import Chatroom from '@/components/Chatroom'
 
 export default {
-  props: ['blocks_prerendered', 'comments', 'replies', 'course', 'week', 'lesson', 'section', '$parameters', '$user'],
+  props: ['blocks_prerendered', 'comments', 'replies', 'course', 'week', 'lesson', 'section', 'next_lesson', 'next_week', '$parameters', '$user'],
 
   components: {
     Chatroom,
@@ -64,6 +108,11 @@ export default {
 
   data() {
     return {
+      greetings: [
+        'Molto bene 👌',
+        'Congratulazioni 👏',
+        'Complimenti 👍'
+      ]
     }
   },
 
@@ -72,6 +121,10 @@ export default {
   },
 
   computed: {
+
+    randomGreeting() {
+      return this.greetings[Math.floor(Math.random() * this.greetings.length)];
+    },
 
   	dynamicComponent() {
     	return {
@@ -97,12 +150,12 @@ export default {
       return this.lesson.sections.map((section) => { return section.id }).indexOf(this.section.id);
     },
 
-    nextSectionID() {
-      return this.lesson.sections[this.currentSectionIndex + 1]?.id;
+    nextSection() {
+      return this.lesson.sections[this.currentSectionIndex + 1];
     },
 
-    previousSectionID() {
-      return this.lesson.sections[this.currentSectionIndex - 1]?.id;
+    previousSection() {
+      return this.lesson.sections[this.currentSectionIndex - 1];
     }
   }
 };
@@ -128,6 +181,16 @@ export default {
   max-width: 16em;
   position: relative;
   z-index: 9;
+}
+
+.section-footer {
+  padding-top: 2em;
+  margin-top: 4em;
+  border-top: 1px solid $grey-lightest;
+
+  .button {
+    width: 45%;
+  }
 }
 
 .lesson-button {

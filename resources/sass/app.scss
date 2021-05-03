@@ -8,6 +8,31 @@
   margin-left: auto;
 }
 
+.mb-a {
+  margin-bottom: auto;
+}
+
+.mr-a {
+  margin-right: auto;
+}
+
+.mt-a {
+  margin-top: auto;
+}
+
+// Fat button, used for section next/previous links
+.is-fat {
+  height: auto;
+  padding: .75em 1.25em;
+  font-weight: 600;
+  white-space: normal;
+  line-height: 1.1;
+}
+
+.is-fullwidth {
+  width: 100%;
+}
+
 .back-link {
   display: inline-block;
   margin-bottom: .5em;

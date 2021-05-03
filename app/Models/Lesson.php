@@ -32,8 +32,16 @@ class Lesson extends Model
       });
     }
 
-    public function feedbackless_reply_count() {
+    public function getFeedbacklessReplyCountAttribute() {
       return $this->replies()->feedbackless()->count();
+    }
+
+    public function next() {
+      return $this->week->lessons->where('day', '>', $this->day)->first()->only('id','title');
+    }
+
+    public function is_last() {
+      return $this->id == $this->week->lessons->last()->id;
     }
 
     public function week()
@@ -50,4 +58,9 @@ class Lesson extends Model
     {
       return $this->hasMany(\App\Models\Reply::class);
     }
+
+    public function course()
+   {
+       return $this->hasOneThrough(\App\Models\Course::class, \App\Models\Week::class);
+   }
 }

@@ -28,7 +28,7 @@ class UserController extends Controller
     }
 
     public function showProfile() {
-      return Inertia::render('Profile', ['user' => \Auth::user()]);
+      return Inertia::render('User/Profile', ['user' => \Auth::user()]);
     }
 
     protected function updateProfile(StoreUser $request) {

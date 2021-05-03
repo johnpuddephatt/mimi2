@@ -27,10 +27,6 @@ class Course extends Model
     return \Hashids::encode($this->id);
   }
 
-  public function feedbackless_reply_count() {
-    return $this->replies()->feedbackless()->count();
-  }
-
   public function scopeOpen($query) {
     return $query->where('is_open', true);
   }

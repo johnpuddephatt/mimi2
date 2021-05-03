@@ -6,7 +6,10 @@
 
     <div class="section-content box column is-two-thirds p-5">
         <div class="mt-6 mb-6">
-          <h3 class="title">{{ lesson.title }} 🗂️</h3>
+          <h3 class="title is-flex">
+            <span class="text-overflow-ellipsis">{{ lesson.title }}</span> 🗂&nbsp;
+            <a target="_blank" :href="route('lesson.show', {'course': $parameters.course, 'week': lesson.week.number, 'lesson': lesson.id })" class="button ml-a">View this lesson</a>
+          </h3>
         </div>
         <Chatroom :show_admin_interface="true" :replies="replies" :include_already_replied_to="include_already_replied_to" :$user="$user" :$parameters="$parameters" class="negative-margin"></Chatroom>
 

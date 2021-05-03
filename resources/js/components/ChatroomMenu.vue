@@ -1,20 +1,24 @@
 <template>
-  <aside class="column is-one-third menu p-5 mt-5">
+  <aside class="column is-one-third p-5 mt-5">
+    <div class="menu">
+      <h2 class="title is-size-3">Chatroom manager</h2>
+      <course-dropdown :courses="courses" :current="current" />
 
-    <course-dropdown :courses="courses" :current="current" />
-
-    <ul class="mt-4 menu-list">
-      <li v-for="lesson in lessons"
-      :key="lesson.id">
-        <inertia-link
-          class="is-justify-between text-overflow-ellipsis"
-          :class="{'is-active' : lesson.id == $parameters.lesson}"
-          :href="route('chatroom.lesson', {'course': $parameters.course, 'lesson': lesson.id })"
-          >
-          {{ lesson.title }}
-        </inertia-link>
-      </li>
-    </ul>
+      <ul class="mt-4 menu-list">
+        <li v-for="lesson in lessons"
+        :key="lesson.id">
+          <inertia-link
+            class="is-flex is-justify-between"
+            :class="{'is-active' : lesson.id == $parameters.lesson}"
+            :href="route('chatroom.lesson', {'course': $parameters.course, 'lesson': lesson.id })"
+            >
+            <strong class="mr-1">{{ lesson.week.name}}</strong>
+            <span class="text-overflow-ellipsis">{{ lesson.title }}</span>
+            <span class="ml-1 tag is-rounded">{{ lesson.feedbackless_reply_count }} new</span>
+          </inertia-link>
+        </li>
+      </ul>
+    </div>
   </aside>
 
 </template>
@@ -55,6 +59,7 @@ export default {
 @import "../../sass/variables";
 
 .menu {
+  padding-right: 3rem !important;
   position: sticky;
   top: 5.5rem;
 }

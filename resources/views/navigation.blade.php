@@ -38,10 +38,10 @@
 
                           @if(Auth::user()->is_admin)
                             <a class="navbar-item" href="{{ route('courses.manage') }}">
-                              Manage Courses
+                              Course manager
                             </a>
                             <a class="navbar-item" href="{{ route('chatroom.index') }}">
-                              Manage chatroom replies
+                              Chatroom manager
                             </a>
                             <a class="navbar-item" href="{{ route('admin.emails') }}">
                               Emails

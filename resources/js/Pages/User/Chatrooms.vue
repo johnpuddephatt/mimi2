@@ -5,7 +5,7 @@
     <div class="column is-7-tablet is-6-desktop is-5-widescreen">
       <div class="box">
         <h3 class="title has-text-centered">Your chatrooms</h3>
-        <p class="subtitle has-text-centered">Select a course to see the chatrooms it contains. Chatrooms you’ve already replied to will be ticked off.</p>
+        <p class="subtitle has-text-centered">Select a course to see a list of the chatrooms you’ve already replied to.</p>
 
         <b-dropdown class="is-block" position="is-bottom-right" append-to-body aria-role="menu">
           <template #trigger>
@@ -24,18 +24,25 @@
 
         <hr>
 
-        <inertia-link
-          v-for="lesson in lessons"
-          :key="lesson.id"
-          class="button is-medium is-justify-between is-fullwidth is-outlined"
-          :href="getLessonOrReplyLink(lesson)"
-          >
-          <span class="text-overflow-ellipsis mr-a">{{ lesson.title }}</span>
-          <b-tooltip v-if="replies.find(entry => entry.lesson_id == lesson.id)" label="You’ve replied to this" type="is-success" position="is-bottom">
-            <b-icon type="is-success" icon="check-circle-outline" />
-          </b-tooltip>
-          <b-icon icon="arrow-right" />
-        </inertia-link>
+          <inertia-link
+            v-for="lesson in lessonsRepliedTo"
+            :key="lesson.id"
+            class="button is-medium is-justify-between is-fullwidth is-outlined"
+            :href="getLessonOrReplyLink(lesson)"
+            >
+            <span class="text-overflow-ellipsis mr-a">{{ lesson.title }}</span>
+            <!-- <b-tooltip v-if="replies.find(entry => entry.lesson_id == lesson.id)" label="You’ve replied to this" type="is-success" position="is-bottom">
+              <b-icon type="is-success" icon="check-circle-outline" />
+            </b-tooltip> -->
+            <b-icon icon="arrow-right" />
+          </inertia-link>
+
+          <div v-if="!lessonsRepliedTo.length" class="message is-fullwidth mt-4 is-success">
+            <div class="message-body section is-medium has-text-centered">
+              You’ve not posted any replies in this course yet.
+            </div>
+          </div>
+
       </div>
     </div>
   </div>
@@ -57,14 +64,22 @@ export default {
     }
   },
   mounted() {},
+
   computed: {
+    lessonsRepliedTo() {
+      return this.lessons.filter(lesson => {
+        return this.replies.map(o => o['lesson_id']).includes(lesson.id);
+      })
+    }
   },
+
   methods: {
     repliesAreForLesson(lesson_id) {
       return this.replies.find(reply => reply.lesson_id == lesson_id);
     },
     getLessonOrReplyLink(lesson) {
-      return this.repliesAreForLesson(lesson.id) ?
+      // return this.repliesAreForLesson(lesson.id) ?
+      return true ?
         route('section.reply', {'course': this.course.id, 'week': lesson.week.number, 'lesson': lesson.id, 'section' : lesson.sections[0].id, 'reply': this.replies.find(reply => reply.lesson_id == lesson.id).id })
           : route('section.show', {'course': this.course.id, 'week': lesson.week.number, 'lesson': lesson.id, 'section' : lesson.sections[0].id });
     }
