@@ -32,7 +32,7 @@ class Week extends Model
     }
 
     public function next() {
-      return $this->course->weeks->where('number', '>', $this->number)->firstOrFail()->only('id','name','number');
+      return $this->course->weeks->where('number', '>', $this->number)->first()->only('id','name','number');
     }
 
     public function is_last() {
