@@ -41,7 +41,8 @@ class SectionController extends Controller
           'section' => $section->only('id','title','order','is_chatroom'),
           'replies' => $section->is_chatroom ? fn () => $lesson->replies()->with('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video')->get() : null,
           'next_lesson' => ($section->is_last() && !$lesson->is_last()) ? $lesson->next() : null,
-          'next_week' => ($section->is_last() && $lesson->is_last()) ? $week->next() : null,
+          'next_week' => ($section->is_last() && $lesson->is_last() && !$week->is_last()) ? $week->next() : null,
+          'end_of_course' => ($section->is_last() && $lesson->is_last() && $week->is_last()) ? true : false,
           'comments' => $reply ? $reply->parent_comments : null,
           'blocks_prerendered' => Cache::rememberForever('section_' . $section->id, function() use($section) {
             return view('editorjs', ['blocks' => $section->getBlocks()])->render();

@@ -90,6 +90,15 @@
           </div>
         </div>
 
+        <!-- <div v-if="end_of_course">
+          <div class="message mt-4 is-success">
+            <div class="message-body p-5 has-text-centered">
+              <h3 class="title mt-3 is-4">{{ randomGreeting }}</h3>
+              <p class="subtitle">You’ve reached the end of this course.</p>
+            </div>
+          </div>
+        </div> -->
+
       </div>
     </div>
   </div>
@@ -100,7 +109,7 @@
 import Chatroom from '@/components/Chatroom'
 
 export default {
-  props: ['blocks_prerendered', 'comments', 'replies', 'course', 'week', 'lesson', 'section', 'next_lesson', 'next_week', '$parameters', '$user'],
+  props: ['blocks_prerendered', 'comments', 'replies', 'course', 'week', 'lesson', 'section', 'next_lesson', 'next_week', 'end_of_course' ,'$parameters', '$user'],
 
   components: {
     Chatroom,

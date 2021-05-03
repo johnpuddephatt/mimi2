@@ -32,7 +32,10 @@ class RedirectIfNotEnrolled
       }
 
       // Return next if user is enrolled on course and either has subscription OR the enrolment isn’t subscription based
-      if(Auth::User()->courses()->find($course_id) && (Auth::User()->subscribed() || !Auth::User()->courses()->find($course_id)->pivot->is_subscription_based)) {
+
+      // if(Auth::User()->courses()->find($course_id) && (Auth::User()->subscribed() || !Auth::User()->courses()->find($course_id)->pivot->is_subscription_based)) {
+
+      if(Auth::User()->courses()->find($course_id)) {
         return $next($request);
       }
 
