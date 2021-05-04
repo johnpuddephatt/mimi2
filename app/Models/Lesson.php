@@ -37,8 +37,7 @@ class Lesson extends Model
     }
 
     public function next() {
-      $next_lesson = $this->week->lessons->where('day', '>', $this->day)->first();
-      return $next_lesson ? $next_lesson->only('id','title') : null;
+      return $this->week->lessons()->select('id','title')->where('day', '>', $this->day)->first();
     }
 
     public function is_last() {
