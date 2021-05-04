@@ -174,6 +174,7 @@ export default {
     .modal-card-foot {
         padding-top: 10px;
         padding-bottom: 10px;
+        flex-direction: column;
     }
     .field {
         width: 100%;

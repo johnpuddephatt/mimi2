@@ -14,7 +14,7 @@ class AddSectionIdToReplies extends Migration
     public function up()
     {
         Schema::table('replies', function (Blueprint $table) {
-          $table->integer('section_id')->references('id')->on('sections')->onDelete('cascade');
+          $table->integer('section_id')->nullable()->references('id')->on('sections')->onDelete('cascade');
         });
     }
 

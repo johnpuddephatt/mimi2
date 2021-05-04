@@ -160,11 +160,15 @@ export default {
     },
 
     nextSection() {
-      return this.lesson.sections[this.currentSectionIndex + 1];
+      if(this.currentSectionIndex + 1 < this.lesson.sections.length) {
+        return this.lesson.sections[this.currentSectionIndex + 1];
+      }
     },
 
     previousSection() {
-      return this.lesson.sections[this.currentSectionIndex - 1];
+      if(this.currentSectionIndex > 0) {
+        return this.lesson.sections[this.currentSectionIndex - 1];
+      }
     }
   }
 };
