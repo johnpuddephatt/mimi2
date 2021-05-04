@@ -193,6 +193,7 @@ export default {
 }
 
 .section-footer {
+  clear: both;
   padding-top: 2em;
   margin-top: 4em;
   border-top: 1px solid $grey-lightest;
