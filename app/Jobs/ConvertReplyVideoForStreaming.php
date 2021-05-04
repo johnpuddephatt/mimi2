@@ -44,11 +44,11 @@ class ConvertReplyVideoForStreaming implements ShouldQueue
         $thumbnail_path = Video::$thumbnail_directory . $this->video->id . '.jpg';
         $playlist_path = Video::$video_directory . $this->video->id . '/playlist.m3u8';
 
-        $lowBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(200)->setAdditionalParameters(
+        $lowBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(250)->setAdditionalParameters(
           ["-preset", "ultrafast"]
         );
 
-        $highBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(1200)->setAdditionalParameters(
+        $highBitrateFormat  = (new X264('aac','libx264'))->setKiloBitrate(1000)->setAdditionalParameters(
           ["-preset", "medium"]
         );
 

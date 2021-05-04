@@ -25,9 +25,15 @@ class Video extends Model
        'converted_for_streaming_at',
     ];
 
+    // dubious??
     public function video()
     {
       return $this->hasOne('App\Models\Lesson');
+    }
+
+    public function reply()
+    {
+      return $this->belongsTo('App\Models\Reply');
     }
 
     public function comment()
