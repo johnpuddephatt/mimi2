@@ -14,6 +14,7 @@ class ActivityController extends Controller
   public function index()
   {
     $activities = Activity::orderBy('id','DESC')
+      ->has('subject')
       ->with(['subject' => function (MorphTo $morphTo) {
         $morphTo->morphWith([
             Comment::class => ['reply.user:id','reply.lesson.week.course:id'],

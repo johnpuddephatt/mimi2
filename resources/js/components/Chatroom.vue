@@ -51,15 +51,21 @@
 
       <reply-card v-for="reply in sortedReplies" :reply="reply" :key="reply.id" :$parameters="$parameters" :$user="$user" :comments="$parameters.reply == reply.id ? comments : null"/>
 
-      <div v-if="!replies.length" class="message is-fullwidth mt-4 is-success">
+      <div v-if="!replies.length && show_admin_interface && !include_already_replied_to" class="message is-fullwidth mt-4 is-success">
         <div class="message-body section is-medium has-text-centered">
-          🧐 Looks like no one’s added a reply yet.
+          😁 Great! No replies in here need feedback.
+        </div>
+      </div>
+
+      <div v-else-if="!replies.length && !show_admin_interface" class="message is-fullwidth mt-4 is-success">
+        <div class="message-body section is-medium has-text-centered">
+          👀 No one’s posted a reply yet.
         </div>
       </div>
 
       <div v-else-if="!sortedReplies.length" class="message is-fullwidth mt-4 is-success">
         <div class="message-body section is-medium has-text-centered">
-          🔍 No results match your filters.
+          🔍 No replies to show you.
         </div>
       </div>
 
