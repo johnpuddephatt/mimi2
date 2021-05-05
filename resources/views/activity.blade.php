@@ -1,6 +1,8 @@
 @extends('layouts.static')
 
 @section('content')
+  <script src="//unpkg.com/timeago.js@4.0.2/dist/timeago.min.js"></script>
+
   <section class="section is-medium">
     <div class="container">
       <div class="columns is-centered">
@@ -96,9 +98,10 @@
       </div>
     </div>
   </section>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/timeago.js/2.0.2/timeago.min.js"></script>
   <script>
-    timeago.render(document.querySelectorAll('.timeago'));
+    document.addEventListener('DOMContentLoaded', ()=>{
+      timeago.render(document.querySelectorAll('.timeago'));
+    });
   </script>
 
 @endsection
