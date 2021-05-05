@@ -1,7 +1,6 @@
 @extends('layouts.static')
 
 @section('content')
-  <script src="//unpkg.com/timeago.js@4.0.2/dist/timeago.min.js"></script>
 
   <section class="section is-medium">
     <div class="container">
@@ -28,7 +27,7 @@
                           @endif
                         </p>
                         <div class="is-italic is-size-7 mb-2">{!!$activity->properties['attributes']['value'] !!}</div>
-                        <div class="timeago is-size-7 has-text-grey" datetime="{{$activity->created_at}}" :auto-update="60">{{$activity->created_at}}</div>
+                        <div class="is-size-7 has-text-grey">{{$activity->created_at->diffForHumans()}}</div>
                     </div>
                     @if($activity->subject)
                       <a class="button" href="{{ route('section.reply', [
@@ -51,7 +50,7 @@
                       </figure>
                       <div class="media-content mr-2">
                           <p><strong>{{ $activity->subject->user->first_name }}</strong> gave feedback to {{ $activity->subject->reply->user->first_name }}</strong></p>
-                          <div class="timeago is-size-7 has-text-grey" datetime="{{$activity->created_at}}" :auto-update="60">{{$activity->created_at}}</div>
+                          <div class="is-size-7 has-text-grey">{{$activity->created_at->diffForHumans()}}</div>
                       </div>
                       @if($activity->subject)
                         <a class="button" href="{{ route('section.reply', [
@@ -72,7 +71,7 @@
                       </figure>
                       <div class="media-content mr-2">
                           <p><strong>{{ $activity->subject->user->first_name }}</strong> posted a reply</p>
-                          <div class="timeago is-size-7 has-text-grey" datetime="{{$activity->created_at}}" :auto-update="60">{{$activity->created_at}}</div>
+                          <div class="is-size-7 has-text-grey">{{$activity->created_at->diffForHumans()}}</div>
                       </div>
 
                       @if($activity->subject)
@@ -98,10 +97,6 @@
       </div>
     </div>
   </section>
-  <script>
-    document.addEventListener('DOMContentLoaded', ()=>{
-      timeago.render(document.querySelectorAll('.timeago'));
-    });
-  </script>
+
 
 @endsection
