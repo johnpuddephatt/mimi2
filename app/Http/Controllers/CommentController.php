@@ -41,7 +41,7 @@ class CommentController extends Controller
     public function store(StoreComment $request, Course $course, Week $week, Lesson $lesson, Section $section, Reply $reply) {
       Comment::create($request->all());
 
-      return redirect()->route('section.reply', [
+      return redirect()->route($request->in_chatroom_manager ? 'chatroom.reply' : 'section.reply', [
         'course' => $course,
         'week' => $week,
         'lesson' => $lesson,

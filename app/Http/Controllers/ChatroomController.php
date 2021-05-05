@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 use App\Models\Course;
 use App\Models\Lesson;
+use App\Models\Week;
 use App\Models\Section;
+use App\Models\Reply;
 
 class ChatroomController extends Controller
 {
@@ -39,7 +41,7 @@ class ChatroomController extends Controller
     $section = $lesson->sections()->where('is_chatroom',true)->first();
 
     if($section) {
-      return redirect()->route('chatroom.section', ['course' => $course, 'lesson' => $lesson, 'section' => $section ]);
+      return redirect()->route('chatroom.section', ['course' => $course, 'week' => $lesson->week, 'lesson' => $lesson, 'section' => $section ]);
     }
     else {
       abort(404);
@@ -47,7 +49,7 @@ class ChatroomController extends Controller
   }
 
 
-  public function section(Request $request, Course $course, Lesson $lesson, Section $section) {
+  public function section(Request $request, Course $course, Week $week, Lesson $lesson, Section $section, Reply $reply = null) {
 
     $lessons = $course->lessons()->whereHas('sections', function ($query) {
       $query->where('is_chatroom', '=', true);
@@ -63,6 +65,7 @@ class ChatroomController extends Controller
       'lesson' => $lesson->load('week'),
       'lessons' => $lessons,
       'include_already_replied_to' => $already_replied_to,
+      'comments' => $reply ? $reply->parent_comments : null,
       'replies' => $already_replied_to ?
         fn () => $lesson->replies()->with('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video')->get() :
           fn () => $lesson->replies()->feedbackless()->with('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video')->get()

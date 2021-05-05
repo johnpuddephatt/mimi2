@@ -100,7 +100,7 @@ var platform = require('platform');
 import Comment from '@/components/Comment';
 
 export default {
-  props: ['$parameters', '$user', 'reply', 'preloadedComments'],
+  props: ['$parameters', '$user', 'reply', 'preloadedComments', 'in_chatroom_manager'],
   components: {
     Comment
   },
@@ -119,7 +119,8 @@ export default {
         user_id: this.$user.id,
         reply_id: this.reply.id,
         value: '',
-        comment_id: null
+        comment_id: null,
+        in_chatroom_manager: this.in_chatroom_manager
       }),
       destroyCommentForm: this.$inertia.form(),
       getCommentsForm: this.$inertia.form()

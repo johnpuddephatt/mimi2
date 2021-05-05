@@ -108,7 +108,8 @@ Route::get('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}
 Route::get('admin/chatroom/', 'ChatroomController@index')->name('chatroom.index')->middleware('admin');
 Route::get('admin/chatroom/course/{course}', 'ChatroomController@course')->name('chatroom.course')->middleware('admin');
 Route::get('admin/chatroom/course/{course}/lesson/{lesson}', 'ChatroomController@lesson')->name('chatroom.lesson')->middleware('admin');
-Route::get('admin/chatroom/course/{course}/lesson/{lesson}/section/{section}', 'ChatroomController@section')->name('chatroom.section')->middleware('admin');
+Route::get('admin/chatroom/course/{course}/week/{week:number}/lesson/{lesson}/section/{section}', 'ChatroomController@section')->name('chatroom.section')->middleware('admin');
+Route::get('admin/chatroom/course/{course}/week/{week:number}/lesson/{lesson}/section/{section}/reply/{reply}/{show_feedback?}', 'ChatroomController@section')->name('chatroom.reply')->middleware('admin');
 
 
 Route::get('admin/courses', 'CourseController@manage')->name('courses.manage')->middleware('admin');

@@ -17,7 +17,7 @@ class ActivityController extends Controller
       ->has('subject')
       ->with(['subject' => function (MorphTo $morphTo) {
         $morphTo->morphWith([
-            Comment::class => ['reply.user:id','reply.lesson.week.course:id'],
+            Comment::class => ['reply.user:id,first_name','reply.lesson.week.course:id'],
             Reply::class => ['reply.lesson.week.course:id','lesson.week.course:id'],
         ]);
       }])

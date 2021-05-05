@@ -11,7 +11,7 @@
             <a target="_blank" :href="route('lesson.show', {'course': $parameters.course, 'week': lesson.week.number, 'lesson': lesson.id })" class="button ml-a">View this lesson</a>
           </h3>
         </div>
-        <Chatroom :show_admin_interface="true" :replies="replies" :include_already_replied_to="include_already_replied_to" :$user="$user" :$parameters="$parameters" class="negative-margin"></Chatroom>
+        <Chatroom :show_admin_interface="true" :in_chatroom_manager="true"  :comments="comments" :replies="replies" :include_already_replied_to="include_already_replied_to" :$user="$user" :$parameters="$parameters" class="negative-margin"></Chatroom>
 
     </div>
   </div>
@@ -23,7 +23,7 @@ import Chatroom from '@/components/Chatroom'
 import ChatroomMenu from '@/components/ChatroomMenu'
 
 export default {
-  props: ['courses', 'course', 'lesson', 'lessons', 'replies', '$parameters', '$user', 'include_already_replied_to'],
+  props: ['courses', 'course', 'lesson', 'lessons', 'comments', 'replies', '$parameters', '$user', 'include_already_replied_to'],
   components: {
     Chatroom,
     ChatroomMenu

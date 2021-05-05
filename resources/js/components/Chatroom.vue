@@ -49,7 +49,7 @@
 
     <div class="chatroom-body container is-flex is-flex-wrap-wrap">
 
-      <reply-card v-for="reply in sortedReplies" :reply="reply" :key="reply.id" :$parameters="$parameters" :$user="$user" :comments="$parameters.reply == reply.id ? comments : null"/>
+      <reply-card v-for="reply in sortedReplies" :reply="reply" :key="reply.id" :in_chatroom_manager="in_chatroom_manager" :$parameters="$parameters" :$user="$user" :comments="$parameters.reply == reply.id ? comments : null"/>
 
       <div v-if="!replies.length && show_admin_interface && !include_already_replied_to" class="message is-fullwidth mt-4 is-success">
         <div class="message-body section is-medium has-text-centered">
@@ -77,7 +77,7 @@
 import { Inertia } from '@inertiajs/inertia'
 
 export default {
-  props: ['replies', 'comments', 'show_admin_interface', '$parameters', '$user', 'include_already_replied_to'],
+  props: ['replies', 'comments', 'show_admin_interface', 'in_chatroom_manager', '$parameters', '$user', 'include_already_replied_to'],
   components: {
 
   },

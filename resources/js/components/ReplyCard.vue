@@ -103,7 +103,7 @@
             <b-icon icon="close"></b-icon>
           </button>
         </header>
-        <comments :$parameters="$parameters" :preloadedComments="comments" :$user="$user" :reply="reply"></comments>
+        <comments :$parameters="$parameters" :in_chatroom_manager="in_chatroom_manager" :preloadedComments="comments" :$user="$user" :reply="reply"></comments>
       </div>
     </b-modal>
 
@@ -136,7 +136,7 @@ import Comments from '@/components/Comments'
 import { Inertia } from '@inertiajs/inertia'
 
 export default {
-  props: ['reply', '$parameters', '$user', 'comments'],
+  props: ['reply', 'in_chatroom_manager', '$parameters', '$user', 'comments'],
   components: {
     Comments
   },
