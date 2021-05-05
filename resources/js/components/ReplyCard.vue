@@ -366,10 +366,24 @@ export default {
             flex-direction: column;
             margin: 0;
             border-radius: 0;
+            height: 100%;
             // min-height: 100vh;
             margin-top: auto;
             background-color: white;
+
+            .carousel {
+              max-width: 50vh;
+              max-height: 50vh;
+              margin: 0 auto;
+            }
+
+            .carousel-wrapper {
+              background-color: $grey-darker;
+              width: 100%;
+            }
+
             .modal-card {
+                width: 100%;
                 flex-grow: 1;
                 min-height: calc(100vh - 100vw);
             }

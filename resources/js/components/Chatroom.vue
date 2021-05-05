@@ -42,7 +42,7 @@
             </b-dropdown>
           </p>
           <p class="control">
-              <create-reply @uploaded="startRefreshing" :section="section" :$parameters="$parameters" :$user="$user"/>
+              <create-reply @uploaded="startRefreshing" :$parameters="$parameters" :$user="$user"/>
           </p>
         </div>
     </div>
