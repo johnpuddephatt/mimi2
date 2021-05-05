@@ -372,8 +372,8 @@ export default {
             background-color: white;
 
             .carousel {
-              max-width: 50vh;
-              max-height: 50vh;
+              max-width: 56.25vh;
+              max-height: 56.25vh;
               margin: 0 auto;
             }
 
@@ -386,6 +386,10 @@ export default {
                 width: 100%;
                 flex-grow: 1;
                 min-height: calc(100vh - 100vw);
+            }
+
+            .modal-card-foot, .modal-card-head {
+              padding: 10px 20px;
             }
         }
     }

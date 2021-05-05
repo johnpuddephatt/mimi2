@@ -26,7 +26,7 @@
                           @endif
                         </p>
                         <div class="is-italic is-size-7 mb-2">{!!$activity->properties['attributes']['value'] !!}</div>
-                        <timeago class="is-size-7 has-text-grey" datetime="{{$activity->created_at}}" :auto-update="60"></timeago>
+                        <div class="timeago is-size-7 has-text-grey" datetime="{{$activity->created_at}}" :auto-update="60">{{$activity->created_at}}</div>
                     </div>
                     @if($activity->subject)
                       <a class="button" href="{{ route('section.reply', [
@@ -49,7 +49,7 @@
                       </figure>
                       <div class="media-content mr-2">
                           <p><strong>{{ $activity->subject->user->first_name }}</strong> gave feedback to {{ $activity->subject->reply->user->first_name }}</strong></p>
-                          <timeago class="is-size-7 has-text-grey" datetime="{{$activity->created_at}}" :auto-update="60"></timeago>
+                          <div class="timeago is-size-7 has-text-grey" datetime="{{$activity->created_at}}" :auto-update="60">{{$activity->created_at}}</div>
                       </div>
                       @if($activity->subject)
                         <a class="button" href="{{ route('section.reply', [
@@ -70,7 +70,7 @@
                       </figure>
                       <div class="media-content mr-2">
                           <p><strong>{{ $activity->subject->user->first_name }}</strong> posted a reply</p>
-                          <timeago class="is-size-7 has-text-grey" datetime="{{$activity->created_at}}" :auto-update="60"></timeago>
+                          <div class="timeago is-size-7 has-text-grey" datetime="{{$activity->created_at}}" :auto-update="60">{{$activity->created_at}}</div>
                       </div>
 
                       @if($activity->subject)
@@ -96,4 +96,9 @@
       </div>
     </div>
   </section>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/timeago.js/2.0.2/timeago.min.js"></script>
+  <script>
+    timeago.render(document.querySelectorAll('.timeago'));
+  </script>
+
 @endsection
