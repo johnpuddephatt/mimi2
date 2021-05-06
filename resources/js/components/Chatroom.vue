@@ -49,7 +49,7 @@
 
     <div class="chatroom-body container is-flex is-flex-wrap-wrap">
 
-      <reply-card v-for="reply in sortedReplies" :reply="reply" :key="reply.id" :include_already_replied_to="include_already_replied_to" :in_chatroom_manager="in_chatroom_manager" :comments="$page.props.parameters.reply == reply.id ? comments : null"/>
+      <reply-card v-for="reply in sortedReplies" :reply="reply" :key="reply.id" :include_already_replied_to="include_already_replied_to" :in_chatroom_manager="in_chatroom_manager" :comments="$page.props.parameters.reply == reply.id ? comments : null" @uploaded="startRefreshing"/>
 
       <div v-if="!replies.length && show_admin_interface && !include_already_replied_to" class="message is-fullwidth mt-4 is-success">
         <div class="message-body section is-medium has-text-centered">
@@ -99,7 +99,12 @@ export default {
 
   computed: {
     sortedReplies() {
-      let replies = this.replies.sort((a,b) => {
+
+      let replies = this.replies.filter((a) => {
+        return a;
+      });
+
+      replies = replies.sort((a,b) => {
         return b[this.sortBy] - a[this.sortBy];
       });
 
@@ -120,6 +125,7 @@ export default {
       })
     },
     startRefreshing() {
+      Inertia.reload({ only: ['replies'] });
       setInterval(()=> {
         Inertia.reload({ only: ['replies'] });
       }, 10000);

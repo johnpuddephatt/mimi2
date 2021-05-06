@@ -7,7 +7,7 @@
         <b-button class="admin-check-button" rounded type="is-light" icon-left="check">
         </b-button>
       </b-tooltip>
-      <create-reply v-else :mode="reply.type" :reply_id="reply.id" :should_open="open_reply_modal"></create-reply>
+      <create-reply v-else :mode="reply.type" :reply_id="reply.id" @uploaded="$emit('uploaded')" :should_open="open_reply_modal"></create-reply>
     </div>
 
     <div class="card reply-card">

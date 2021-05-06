@@ -66,7 +66,7 @@ class ChatroomController extends Controller
       'comments' => $reply ? fn () => $reply->parent_comments : null,
       'replies' => $request->include_already_replied_to ?
         fn () => $lesson->replies()->with('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video')->get() :
-          fn () => $lesson->replies()->feedbackless()->with('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video')->get()
+          fn () => $lesson->replies()->feedbackless()->with('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video')->get()->push($reply ? $reply->load('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video') : null)
 
     ]);
   }
