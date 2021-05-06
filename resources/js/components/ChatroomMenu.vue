@@ -9,8 +9,8 @@
         :key="lesson.id">
           <inertia-link
             class="is-flex is-justify-between"
-            :class="{'is-active' : lesson.id == $parameters.lesson}"
-            :href="route('chatroom.lesson', {'course': $parameters.course, 'lesson': lesson.id })"
+            :class="{'is-active' : lesson.id == $page.props.parameters.lesson}"
+            :href="route('chatroom.lesson', {'course': $page.props.parameters.course, 'lesson': lesson.id })"
             >
             <strong class="mr-1">{{ lesson.week.name}}</strong>
             <span class="text-overflow-ellipsis">{{ lesson.title }}</span>
@@ -28,7 +28,7 @@ import CourseDropdown from '@/components/CourseDropdown'
 
 export default {
 
-  props: ['courses','lessons', 'current', '$parameters'],
+  props: ['courses','lessons', 'current'],
 
   components: {
     CourseDropdown

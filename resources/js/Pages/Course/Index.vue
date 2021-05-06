@@ -6,7 +6,7 @@
       <div class="box">
         <div class="mb-5">
           <h3 class="title has-text-centered">Corsi 🗂️</h3>
-          <p v-if="$user.is_admin" class="subtitle has-text-centered">Hi Admin! Here are all the active courses</p>
+          <p v-if="$page.props.user.is_admin" class="subtitle has-text-centered">Hi Admin! Here are all the active courses</p>
           <p v-else class="subtitle has-text-centered">You’re enrolled on the courses below</p>
         </div>
 
@@ -24,7 +24,7 @@
           </inertia-link>
 
           <section v-if="!courses.length" class="section is-medium has-background-light has-text-centered">
-              <a v-if="$user.is_admin" class="button" :href="route('course.new')">Add the first course</a>
+              <a v-if="$page.props.user.is_admin" class="button" :href="route('course.new')">Add the first course</a>
               <p>You’re not enrolled in any courses.</p>
           </section>
       </div>
@@ -35,7 +35,7 @@
 
 <script>
 export default {
-  props: ['courses', '$parameters', '$user'],
+  props: ['courses'],
   components: {},
   data() {
     return {

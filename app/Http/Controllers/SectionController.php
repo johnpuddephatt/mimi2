@@ -35,16 +35,16 @@ class SectionController extends Controller
 
         $lesson_with_sections = $lesson->load('sections:id,title,lesson_id')->only('id','title','instructions','day','sections');
         return Inertia::render('Section/Show', [
-          'course' => $course->only('id','title','archived'),
-          'week' => $week->only('id','name','number'),
-          'lesson' => $lesson_with_sections,
-          'section' => $section->only('id','title','order','is_chatroom'),
+          'course' => fn () => $course->only('id','title','archived'),
+          'week' => fn () => $week->only('id','name','number'),
+          'lesson' => fn () => $lesson_with_sections,
+          'section' => fn () => $section->only('id','title','order','is_chatroom'),
           'replies' => $section->is_chatroom ? fn () => $lesson->replies()->with('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video')->get() : null,
-          'next_lesson' => ($section->is_last() && !$lesson->is_last()) ? $lesson->next() : null,
-          'next_week' => ($section->is_last() && $lesson->is_last() && !$week->is_last()) ? $week->next() : null,
-          'end_of_course' => ($section->is_last() && $lesson->is_last() && $week->is_last()) ? true : false,
-          'comments' => $reply ? $reply->parent_comments : null,
-          'blocks_prerendered' => Cache::rememberForever('section_' . $section->id, function() use($section) {
+          'next_lesson' => fn () => ($section->is_last() && !$lesson->is_last()) ? $lesson->next() : null,
+          'next_week' => fn () => ($section->is_last() && $lesson->is_last() && !$week->is_last()) ? $week->next() : null,
+          'end_of_course' => fn () => ($section->is_last() && $lesson->is_last() && $week->is_last()) ? true : false,
+          'comments' => $reply ? fn () => $reply->parent_comments : null,
+          'blocks_prerendered' => fn () => Cache::rememberForever('section_' . $section->id, function() use($section) {
             return view('editorjs', ['blocks' => $section->getBlocks()])->render();
           })
         ]);

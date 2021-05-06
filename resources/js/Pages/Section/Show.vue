@@ -4,9 +4,9 @@
     <div class="column is-10-tablet is-8-desktop is-7-widescreen">
       <div class="breadcrumb-wrapper">
         <div>
-          <inertia-link class="back-link mb-0 has-text-dark" :href="route('course.show', {'course': $parameters.course })">{{ course.title }}</inertia-link> &gt; <inertia-link class="back-link mb-0 has-text-dark" accesskey="":href="route('week.show', {'course': $parameters.course, 'week': $parameters.week })">{{ week.name }}</inertia-link>
+          <inertia-link class="back-link mb-0 has-text-dark" :href="route('course.show', {'course': $page.props.parameters.course })">{{ course.title }}</inertia-link> &gt; <inertia-link class="back-link mb-0 has-text-dark" accesskey="":href="route('week.show', {'course': $page.props.parameters.course, 'week': $page.props.parameters.week })">{{ week.name }}</inertia-link>
         </div>
-        <course-navigator :$parameters="$parameters" :course_id="$parameters.course"></course-navigator>
+        <course-navigator :page.props.parameters="$page.props.parameters" :course_id="$page.props.parameters.course"></course-navigator>
       </div>
       <div class="box section-content">
         <h3 class="subtitle is-4 has-text-grey mt-3 mb-0">{{ lesson.title }}</h3>
@@ -15,8 +15,8 @@
 
         <div v-if="lesson.sections.length > 1" class="sections-box box p-4">
           <h3 class="has-text-weight-bold is-size-4 mt-0">Today’s lesson 🧑‍🏫</h3>
-          <inertia-link v-for="section in lesson.sections" :key="section.id" :href="route('section.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': $parameters.lesson, 'section': section.id })" class="lesson-button mt-3 is-block p-2 is-bordered has-text-black is-outlined is-fullwidth">{{ section.title }}</inertia-link>
-          <a class="mt-4 button is-small is-fullwidth" target="_blank" :href="route('lesson.print', {'course': $parameters.course, 'week': $parameters.week, 'lesson': $parameters.lesson })">🖨 Print this lesson</a>
+          <inertia-link v-for="section in lesson.sections" :key="section.id" :href="route('section.show', {'course': $page.props.parameters.course, 'week': $page.props.parameters.week, 'lesson': $page.props.parameters.lesson, 'section': section.id })" class="lesson-button mt-3 is-block p-2 is-bordered has-text-black is-outlined is-fullwidth">{{ section.title }}</inertia-link>
+          <a class="mt-4 button is-small is-fullwidth" target="_blank" :href="route('lesson.print', {'course': $page.props.parameters.course, 'week': $page.props.parameters.week, 'lesson': $page.props.parameters.lesson })">🖨 Print this lesson</a>
         </div>
 
         <div v-if="section.order == 1 && lesson.instructions && lesson.instructions.length && lesson.instructions != '<p></p>'">
@@ -40,17 +40,17 @@
 
         </div>
 
-        <Chatroom class="negative-margin" v-if="section.is_chatroom" :replies="replies" :$user="$user" :comments="comments" :$parameters="$parameters"></Chatroom>
+        <Chatroom class="negative-margin" v-if="section.is_chatroom" :replies="replies" :comments="comments" :page.props.parameters="$page.props.parameters"></Chatroom>
 
         <div class="section-footer container is-flex">
-          <inertia-link class="button is-primary is-light is-fat has-text-left is-justify-content-flex-start is-medium " v-if="previousSection" :href="route('section.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': $parameters.lesson, 'section': previousSection.id })">
+          <inertia-link class="button is-primary is-light is-fat has-text-left is-justify-content-flex-start is-medium " v-if="previousSection" :href="route('section.show', {'course': $page.props.parameters.course, 'week': $page.props.parameters.week, 'lesson': $page.props.parameters.lesson, 'section': previousSection.id })">
             <b-icon icon="arrow-left" />
             <div class="mb-a">
               <h4 class="heading">Previous page:</h4>
               <p>{{ previousSection.title }}</p>
             </div>
           </inertia-link>
-          <inertia-link class="button is-primary is-light is-fat is-justify-content-space-between has-text-left is-medium ml-a" v-if="nextSection" :href="route('section.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': $parameters.lesson, 'section': nextSection.id })">
+          <inertia-link class="button is-primary is-light is-fat is-justify-content-space-between has-text-left is-medium ml-a" v-if="nextSection" :href="route('section.show', {'course': $page.props.parameters.course, 'week': $page.props.parameters.week, 'lesson': $page.props.parameters.lesson, 'section': nextSection.id })">
             <div class="mb-a">
               <h4 class="heading">Next page:</h4>
               <p>{{ nextSection.title }}</p>
@@ -64,7 +64,7 @@
             <div class="message-body p-5 has-text-centered">
               <h3 class="title mt-3 is-4">{{ randomGreeting }}</h3>
               <p class="subtitle">You’ve reached the end of this lesson.</p>
-              <inertia-link :href="route('lesson.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': next_lesson.id })" class="button is-fat has-text-left is-success is-medium">
+              <inertia-link :href="route('lesson.show', {'course': $page.props.parameters.course, 'week': $page.props.parameters.week, 'lesson': next_lesson.id })" class="button is-fat has-text-left is-success is-medium">
                 <div>
                   <h3 class="heading">Go to the next lesson:</h3>
                   <p>{{ next_lesson.title }}</p>
@@ -80,7 +80,7 @@
             <div class="message-body p-5 has-text-centered">
               <h3 class="title mt-3 is-4">{{ randomGreeting }}</h3>
               <p class="subtitle">You’ve reached the end of this week.</p>
-              <inertia-link :href="route('week.show', {'course': $parameters.course, 'week': next_week.number })" class="button is-fat has-text-left is-success is-medium">
+              <inertia-link :href="route('week.show', {'course': $page.props.parameters.course, 'week': next_week.number })" class="button is-fat has-text-left is-success is-medium">
                 <div>
                   <h3 class="heading">Next week:</h3>
                   <p>{{ next_week.name }}</p>
@@ -109,7 +109,7 @@
 import Chatroom from '@/components/Chatroom'
 
 export default {
-  props: ['blocks_prerendered', 'comments', 'replies', 'course', 'week', 'lesson', 'section', 'next_lesson', 'next_week', 'end_of_course' ,'$parameters', '$user'],
+  props: ['blocks_prerendered', 'comments', 'replies', 'course', 'week', 'lesson', 'section', 'next_lesson', 'next_week', 'end_of_course'],
 
   components: {
     Chatroom,

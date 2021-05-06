@@ -31,11 +31,11 @@
           <b-tab-item label="Lessons">
             <div class="is-flex is-justify-content-space-between is-align-items-center mb-2">
               <h3 class="label">Lessons</h3>
-              <inertia-link v-if="$parameters.course" class="button is-primary is-small" :href="route('week.create', {course: $parameters.course })">
+              <inertia-link v-if="$page.props.parameters.course" class="button is-primary is-small" :href="route('week.create', {course: $page.props.parameters.course })">
                 Add a new week</inertia-link>
             </div>
 
-            <nav v-if="$parameters.course" class="mb-6">
+            <nav v-if="$page.props.parameters.course" class="mb-6">
 
               <b-collapse
                   class="collapse"
@@ -58,7 +58,7 @@
                       </span>
 
                       <div class="ml-a has-text-weight-normal">
-                        <inertia-link @click.stop class="button is-small is-link is-outlined" :href="route('lesson.create', {course: $parameters.course, week: week.number })">Add lesson</inertia-link>
+                        <inertia-link @click.stop class="button is-small is-link is-outlined" :href="route('lesson.create', {course: $page.props.parameters.course, week: week.number })">Add lesson</inertia-link>
                         <b-dropdown
                             position="is-bottom-left"
                             append-to-body
@@ -72,7 +72,7 @@
                             </template>
 
                             <b-dropdown-item has-link aria-role="menuitem">
-                              <inertia-link @click.stop :href="route('week.edit', {course: $parameters.course, week: week.number})">Edit</inertia-link>
+                              <inertia-link @click.stop :href="route('week.edit', {course: $page.props.parameters.course, week: week.number})">Edit</inertia-link>
                             </b-dropdown-item>
                             <b-dropdown-item has-link aria-role="menuitem">
                               <a href="#" role="button" @click.stop="confirmWeekDelete(week.number)">Delete</a>
@@ -83,20 +83,20 @@
                   </template>
 
                   <div class="notification has-background-white mb-0 is-size-7 has-text-centered" v-if="!week.lessons.length">
-                    No lessons in this week. <inertia-link :href="route('lesson.create', {course: $parameters.course, week: week.number })">Add the first</inertia-link>.
+                    No lessons in this week. <inertia-link :href="route('lesson.create', {course: $page.props.parameters.course, week: week.number })">Add the first</inertia-link>.
                   </div>
 
                   <div class="panel-block pl-6 has-background-white-bis is-justify-between" v-for="lesson in week.lessons" :key="lesson.id">
                     <span class="text-overflow-ellipsis is-size-6">{{ lesson.title }}</span>
                     <div class="is-size-6 ml-2">
-                      <inertia-link class="button has-text-grey is-small" :href="route('lesson.edit', { course: $parameters.course, week: week.number, lesson: lesson.id })">Edit</inertia-link>
+                      <inertia-link class="button has-text-grey is-small" :href="route('lesson.edit', { course: $page.props.parameters.course, week: week.number, lesson: lesson.id })">Edit</inertia-link>
                       <button class="button has-text-grey is-small" @click="confirmLessonDelete(week.number, lesson.id)">Delete</button>
                     </div>
                   </div>
               </b-collapse>
 
               <section v-if="!data.weeks" class="section is-medium has-background-light has-text-centered">
-                Start by <inertia-link :href="route('week.create', {course: $parameters.course })">adding a week</inertia-link>. Once you’ve added a week, you can then add lessons to it.
+                Start by <inertia-link :href="route('week.create', {course: $page.props.parameters.course })">adding a week</inertia-link>. Once you’ve added a week, you can then add lessons to it.
               </section>
 
             </nav>
@@ -105,9 +105,9 @@
               Save this course before adding lessons.
             </div>
           </b-tab-item>
-          <b-tab-item  v-if="$parameters.course" label="Students">
+          <b-tab-item  v-if="$page.props.parameters.course" label="Students">
 
-            <course-users :course_id="$parameters.course"/>
+            <course-users :course_id="$page.props.parameters.course"/>
 
             <div class="notification has-background-light">
               <h3>Invite people</h3>
@@ -130,7 +130,7 @@ import TipTap from '@/components/TipTap';
 import CourseUsers from '@/components/CourseUsers';
 
 export default {
-  props: ['errors', 'data', '$parameters'],
+  props: ['errors', 'data'],
   components: {
     TipTap,
     CourseUsers
@@ -169,7 +169,7 @@ export default {
           .post(route('lesson.delete', {
             week: weekNumber,
             lesson: lessonId,
-            course: this.$parameters.course
+            course: this.$page.props.parameters.course
           }), {
             preserveScroll: true,
             onSuccess: () => {
@@ -190,7 +190,7 @@ export default {
         message: 'Are you sure you want to delete this week?<br> <strong>This will also delete any lessons within this week.</strong>',
         onConfirm: () => this.destroyWeekForm.delete(route('week.delete', {
             week: weekNumber,
-            course: this.$parameters.course
+            course: this.$page.props.parameters.course
           }), {
             preserveScroll: true,
             onSuccess: () => {
@@ -205,12 +205,12 @@ export default {
 
     onSubmit() {
       let postRoute = this.data ? route('course.update', {
-        course: this.$parameters.course
+        course: this.$page.props.parameters.course
       }) : route('course.create');
 
       this.form.transform((data) => ({
           ...data,
-          course_id: this.$parameters.course,
+          course_id: this.$page.props.parameters.course,
           _method: (this.data ? 'PUT' : 'POST'),
         }))
         .post(postRoute, {

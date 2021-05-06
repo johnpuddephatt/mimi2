@@ -93,7 +93,7 @@ import { StripeElementCard } from '@vue-stripe/vue-stripe';
 
 
 export default {
-  props: ['errors', 'price', 'stripe_public_key', 'client_secret', 'user_hash', '$parameters'],
+  props: ['errors', 'price', 'stripe_public_key', 'client_secret', 'user_hash'],
   components: {
     AppLayout,
     StripeElementCard
@@ -133,7 +133,10 @@ export default {
     register() {
       this.isProcessing = true;
       if(!this.user_hash) {
-        this.userForm.post(route('billing.create-user', { payment_type: this.$parameters.payment_type, stripe_price_code: this.$parameters.stripe_price_code }), {
+        this.userForm.post(route('billing.create-user', {
+          payment_type: this.$page.props.parameters.payment_type,
+          stripe_price_code: this.$page.props.parameters.stripe_price_code
+        }), {
           preserveScroll: true,
           errorBag: 'user',
           onSuccess: () => {
@@ -161,7 +164,7 @@ export default {
         }
       };
 
-      if(this.$parameters.payment_type == 'subscription') {
+      if(this.$page.props.parameters.payment_type == 'subscription') {
         const { setupIntent, error } = await stripe.confirmCardSetup(this.client_secret, {
           payment_method: payment_method
         });
@@ -175,7 +178,7 @@ export default {
           this.processPayment();
         }
       }
-      else if (this.$parameters.payment_type == 'single') {
+      else if (this.$page.props.parameters.payment_type == 'single') {
         const { paymentMethod, error } = await stripe.createPaymentMethod(
           'card',
           payment_method.card,
@@ -194,7 +197,11 @@ export default {
     },
 
     processPayment() {
-      this.paymentForm.post(route('billing.process-payment', { payment_type: this.$parameters.payment_type, stripe_price_code: this.$parameters.stripe_price_code, user_hash: this.user_hash }), {
+      this.paymentForm.post(route('billing.process-payment', {
+        payment_type: this.$page.props.parameters.payment_type,
+        stripe_price_code: this.$page.props.parameters.stripe_price_code,
+        user_hash: this.user_hash
+      }), {
         // preserveScroll: true,
         onError: errors => {
           this.isProcessing = false;

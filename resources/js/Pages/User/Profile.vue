@@ -26,7 +26,7 @@
           </b-input>
         </b-field>
 
-        <b-button type="is-primary" @click.prevent="onSubmit" expanded>Register</b-button>
+        <b-button type="is-primary" @click.prevent="onSubmit" expanded>Save</b-button>
 
       </form>
     </div>

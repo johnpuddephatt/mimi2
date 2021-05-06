@@ -239,9 +239,9 @@ export default {
       axios.post('/log', {'error': `CAMERAFIELD ERROR ${ platform.description }, ${ error.name }: ${ error.message },`});
 
       if (error.name == "NotFoundError") {
-        this.errorMessage = "<strong>Camera or microphone not found</strong><br>A suitable camera and/or microphone could not be found on your device. Please ensure your devices are connected and turned on, then refresh this page to try again.";
+        this.errorMessage = "<strong>Camera or microphone not found</strong><br>A suitable camera and/or microphone could not be found. Please ensure your devices are connected and turned on, then refresh this page to try again.";
       } else if (error.name == "NotReadableError") {
-          this.errorMessage = "<strong>Couldn’t access your camera or microphone</strong><br>Your camera and/or microphone can’t be reached. They may be in use by another website or application. Try closing any applications using your camera/microphone and ensure you’ve given this website permission to access your camera and/or microphone. <br>. Please also ensure your browser is up to date. <a href='https://www.whatismybrowser.com/' target='_blank'>Is my browser up to date?</a>";
+          this.errorMessage = "<strong>Couldn’t access your camera or microphone</strong><br>Your camera and/or microphone can’t be reached. They may be in use by another website or application. Try closing any applications using your camera/microphone and ensure you’ve given this website permission to access your camera and/or microphone. <br> Please also ensure your browser is up to date. <a href='https://www.whatismybrowser.com/' target='_blank'>Is my browser up to date?</a>";
       } else if (error.name == "OverconstrainedError") {
         this.errorMessage = "<strong>Could not access camera or microphone</strong><br>. Please ensure your browser is up to date. <a href='https://www.whatismybrowser.com/' target='_blank'>Is my browser up to date?</a>";
       } else if (error.name == "NotAllowedError") {

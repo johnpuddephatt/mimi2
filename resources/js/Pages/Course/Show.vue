@@ -17,7 +17,7 @@
             v-for="week in course.weeks"
             :key="week.id"
             class="button is-medium is-justify-between is-fullwidth is-outined "
-            :href="route('week.show', {'course': $parameters.course, 'week': week.number })"
+            :href="route('week.show', {'course': $page.props.parameters.course, 'week': week.number })"
             >
             <span class="text-overflow-ellipsis">
               {{ week.name }}
@@ -39,7 +39,7 @@
 
 <script>
 export default {
-  props: ['course', '$parameters'],
+  props: ['course'],
   components: {},
   data() {
     return {

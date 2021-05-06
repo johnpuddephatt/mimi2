@@ -2,7 +2,6 @@
 
 <div class="comment-wrapper">
 
-
   <div class="comment-list modal-card-body" v-if="errorLoading">
     <div class="notification">
       An error occured while trying to load comments
@@ -17,7 +16,6 @@
         @reply="setupReply(comment.id)"
         @delete="confirmDelete(comment.id)"
         :comment="comment"
-        :$user="$user"
         @click.native="currentlySelected = comment"
         class="comment-card"
         :class="currentlySelected.id == comment.id ? 'active' : ''">
@@ -29,7 +27,6 @@
           @delete="confirmDelete(child_comment.id)"
           v-show="index < threadDepth || (expandedComments.indexOf(comment.id) > -1)"
           :comment="child_comment"
-          :$user="$user"
           :key="child_comment.id"
           class="comment-card comment-card--child"
           @click.native="currentlySelected = child_comment"
@@ -100,13 +97,13 @@ var platform = require('platform');
 import Comment from '@/components/Comment';
 
 export default {
-  props: ['$parameters', '$user', 'reply', 'preloadedComments', 'in_chatroom_manager'],
+  props: ['reply', 'comments', 'in_chatroom_manager', 'include_already_replied_to'],
   components: {
     Comment
   },
   data() {
     return {
-      isLoaded: false,
+      isLoaded: true,
       isSaving: false,
       currentlyCommentingOn: null,
       currentlySelected: {},
@@ -114,47 +111,25 @@ export default {
       expandedComments: [],
       threadDepth: 3,
       errors: '',
-      comments: [],
       form: this.$inertia.form({
-        user_id: this.$user.id,
+        user_id: this.$page.props.user.id,
         reply_id: this.reply.id,
         value: '',
         comment_id: null,
         in_chatroom_manager: this.in_chatroom_manager
       }),
-      destroyCommentForm: this.$inertia.form(),
+      destroyCommentForm: this.$inertia.form({
+        in_chatroom_manager: this.in_chatroom_manager
+      }),
       getCommentsForm: this.$inertia.form()
     }
   },
 
   mounted() {
-    if(!this.preloadedComments) {
-      fetch(route('comment.index', {'lesson': this.$parameters.lesson, 'reply': this.reply.id}))
-        .then(response => response.json())
-        .then(data => {
-          this.comments = data;
-          this.isLoaded = true;
-        })
-        .catch(error => {
-          this.errorLoading = true;
-          axios.post('/log', {'error': `COMMENT GET ERROR { platform.description }, ${ JSON.stringify(error) }`});        console.log(data)
-        });
-      }
-    else {
-      this.comments = this.preloadedComments;
-      this.isLoaded = true;
-    }
+    this.scrollToBottom();
   },
 
   watch: {
-    preloadedComments() {
-      this.comments = this.preloadedComments;
-      this.scrollToBottom();
-    },
-
-    isLoaded() {
-      this.scrollToBottom();
-    },
 
     currentlyCommentingOn(value) {
       this.form.value = null;
@@ -179,9 +154,11 @@ export default {
   methods: {
     resetCommentInput() {
       this.form.value = null;
-      this.$refs.commentInput.value = '';
       this.currentlyCommentingOn = null;
-      this.$refs.commentInput.style.height = 'auto';
+      if(this.$refs.commentInput) {
+        this.$refs.commentInput.value = '';
+        this.$refs.commentInput.style.height = 'auto';
+      }
     },
 
     setupReply(id) {
@@ -208,12 +185,14 @@ export default {
     },
 
     delete(id) {
-      this.destroyCommentForm.delete(route('comment.delete', { 'course': this.$parameters.course, 'week': this.$parameters.week, 'lesson': this.$parameters.lesson, 'section': this.$parameters.section, 'reply': this.reply.id, 'comment': id }), {
+      this.destroyCommentForm.delete(route('comment.delete', { 'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'reply': this.reply.id, 'comment': id }), {
+        only: ['comments'],
+        preserveScroll: true,
         onSuccess: () => {
           this.successToast('Comment deleted!');
         },
         onError: errors => {
-          this.errorToast('Comment deleted!');
+          this.errorToast('Comment could not be deleted');
           axios.post('/log', {'error': `COMMENT DELETE ERROR, ${ platform.description }, ${ JSON.stringify(error) }`});
         },
       })
@@ -227,7 +206,10 @@ export default {
 
     onSubmit() {
       this.isSaving = true;
-      this.form.post(route('comment.create', { 'course': this.$parameters.course, 'week': this.$parameters.week, 'lesson': this.$parameters.lesson, 'section': this.$parameters.section, 'reply': this.reply.id,}), {
+      this.form.post(route('comment.create', { 'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'reply': this.reply.id, 'include_already_replied_to': this.include_already_replied_to }), {
+        only: ['comments'],
+        preserveScroll: true,
+        preserveState: true,
         onSuccess: () => {
           this.successToast('Comment created!');
           this.resetCommentInput();
@@ -257,6 +239,7 @@ export default {
   flex-basis: 0;
   padding-top: 0.5em;
   padding-bottom: 0.5em;
+
   &__empty {
     display: flex;
     flex-direction: column;
@@ -280,6 +263,7 @@ export default {
     margin-right: -0.75rem !important;
     background-color: $white-ter;
   }
+
   textarea {
     resize: none;
     width: 100%;
@@ -293,6 +277,7 @@ export default {
     box-shadow: none !important;
     outline: none !important;
   }
+
   button {
     position: absolute;
     right: 0.1rem;
@@ -300,6 +285,7 @@ export default {
     border-radius: 99999px;
     border: none !important;
     background-color: transparent !important;
+
     i {
       font-size: 1.5em;
       color: $success;

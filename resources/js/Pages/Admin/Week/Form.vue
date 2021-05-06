@@ -2,7 +2,7 @@
   <app-layout>
     <div class="columns is-centered">
       <div class="column is-7-tablet is-6-desktop is-5-widescreen">
-        <inertia-link class="back-link has-text-dark" :href="route('course.edit', { course: $parameters.course })">&larr; Back to course</inertia-link>
+        <inertia-link class="back-link has-text-dark" :href="route('course.edit', { course: $page.props.parameters.course })">&larr; Back to course</inertia-link>
         <div class="box">
           <h3 class="title has-text-centered">{{ data ? 'Modifica' : 'Creare' }} settimana <span class="emoji">✏️</span></h3>
           <p class="subtitle has-text-centered">{{ data ? 'Edit the' : 'Set up a new'  }} week below</p>
@@ -44,7 +44,7 @@ import TipTap from '@/components/TipTap';
 
 export default {
 
-  props: ['errors', 'data', '$parameters'],
+  props: ['errors', 'data'],
   components: {
     TipTap
   },
@@ -66,7 +66,12 @@ export default {
   methods: {
 
     onSubmit() {
-      let postRoute = this.data ? route('week.update', { course: this.$parameters.course, week: this.$parameters.week }) : route('week.store', { course: this.$parameters.course });
+      let postRoute = this.data ? route('week.update', {
+        course: this.$page.props.parameters.course,
+        week: this.$page.props.parameters.week
+      }) : route('week.store', {
+        course: this.$page.props.parameters.course
+      });
 
       this.form.transform((data) => ({
           ...data,

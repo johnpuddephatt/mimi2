@@ -13,12 +13,12 @@
                 {{ week.name}}
               </p>
               <ul class="menu-list">
-                <li v-for="lesson in week.lessons" :key="lesson.id" :class="{'is-current' : (lesson.id == $parameters.lesson) }">
+                <li v-for="lesson in week.lessons" :key="lesson.id" :class="{'is-current' : (lesson.id == $page.props.parameters.lesson) }">
                   <a class="menu-heading" @click="open = lesson.id" >{{ lesson.title }}</a>
 
-                  <ul v-if="(lesson.id == open) || (lesson.id == $parameters.lesson) || search">
+                  <ul v-if="(lesson.id == open) || (lesson.id == $page.props.parameters.lesson) || search">
                     <li v-for="section in lesson.sections">
-                      <inertia-link :class="{'is-active' : (lesson.id == $parameters.lesson && section.id == $parameters.section) }" :href="route('section.show', {course: course.id, week: week.number, lesson: lesson.id, section: section.id })">{{ section.title }}</inertia-link>
+                      <inertia-link :class="{'is-active' : (lesson.id == $page.props.parameters.lesson && section.id == $page.props.parameters.section) }" :href="route('section.show', {course: course.id, week: week.number, lesson: lesson.id, section: section.id })">{{ section.title }}</inertia-link>
                     </li>
                     <li v-if="!lesson.sections.length" class="notification is-size-7">No sections in this lesson</li>
                   </ul>
@@ -36,7 +36,7 @@
 
 <script>
 export default {
-  props: ['$parameters','course_id'],
+  props: ['course_id'],
 
   data() {
     return {

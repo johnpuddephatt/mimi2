@@ -23,7 +23,7 @@
                Text
            </b-radio-button>
        </b-field>
-       <b-switch :value="include_already_replied_to" @input="toggle_already_replied_to" class="ml-a" v-if="show_admin_interface" :left-label="true">Show replies already replied to</b-switch>
+       <b-switch :value="include_already_replied_to" :true-value="1" :false-value="0" @input="toggle_already_replied_to" class="ml-a" v-if="show_admin_interface" :left-label="true">Show replies already replied to</b-switch>
        <div v-else class="is-flex ml-a">
           <p class="control">
             <b-dropdown v-model="sortBy" aria-role="list">
@@ -42,14 +42,14 @@
             </b-dropdown>
           </p>
           <p class="control">
-              <create-reply @uploaded="startRefreshing" :$parameters="$parameters" :$user="$user"/>
+              <create-reply @uploaded="startRefreshing" />
           </p>
         </div>
     </div>
 
     <div class="chatroom-body container is-flex is-flex-wrap-wrap">
 
-      <reply-card v-for="reply in sortedReplies" :reply="reply" :key="reply.id" :in_chatroom_manager="in_chatroom_manager" :$parameters="$parameters" :$user="$user" :comments="$parameters.reply == reply.id ? comments : null"/>
+      <reply-card v-for="reply in sortedReplies" :reply="reply" :key="reply.id" :include_already_replied_to="include_already_replied_to" :in_chatroom_manager="in_chatroom_manager" :comments="$page.props.parameters.reply == reply.id ? comments : null"/>
 
       <div v-if="!replies.length && show_admin_interface && !include_already_replied_to" class="message is-fullwidth mt-4 is-success">
         <div class="message-body section is-medium has-text-centered">
@@ -77,7 +77,7 @@
 import { Inertia } from '@inertiajs/inertia'
 
 export default {
-  props: ['replies', 'comments', 'show_admin_interface', 'in_chatroom_manager', '$parameters', '$user', 'include_already_replied_to'],
+  props: ['replies', 'comments', 'show_admin_interface', 'in_chatroom_manager', 'include_already_replied_to'],
   components: {
 
   },
@@ -115,11 +115,8 @@ export default {
 
   methods: {
     toggle_already_replied_to(value) {
-      Inertia.reload({
-        only: ['replies'],
-        data: {
-          already_replied_to: value,
-        }
+      this.$inertia.visit(route('chatroom.section', {'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'include_already_replied_to': value }), {
+        preserveScroll: true
       })
     },
     startRefreshing() {

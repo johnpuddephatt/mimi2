@@ -45,6 +45,7 @@
     </div>
 
     <div v-else class="modal-card">
+      <header class="modal-card-head"><p class="title is-5 modal-card-title">Add your reply</p></header>
       <section class="modal-card-body is-paddingless" style="overflow: visible;">
         <camera-field v-if="replyMode == 'video'" @is-recording="isRecording = $event" v-model="reply.video" mode="video"></camera-field>
         <audio-field v-else-if="replyMode == 'audio'" v-model="reply.audio" ></audio-field>
@@ -68,7 +69,7 @@ import TipTap from '@/components/TipTap';
 
 
 export default {
-  props: ['$parameters', '$user', 'reply_id', 'mode', 'should_open'],
+  props: ['reply_id', 'mode', 'should_open'],
   components: {
     TipTap,
     AudioField,
@@ -91,7 +92,7 @@ export default {
         video: null,
         text: null,
         reply_id: this.reply_id ?? null,
-        user_id: this.$user.id
+        user_id: this.$page.props.user.id
       }
     }
   },
@@ -132,7 +133,7 @@ export default {
 
       axios({
           method: 'post',
-          url: route('reply.create', { lesson: this.$parameters.lesson, section: this.$parameters.section }),
+          url: route('reply.create', { lesson: this.$page.props.parameters.lesson, section: this.$page.props.parameters.section }),
           data: data,
           headers: {
             'Content-Type': `multipart/form-data; boundary=${data._boundary}`
@@ -170,7 +171,8 @@ export default {
 
 <style lang="scss">
 .create-reply-modal {
-    // z-index: 9999;
+    z-index: 99;
+
     .modal-card-foot {
         padding-top: 10px;
         padding-bottom: 10px;

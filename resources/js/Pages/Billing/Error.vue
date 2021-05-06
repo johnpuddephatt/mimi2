@@ -18,7 +18,7 @@
 import AppLayout from '@/Layouts/AppLayout'
 
 export default {
-  props: ['errors', '$parameters'],
+  props: ['errors'],
   components: {
     AppLayout,
   },

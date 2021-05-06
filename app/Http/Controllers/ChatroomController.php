@@ -55,18 +55,16 @@ class ChatroomController extends Controller
       $query->where('is_chatroom', '=', true);
     })->with('week:id,name')->get();
 
-    $already_replied_to = ($request->already_replied_to == 'true');
-
     $lessons->each->append('feedbackless_reply_count');
 
     return Inertia::render('Admin/Chatroom/Section', [
-      'courses' => Course::all(),
-      'course' => $course,
-      'lesson' => $lesson->load('week'),
-      'lessons' => $lessons,
-      'include_already_replied_to' => $already_replied_to,
-      'comments' => $reply ? $reply->parent_comments : null,
-      'replies' => $already_replied_to ?
+      'courses' => fn () => Course::all(),
+      'course' => fn () => $course,
+      'lesson' => fn () => $lesson->load('week'),
+      'lessons' => fn () => $lessons,
+      'include_already_replied_to' => $request->include_already_replied_to,
+      'comments' => $reply ? fn () => $reply->parent_comments : null,
+      'replies' => $request->include_already_replied_to ?
         fn () => $lesson->replies()->with('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video')->get() :
           fn () => $lesson->replies()->feedbackless()->with('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video')->get()
 

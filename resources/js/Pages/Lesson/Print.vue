@@ -40,7 +40,7 @@
 import Chatroom from '@/components/Chatroom'
 
 export default {
-  props: ['blocks_prerendered', 'comments', 'replies', 'course', 'lesson', 'section', '$parameters', '$user'],
+  props: ['blocks_prerendered', 'comments', 'replies', 'course', 'lesson', 'section'],
 
   components: {
     Chatroom,

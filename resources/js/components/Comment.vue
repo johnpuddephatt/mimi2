@@ -20,7 +20,7 @@
 
       <div class="comment-card__controls">
         <span class="is-size-7" @click="$emit('reply', comment.id)">Reply</span>
-        <span v-if="$user.is_admin || ($user.id == comment.user.id)" class="is-size-7" @click="$emit('delete', comment.id)">Delete</span>
+        <span v-if="$page.props.user.is_admin || (page.props.user.id == comment.user.id)" class="is-size-7" @click="$emit('delete', comment.id)">Delete</span>
       </div>
 
     </div>
@@ -30,7 +30,7 @@
 <script>
 
 export default {
-  props: ['comment', '$user'],
+  props: ['comment'],
 
   mounted() {
   },

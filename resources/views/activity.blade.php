@@ -11,7 +11,7 @@
             <p class="subtitle has-text-centered">Take a look at what’s been happening</p>
             <div class="panel is-shadowless is-bordered">
               @foreach($activities as $activity)
-                @if($activity->subject)
+                @if($activity->subject && $activity->subject->reply)
                  <div class="panel-block is-justify-between">
                   @if(class_basename($activity->subject_type) == 'Comment')
                     <figure class="image is-64x64 mr-2 is-align-self-flex-start is-flex-shrink-0">
@@ -29,16 +29,12 @@
                         <div class="is-italic is-size-7 mb-2">{!!$activity->properties['attributes']['value'] !!}</div>
                         <div class="is-size-7 has-text-grey">{{$activity->created_at->diffForHumans()}}</div>
                     </div>
-                    @if($activity->subject)
                       <a class="button" href="{{ route('section.reply', [
                         'course' => $activity->subject->reply->lesson->week->course->id,
                         'lesson' => $activity->subject->reply->lesson->id,
                         'week' => $activity->subject->reply->lesson->week,
                         'section' => $activity->subject->reply->lesson->sections->where('is_chatroom', true)->first()->id,
                         'reply' => $activity->subject->reply->id ]) }}">View</a>
-                    @else
-                      This entry has since been deleted
-                    @endif
 
                   @endif
 
@@ -74,7 +70,7 @@
                           <div class="is-size-7 has-text-grey">{{$activity->created_at->diffForHumans()}}</div>
                       </div>
 
-                      @if($activity->subject)
+                      @if($activity->subject->lesson)
                         <a class="button" href="{{ route('section.reply', [
                           'course' => $activity->subject->lesson->week->course->id,
                           'lesson' => $activity->subject->lesson->id,

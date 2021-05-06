@@ -3,7 +3,7 @@
   <div class="columns is-centered">
 
     <div class="column is-7-tablet is-6-desktop is-5-widescreen is-paddingless">
-      <inertia-link class="back-link has-text-dark" :href="route('course.show', { 'course': $parameters.course })">{{ course.title }}</inertia-link> > {{ week.name }}
+      <inertia-link class="back-link has-text-dark" :href="route('course.show', { 'course': $page.props.parameters.course })">{{ course.title }}</inertia-link> > {{ week.name }}
       <div class="box">
         <h3 class="title">{{ course.title }}</h3>
         <h2 class="subtitle mb-4">{{ week.name }}</h2>
@@ -20,7 +20,7 @@
             :key="lesson.id"
             tag="a"
             size="is-medium"
-            :href="route('lesson.show', {'course': $parameters.course, 'week': $parameters.week, 'lesson': lesson.id })"
+            :href="route('lesson.show', {'course': $page.props.parameters.course, 'week': $page.props.parameters.week, 'lesson': lesson.id })"
             class="is-justify-between"
             icon-right="arrow-right"
             expanded
@@ -44,7 +44,7 @@
 
 <script>
 export default {
-  props: ['course', 'week', '$parameters'],
+  props: ['course', 'week'],
   components: {},
   data() {
     return {

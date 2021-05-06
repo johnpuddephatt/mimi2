@@ -2,7 +2,7 @@
   <app-layout>
     <div class="columns is-centered">
       <div class="column is-7-tablet is-6-desktop is-5-widescreen">
-        <inertia-link  class="back-link has-text-dark" :href="route('course.edit', { course: $parameters.course })">&larr; Back to course</inertia-link>
+        <inertia-link  class="back-link has-text-dark" :href="route('course.edit', { course: $page.props.parameters.course })">&larr; Back to course</inertia-link>
         <div class="box">
           <h3 class="title has-text-centered">{{ data ? 'Modifica' : 'Creare' }} lezione <span class="emoji">🆕</span></h3>
           <p class="subtitle has-text-centered">{{ data ? 'Edit the' : 'Set up a new'  }} lesson below</p>
@@ -44,9 +44,9 @@
             <b-tab-item label="Sections">
               <h3 class="label is-flex is-justify-between">
                 <p>Sections</p>
-                <inertia-link v-if="$parameters.lesson"  class="button is-small is-primary ml-a has-text-weight-normal" :href="route('section.create', {course: $parameters.course, week: $parameters.week, lesson: data.id})">Add new section</inertia-link>
+                <inertia-link v-if="$page.props.parameters.lesson"  class="button is-small is-primary ml-a has-text-weight-normal" :href="route('section.create', {course: $page.props.parameters.course, week: $page.props.parameters.week, lesson: data.id})">Add new section</inertia-link>
               </h3>
-              <nav v-if="$parameters.lesson" class="panel is-shadowless is-bordered">
+              <nav v-if="$page.props.parameters.lesson" class="panel is-shadowless is-bordered">
 
                 <draggable v-model="form.sections" @start="drag=true" @end="onMoveEnd">
                   <div v-for="section in form.sections" :key="section.id" class="panel-block is-justify-between">
@@ -57,13 +57,13 @@
                     </p>
                     <div>
                       <button class="button is-small ml-3" @click="confirmSectionDelete(section.id)">Delete</button>
-                      <inertia-link class="button is-small ml-1" :href="route('section.edit', {course: $parameters.course, week: $parameters.week, lesson: $parameters.lesson , section: section.id})">Edit</inertia-link>
+                      <inertia-link class="button is-small ml-1" :href="route('section.edit', {course: $page.props.parameters.course, week: $page.props.parameters.week, lesson: $page.props.parameters.lesson, section: section.id})">Edit</inertia-link>
                     </div>
                   </div>
                 </draggable>
 
                 <section v-if="!form.sections.length" class="section is-medium has-background-light has-text-centered">
-                  No sections added yet. <br><inertia-link :href="route('section.create', {course: $parameters.course, week: $parameters.week, lesson: data.id})">Create the first section</inertia-link>
+                  No sections added yet. <br><inertia-link :href="route('section.create', {course: $page.props.parameters.course, week: $page.props.parameters.week, lesson: data.id})">Create the first section</inertia-link>
                 </section>
               </nav>
               <div class="notification" v-else>
@@ -86,7 +86,7 @@ import draggable from 'vuedraggable'
 import TipTap from '@/components/TipTap';
 
 export default {
-  props: ['errors', 'data', 'latest_lesson_number', '$parameters'],
+  props: ['errors', 'data', 'latest_lesson_number'],
   components: {
      CameraField,
      TipTap,
@@ -112,16 +112,16 @@ export default {
     onMoveEnd: function(){
       this.drag = false;
 
-      this.$inertia.post(route('lesson.reorderSections', {course: this.$parameters.course, week: this.$parameters.week, lesson: this.data.id, newOrder: this.form.sections.map(section => section.id)}), null, {
+      this.$inertia.post(route('lesson.reorderSections', {course: this.$page.props.parameters.course, week: this.$page.props.parameters.week, lesson: this.data.id, newOrder: this.form.sections.map(section => section.id)}), null, {
         preserveScroll: true,
       });
     },
 
     onSubmit() {
-      let postRoute = this.data ? route('lesson.update', { course: this.$parameters.course, week: this.$parameters.week, lesson: this.form.id }) : route('lesson.store', { course: this.$parameters.course, week: this.$parameters.week });
+      let postRoute = this.data ? route('lesson.update', { course: this.$page.props.parameters.course, week: this.$page.props.parameters.week, lesson: this.form.id }) : route('lesson.store', { course: this.$page.props.parameters.course, week: this.$page.props.parameters.week });
       this.form.transform((data) => ({
           ...data,
-          course_id: this.$parameters.course,
+          course_id: this.$page.props.parameters.course,
           _method: (this.data ? 'PUT' : 'POST'),
         }))
         .post(postRoute, {
@@ -143,9 +143,9 @@ export default {
         message: 'Are you sure you want to delete this section?',
         onConfirm: () => this.destroySectionForm.delete(route('section.delete', {
             section: sectionId,
-            lesson: this.$parameters.lesson,
-            week: this.$parameters.week,
-            course: this.$parameters.course
+            lesson: this.$page.props.parameters.lesson,
+            week: this.$page.props.parameters.week,
+            course: this.$page.props.parameters.course
           }), {
             preserveScroll: true,
             onSuccess: () => {

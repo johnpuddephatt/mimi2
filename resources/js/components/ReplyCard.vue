@@ -2,12 +2,12 @@
 <transition name="fade-out">
   <div class="column is-full is-half-widescreen is-relative">
 
-    <div class="admin-reply" v-if="$user.is_admin">
+    <div class="admin-reply" v-if="$page.props.user.is_admin">
       <b-tooltip v-if="reply.feedback" label="You’ve replied to this" type="is-dark" animated position="is-left" :delay="1000" class="admin-check-button--tooltip">
         <b-button class="admin-check-button" rounded type="is-light" icon-left="check">
         </b-button>
       </b-tooltip>
-      <create-reply v-else :$user="$user" :$parameters="$parameters" :mode="reply.type" :reply_id="reply.id" :should_open="open_reply_modal"></create-reply>
+      <create-reply v-else :mode="reply.type" :reply_id="reply.id" :should_open="open_reply_modal"></create-reply>
     </div>
 
     <div class="card reply-card">
@@ -91,19 +91,19 @@
             </p>
           </div>
 
-          <b-dropdown class="ml-a" v-if="$user.id == reply.user.id || $user.is_admin" position="is-bottom-left" aria-role="list">
+          <b-dropdown class="ml-a" v-if="$page.props.user.id == reply.user.id || $page.props.user.is_admin" position="is-bottom-left" aria-role="list">
             <button class="button is-light" slot="trigger" slot-scope="{ active }">
               <b-icon icon="cog"></b-icon>
             </button>
             <b-dropdown-item @click="confirmDelete(reply.id)" aria-role="listitem">Delete</b-dropdown-item>
-            <b-dropdown-item v-if="$user.is_admin && reply.feedback && reply.feedback.id" @click="confirmDelete(reply.feedback.id)" aria-role="listitem">Delete feedback</b-dropdown-item>
-            <b-dropdown-item v-if="$user.is_admin && !reply.feedback" @click="openReplyModal" aria-role="listitem">Add feedback</b-dropdown-item>
+            <b-dropdown-item v-if="$page.props.user.is_admin && reply.feedback && reply.feedback.id" @click="confirmDelete(reply.feedback.id)" aria-role="listitem">Delete feedback</b-dropdown-item>
+            <b-dropdown-item v-if="$page.props.user.is_admin && !reply.feedback" @click="openReplyModal" aria-role="listitem">Add feedback</b-dropdown-item>
           </b-dropdown>
           <button class="button reply-card-modal__close is-light" @click="is_open = false">
             <b-icon icon="close"></b-icon>
           </button>
         </header>
-        <comments :$parameters="$parameters" :in_chatroom_manager="in_chatroom_manager" :preloadedComments="comments" :$user="$user" :reply="reply"></comments>
+        <comments :in_chatroom_manager="in_chatroom_manager" :include_already_replied_to="include_already_replied_to" :comments="comments" :reply="reply"></comments>
       </div>
     </b-modal>
 
@@ -118,7 +118,7 @@
             </div>
             <div class="media-content">
               <p class="title is-4">{{ reply.user.first_name}} {{ reply.user.last_name}}</p>
-              <p class="subtitle is-6" v-if="$user.is_admin"><a :href="`mailto:${ reply.user.email }`">{{ reply.user.email }}</a></p>
+              <p class="subtitle is-6" v-if="$page.props.user.is_admin"><a :href="`mailto:${ reply.user.email }`">{{ reply.user.email }}</a></p>
               <p>{{ reply.user.description }}</p>
               <br>
               <p><small>Joined <timeago :datetime="reply.user.created_at"></timeago></small></p>
@@ -136,7 +136,7 @@ import Comments from '@/components/Comments'
 import { Inertia } from '@inertiajs/inertia'
 
 export default {
-  props: ['reply', 'in_chatroom_manager', '$parameters', '$user', 'comments'],
+  props: ['reply', 'in_chatroom_manager', 'include_already_replied_to', 'comments'],
   components: {
     Comments
   },
@@ -147,25 +147,37 @@ export default {
       isDeleted: false,
       media_stopped: null,
       open_reply_modal: false,
-      isUserModalOpen: false
+      isUserModalOpen: false,
+      destroyReplyForm: this.$inertia.form({
+        in_chatroom_manager: this.in_chatroom_manager
+      }),
     }
   },
 
   watch: {
     is_open: function(value) {
-      if (value) {
-        if (!window.location.href.includes(`/reply/${this.reply.id}`)) {
-          history.pushState(null, null, `${window.location.href}/reply/${this.reply.id}`);
+      if(value) {
+        if(!this.$page.props.parameters.reply) {
+          this.$inertia.visit(route(this.in_chatroom_manager ? 'chatroom.reply' : 'section.reply', {'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'reply': this.reply.id, 'include_already_replied_to': this.include_already_replied_to  }), {
+            only: ['comments', 'parameters'],
+            preserveScroll: true,
+            preserveState: true,
+          });
+          this.currentSlide = this.$page.props.parameters.show_feedback ? 1 : 0;
         }
-        this.currentSlide = this.$parameters.show_feedback ? 1 : 0;
-      } else {
-        history.pushState(null, null, window.location.href.replace('/feedback', '').replace(`/reply/${this.reply.id}`, ''));
+      }
+      else {
+        this.$inertia.visit(route(this.in_chatroom_manager ? 'chatroom.section' : 'section.show', {'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'include_already_replied_to': this.include_already_replied_to  }), {
+          only: [],
+          preserveScroll: true,
+          preserveState: true,
+        });
       }
     }
   },
 
   mounted() {
-    if (this.$parameters.reply == this.reply.id) {
+    if (this.$page.props.parameters.reply == this.reply.id && !this.is_open) {
       this.is_open = true;
     }
   },
@@ -174,7 +186,7 @@ export default {
     onSubmit() {},
 
     openReplyModal() {
-      this.is_open = false;
+      // this.is_open = false;
       this.open_reply_modal = true;
     },
 
@@ -195,29 +207,17 @@ export default {
     },
 
     delete(id) {
-      axios({
-          method: 'delete',
-          url: `/lesson/${ this.$parameters.lesson }/reply/${id}/delete`
-        })
-        .then(feedback => {
-          if (id != this.reply.id) {
-            this.updateSlide(0);
-          }
-          else {
-            this.is_open = false;
-          }
-
-          this.$nextTick(() => {
-            this.successToast('Reply deleted');
-            Inertia.reload({ only: ['replies'] });
-          });
-        })
-        .catch(error => {
+      this.destroyReplyForm.delete(route('reply.delete', { 'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'reply': id }),
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.successToast('Reply deleted!');
+        },
+        onError: errors => {
           this.errorToast('Reply could not be deleted');
-          axios.post('/log', {
-            'error': `REPLY DELETE ERROR, ${ platform.description }, ${ JSON.stringify(error) }`
-          });
-        })
+          axios.post('/log', {'error': `COMMENT DELETE ERROR, ${ platform.description }, ${ JSON.stringify(error) }`});
+        },
+      })
     }
   }
 };

@@ -2,7 +2,7 @@
 <app-layout :padded="false">
   <div class="columns is-centered">
 
-    <chatroom-menu :courses="courses" :lessons="lessons" :current="course.title" :$parameters="$parameters"/>
+    <chatroom-menu :courses="courses" :lessons="lessons" :current="course.title"/>
 
     <div class="column"></div>
   </div>
@@ -14,7 +14,7 @@ import Chatroom from '@/components/Chatroom'
 import ChatroomMenu from '@/components/ChatroomMenu'
 
 export default {
-  props: ['courses', 'course', 'lessons', '$parameters', '$user'],
+  props: ['courses', 'course', 'lessons'],
   components: {
     Chatroom,
     ChatroomMenu

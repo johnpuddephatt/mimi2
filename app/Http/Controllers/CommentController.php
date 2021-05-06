@@ -26,10 +26,10 @@ class CommentController extends Controller
       $this->middleware('auth');
     }
 
-    public function delete(Course $course, Week $week, Lesson $lesson, Section $section, Reply $reply, Comment $comment) {
+    public function delete(Request $request, Course $course, Week $week, Lesson $lesson, Section $section, Reply $reply, Comment $comment) {
       $comment->delete();
 
-      return redirect()->route('section.reply', [
+      return redirect()->route($request->in_chatroom_manager ? 'chatroom.reply' : 'section.reply', [
         'course' => $course,
         'week' => $week,
         'lesson' => $lesson,
@@ -46,7 +46,8 @@ class CommentController extends Controller
         'week' => $week,
         'lesson' => $lesson,
         'section' => $section,
-        'reply' => $reply
+        'reply' => $reply,
+        'include_already_replied_to' => $request->include_already_replied_to
       ]);
     }
 

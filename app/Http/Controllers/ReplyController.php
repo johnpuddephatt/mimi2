@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Models\Reply;
 use App\Models\Lesson;
+use App\Models\Course;
+use App\Models\Week;
 use App\Models\Section;
 use App\Models\Video;
 
@@ -26,8 +28,15 @@ class ReplyController extends Controller
       $this->middleware('auth');
     }
 
-    public function destroy(Lesson $lesson, Reply $reply) {
+    public function destroy(Request $request, Course $course, Week $week, Lesson $lesson, Section $section, Reply $reply) {
       $reply->delete();
+
+      return redirect()->route($request->in_chatroom_manager ? 'chatroom.section' : 'section.show', [
+        'course' => $course,
+        'week' => $week,
+        'lesson' => $lesson,
+        'section' => $section
+      ]);
     }
 
     /**

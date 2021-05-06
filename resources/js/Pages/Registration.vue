@@ -87,7 +87,7 @@ import AppLayout from '@/Layouts/AppLayout'
 import CameraField from '@/components/CameraField'
 
 export default {
-  props: ['errors', 'course','admin'],
+  props: ['errors', 'course', 'admin'],
   components: {
     AppLayout,
     CameraField

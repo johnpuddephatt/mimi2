@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  props: ['courses','current'],
+  props: ['courses', 'current'],
 
   data() {
     return {

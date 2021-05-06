@@ -42,7 +42,7 @@ import Undo from 'editorjs-undo';
 import Embed from '@editorjs/embed';
 
 export default {
-  props: ['errors', 'data', '$parameters'],
+  props: ['errors', 'data'],
 
   data() {
     return {
@@ -121,16 +121,16 @@ export default {
         this.$buefy.dialog.confirm({
           message: '<strong>Are you sure?</strong> Unsaved changes will be lost.',
           onConfirm: () => this.$inertia.visit(route('lesson.edit', {
-            course: this.$parameters.course,
-            week: this.$parameters.week,
-            lesson: this.$parameters.lesson
+            course: this.$page.props.parameters.course,
+            week: this.$page.props.parameters.week,
+            lesson: this.$page.props.parameters.lesson
           }))
         })
       } else {
         this.$inertia.visit(route('lesson.edit', {
-          course: this.$parameters.course,
-          week: this.$parameters.week,
-          lesson: this.$parameters.lesson
+          course: this.$page.props.parameters.course,
+          week: this.$page.props.parameters.week,
+          lesson: this.$page.props.parameters.lesson
         }))
       }
     },
@@ -139,14 +139,14 @@ export default {
       this.editor.save().then((outputData) => {
 
         let postRoute = this.data ? route('section.update', {
-          course: this.$parameters.course,
-          week: this.$parameters.week,
-          lesson: this.$parameters.lesson,
+          course: this.$page.props.parameters.course,
+          week: this.$page.props.parameters.week,
+          lesson: this.$page.props.parameters.lesson,
           section: this.data.id
         }) : route('section.store', {
-          course: this.$parameters.course,
-          week: this.$parameters.week,
-          lesson: this.$parameters.lesson,
+          course: this.$page.props.parameters.course,
+          week: this.$page.props.parameters.week,
+          lesson: this.$page.props.parameters.lesson,
         })
 
         this.form.transform((data) => ({
