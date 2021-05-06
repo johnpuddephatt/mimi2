@@ -13,12 +13,12 @@
     <div class="card reply-card">
       <div class="card-image" :class="{'loaded' : reply.audio || reply.video}" @click="is_open = true">
         <figure class="image is-square m-0" :class="{'audio-preview' : reply.audio}">
-          <div v-if="reply.audio"></div>
-          <img v-else-if="reply.video" :src="reply.video.thumbnail_path" alt="">
-          <div class="text-preview" v-else-if="reply.text">
+          <div v-if="reply.type == 'audio' && reply.audio"></div>
+          <img v-else-if="reply.type == 'video' && reply.video" :src="reply.video.thumbnail_path" alt="">
+          <div class="text-preview" v-else-if="reply.type== 'text'">
             <div class="text-preview--inner-preview" v-html="reply.text.replace(/(<([^>]+)>)/gi, '').substr(0,75) + '...'"></div>
           </div>
-          <b-loading v-else :is-full-page="false" :active="true"></b-loading>
+          <b-loading class="reply-loading" v-else :is-full-page="false" :active="true"></b-loading>
         </figure>
       </div>
       <div class="card-content is-justify-between">
@@ -57,21 +57,27 @@
 
         <b-carousel animated="fade" @change="updateSlide($event)" :arrow="false" :indicator="false" :has-drag="false" v-model="currentSlide" :autoplay="false" icon-size="is-medium">
           <b-carousel-item key="reply">
-            <video-player v-if="reply.video" @playing="media_stopped = null" @stopped="media_stopped = 'reply'" :should_autoplay="currentSlide == 0" :source="reply.video.playlist_path" :poster="reply.video.thumbnail_path" type="application/x-mpegURL"></video-player>
-            <audio-player v-else-if="reply.audio" :source="reply.audio" @playing="media_stopped = null" @stopped="media_stopped = 'reply'" :should_autoplay="currentSlide == 0" v-else />
-            <div class="image is-square m-0" v-else>
+            <video-player v-if="reply.type == 'video' && reply.video" @playing="media_stopped = null" @stopped="media_stopped = 'reply'" :should_autoplay="currentSlide == 0" :source="reply.video.playlist_path" :poster="reply.video.thumbnail_path" type="application/x-mpegURL"></video-player>
+            <audio-player v-else-if="reply.type == 'audio' && reply.audio" :source="reply.audio" @playing="media_stopped = null" @stopped="media_stopped = 'reply'" :should_autoplay="currentSlide == 0" v-else />
+            <div class="image is-square m-0" v-else-if="reply.type == 'text'">
               <div class="text-preview">
                 <div v-html="reply.text" class="content text-preview--inner"></div>
               </div>
             </div>
+            <div class="image is-square m-0" v-else>
+              <b-loading class="reply-loading" :is-full-page="false" :active="true"></b-loading>
+            </div>
           </b-carousel-item>
           <b-carousel-item v-if="reply.feedback" key="feedback">
-            <video-player v-if="reply.feedback.video && reply.feedback.video.playlist_path" @playing="media_stopped = null" @stopped="media_stopped = 'feedback'" :should_autoplay="currentSlide == 1" :source="reply.feedback.video.playlist_path" :poster="reply.feedback.video.thumbnail_path" type="application/x-mpegURL"></video-player>
-            <audio-player v-else-if="reply.feedback.audio" :source="reply.feedback.audio" @playing="media_stopped = null" @stopped="media_stopped = 'feedback'" :should_autoplay="currentSlide == 1" />
-            <div class="image is-square m-0" v-else>
+            <video-player v-if="reply.feedback.type == 'video' && reply.feedback.video" @playing="media_stopped = null" @stopped="media_stopped = 'feedback'" :should_autoplay="currentSlide == 1" :source="reply.feedback.video.playlist_path" :poster="reply.feedback.video.thumbnail_path" type="application/x-mpegURL"></video-player>
+            <audio-player v-else-if="reply.feedback.type == 'audio' && reply.feedback.audio" :source="reply.feedback.audio" @playing="media_stopped = null" @stopped="media_stopped = 'feedback'" :should_autoplay="currentSlide == 1" />
+            <div class="image is-square m-0" v-else-if="reply.feedback.type == 'text'">
               <div class="text-preview">
                 <div v-html="reply.feedback.text" class="content text-preview--inner"></div>
               </div>
+            </div>
+            <div class="image is-square m-0" v-else>
+              <b-loading class="reply-loading" :is-full-page="false" :active="true"></b-loading>
             </div>
           </b-carousel-item>
         </b-carousel>
@@ -458,5 +464,9 @@ export default {
 
 .carousel-wrapper {
     position: relative;
+}
+
+.reply-loading {
+  z-index: 8;
 }
 </style>
