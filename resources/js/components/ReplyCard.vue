@@ -354,6 +354,7 @@ export default {
 }
 
 .reply-card-modal {
+    z-index: 39;
     .animation-content {
         position: relative;
         border-radius: $radius-large;

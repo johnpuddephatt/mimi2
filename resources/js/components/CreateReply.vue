@@ -171,7 +171,6 @@ export default {
 
 <style lang="scss">
 .create-reply-modal {
-    z-index: 99;
 
     .modal-card-foot {
         padding-top: 10px;
