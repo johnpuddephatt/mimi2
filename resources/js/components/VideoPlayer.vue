@@ -62,9 +62,9 @@ export default {
       this.player.pause();
     },
     onPlay() {
-      if (this.player.currentTime() === 0) {
-        this.player.currentTime(0);
-      }
+      // if (this.player.currentTime() === 0) {
+      //   this.player.currentTime(0);
+      // }
       this.$emit('playing');
     },
     onEnded() {
