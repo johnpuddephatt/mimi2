@@ -149,7 +149,7 @@ export default {
   data() {
     return {
       is_open: false,
-      currentSlide: null,
+      currentSlide: 0,
       isDeleted: false,
       media_stopped: null,
       open_reply_modal: false,
