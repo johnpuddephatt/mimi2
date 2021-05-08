@@ -8,9 +8,8 @@
       <audio controls :src="dataUrl" />
     </div>
 
-    <div class="camera-controls has-background-light is-bordered has-text-centered">
-      <b-button class="restart-camera" icon-right="camera-retake" @click.prevent="confirmRestart">Start again</b-button>
-    </div>
+    <b-button class="restart-audio" @click.prevent="confirmRestart">Start again</b-button>
+
   </div>
 
   <!-- Audio capture -->
@@ -255,6 +254,12 @@ export default {
 <style lang="scss">
 @import "../../sass/variables";
 
+.restart-audio {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
 .audio-preview {
   background-color: lighten($success, 35%);
   background-image: url(/images/sine.svg);
@@ -281,9 +286,9 @@ export default {
     margin-bottom: 0.5rem;
   }
 
-  .camera-wrapper {
-    position: relative;
-  }
+  // .camera-wrapper {
+  //   position: relative;
+  // }
 
   .field .camera-wrapper .has-square-media {
     border-radius: 5px 5px 0 0;

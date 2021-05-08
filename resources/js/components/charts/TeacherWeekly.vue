@@ -34,7 +34,6 @@
       date(newDate,oldDate) {
 
         if(newDate && newDate != oldDate) {
-          console.log('fetching');
           this.fetchData();
         }
       }

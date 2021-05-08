@@ -17,26 +17,13 @@
         </div>
       </div>
     </div>
+    <b-button class="restart-camera" @click.prevent="confirmRestart">Start again</b-button>
 
-    <div class="camera-controls has-background-light is-bordered has-text-centered">
-      <b-button class="restart-camera" icon-right="camera-retake" @click.prevent="confirmRestart">{{ mode == 'photo' ? 'Take a new photo' : 'Record a new video'}}</b-button>
-    </div>
   </div>
 
   <!-- Camera capture -->
   <div v-else>
-
     <section v-if="cameraType == 'fallback'" class="section has-background-light has-text-centered">
-
-      <!-- <b-notification
-        type="is-info"
-        has-icon
-        role="alert"
-        v-if="warningMessage"
-        closable="false"
-        :message="warningMessage">
-      </b-notification> -->
-
       <div class="reply-card__add">
         <b-upload @input="onFileInputChange" type="file" name="file" :accept="accept[mode]" capture="user">
           <a class="button">
@@ -289,7 +276,6 @@ export default {
         this.isRecording = true;
         this.shouldStopRecording = false;
         this.mediaRecorder.start();
-        console.log(this.mediaRecorder);
 
         this.timeRemaining = this.maxDuration;
         this.timer = setInterval(()=>{
@@ -384,9 +370,16 @@ export default {
 
 
 <style lang="scss">
-  .camera-wrapper {
-    position: relative;
+
+  .restart-camera {
+      position: absolute;
+      top: 10px;
+      right: 20px;
   }
+
+  // .camera-wrapper {
+  //   position: relative;
+  // }
 
   .field .camera-wrapper .has-square-media {
     border-radius: 5px 5px 0 0;

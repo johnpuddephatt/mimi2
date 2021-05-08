@@ -57,6 +57,22 @@ class ChatroomController extends Controller
 
     $lessons->each->append('feedbackless_reply_count');
 
+    $replies = $request->include_already_replied_to ?
+                                $lesson->replies()->with('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video')->get() : $lesson->replies()->feedbackless()->with('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video')->get();
+
+    if($reply && !$request->include_already_replied_to && !$replies->contains(function($value) use ($reply) {
+      return $value->id == $reply->id;
+    })) {
+        $replies->push($reply->load('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video'));
+    }
+        // ->reject(function ($value) use ($reply) {
+        //   return $value->id == $reply->id;
+        //   // dd($reply->id);
+        //   // return true;
+        // })
+        // ->
+        // ->toArray()
+
     return Inertia::render('Admin/Chatroom/Section', [
       'courses' => fn () => Course::all(),
       'course' => fn () => $course,
@@ -64,10 +80,7 @@ class ChatroomController extends Controller
       'lessons' => fn () => $lessons,
       'include_already_replied_to' => $request->include_already_replied_to,
       'comments' => $reply ? fn () => $reply->parent_comments : null,
-      'replies' => $request->include_already_replied_to ?
-        fn () => $lesson->replies()->with('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video')->get() :
-          fn () => $lesson->replies()->feedbackless()->with('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video')->get()->push($reply ? $reply->load('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video') : null)
-
+      'replies' => fn () => $replies
     ]);
   }
 }

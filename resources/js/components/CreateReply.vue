@@ -52,8 +52,8 @@
         <tip-tap :max_height="360" v-else v-model="reply.text"></tip-tap>
       </section>
       <footer class="modal-card-foot has-background-light">
-        <b-button :disabled="!(reply.video || reply.audio || reply.text)" expanded type="is-primary" size="is-medium" @click.prevent="onSubmit" :loading="isSaving">Post your reply</b-button>
-        <p v-if="replyMode != 'text'" class="is-size-7">Start and stop recording with the red record button.</p>
+        <b-button v-if="replyMode == 'text' || reply.video || reply.audio" :disabled="replyMode == 'text' && !reply.text" expanded type="is-primary" size="is-medium" @click.prevent="onSubmit" :loading="isSaving">Post your reply</b-button>
+        <p v-if="!reply.video && !reply.audio && replyMode != 'text'" class="mt-1 is-size-7">Start and stop recording with the red record button.</p>
       </footer>
     </div>
   </b-modal>

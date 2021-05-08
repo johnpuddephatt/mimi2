@@ -142,7 +142,6 @@ export default {
           setTimeout(()=>{
             this.isSaving = false;
           }, 2000);
-          console.log('User removed');
           this.enrolledUsers = this.enrolledUsers.filter(user => user.id != user_id);
         })
         .catch(error => {

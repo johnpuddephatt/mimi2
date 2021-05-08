@@ -97,7 +97,7 @@ var platform = require('platform');
 import Comment from '@/components/Comment';
 
 export default {
-  props: ['reply', 'comments', 'in_chatroom_manager', 'include_already_replied_to'],
+  props: ['reply', 'comments'],
   components: {
     Comment
   },
@@ -116,10 +116,10 @@ export default {
         reply_id: this.reply.id,
         value: '',
         comment_id: null,
-        in_chatroom_manager: this.in_chatroom_manager
+        // in_chatroom_manager: this.in_chatroom_manager
       }),
       destroyCommentForm: this.$inertia.form({
-        in_chatroom_manager: this.in_chatroom_manager
+        // in_chatroom_manager: this.in_chatroom_manager
       }),
       getCommentsForm: this.$inertia.form()
     }
@@ -206,7 +206,7 @@ export default {
 
     onSubmit() {
       this.isSaving = true;
-      this.form.post(route('comment.create', { 'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'reply': this.reply.id, 'include_already_replied_to': this.include_already_replied_to }), {
+      this.form.post(route('comment.create', { 'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'reply': this.reply.id, 'include_already_replied_to': true }), {
         only: ['comments'],
         preserveScroll: true,
         preserveState: true,

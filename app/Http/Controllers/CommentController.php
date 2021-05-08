@@ -29,26 +29,29 @@ class CommentController extends Controller
     public function delete(Request $request, Course $course, Week $week, Lesson $lesson, Section $section, Reply $reply, Comment $comment) {
       $comment->delete();
 
-      return redirect()->route($request->in_chatroom_manager ? 'chatroom.reply' : 'section.reply', [
-        'course' => $course,
-        'week' => $week,
-        'lesson' => $lesson,
-        'section' => $section,
-        'reply' => $reply
-      ]);
+      return redirect()->back();
+
+      // return redirect()->route($request->in_chatroom_manager ? 'chatroom.reply' : 'section.reply', [
+      //   'course' => $course,
+      //   'week' => $week,
+      //   'lesson' => $lesson,
+      //   'section' => $section,
+      //   'reply' => $reply
+      // ]);
     }
 
     public function store(StoreComment $request, Course $course, Week $week, Lesson $lesson, Section $section, Reply $reply) {
       Comment::create($request->all());
+      return redirect()->back();
 
-      return redirect()->route($request->in_chatroom_manager ? 'chatroom.reply' : 'section.reply', [
-        'course' => $course,
-        'week' => $week,
-        'lesson' => $lesson,
-        'section' => $section,
-        'reply' => $reply,
-        'include_already_replied_to' => $request->include_already_replied_to
-      ]);
+      // return redirect()->route($request->in_chatroom_manager ? 'chatroom.reply' : 'section.reply', [
+      //   'course' => $course,
+      //   'week' => $week,
+      //   'lesson' => $lesson,
+      //   'section' => $section,
+      //   'reply' => $reply,
+      //   'include_already_replied_to' => $request->include_already_replied_to
+      // ]);
     }
 
     public function index(Lesson $lesson, Reply $reply) {

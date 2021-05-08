@@ -1,204 +1,67 @@
 <template>
-<transition name="fade-out">
-  <div class="column is-full is-half-widescreen is-relative">
-
-    <div class="admin-reply" v-if="$page.props.user.is_admin">
-      <b-tooltip v-if="reply.feedback" label="You’ve replied to this" type="is-dark" animated position="is-left" :delay="1000" class="admin-check-button--tooltip">
-        <b-button class="admin-check-button" rounded type="is-light" icon-left="check">
-        </b-button>
-      </b-tooltip>
-      <create-reply v-else :mode="reply.type" :reply_id="reply.id" @uploaded="$emit('uploaded')" :should_open="open_reply_modal"></create-reply>
+  <transition name="fade-out">
+    <div class="column is-full is-half-widescreen is-relative">
+      <div class="admin-reply" v-if="$page.props.user.is_admin">
+        <b-tooltip v-if="reply.feedback" label="You’ve replied to this" type="is-dark" animated position="is-left" :delay="1000" class="admin-check-button--tooltip">
+          <b-button class="admin-check-button" rounded type="is-light" icon-left="check"></b-button>
+        </b-tooltip>
+        <create-reply v-else :mode="reply.type" :reply_id="reply.id" @uploaded="$emit('uploaded')" :should_open="isCreateReplyModalOpen"></create-reply>
+      </div>
+      <reply-preview-card :reply="reply" @open-reply-modal="openReply" @openUserModal="isUserModalOpen = true"></reply-preview-card>
+      <reply-modal :reply="reply" :comments="comments" @close-reply-modal="closeReply" @open-create-reply-modal="isCreateReplyModalOpen = true" @delete="confirmDelete" @openUserModal="isUserModalOpen = true"></reply-modal>
+      <user-modal v-model="isUserModalOpen" :user="reply.user"></user-modal>
     </div>
-
-    <div class="card reply-card">
-      <div class="card-image" :class="{'loaded' : reply.audio || reply.video}" @click="is_open = true">
-        <figure class="image is-square m-0" :class="{'audio-preview' : reply.audio}">
-          <div v-if="reply.type == 'audio' && reply.audio"></div>
-          <img v-else-if="reply.type == 'video' && reply.video" :src="reply.video.thumbnail_path" alt="">
-          <div class="text-preview" v-else-if="reply.type== 'text'">
-            <div class="text-preview--inner-preview" v-html="reply.text.replace(/(<([^>]+)>)/gi, '').substr(0,75) + '...'"></div>
-          </div>
-          <b-loading class="reply-loading" v-else :is-full-page="false" :active="true"></b-loading>
-        </figure>
-      </div>
-      <div class="card-content is-justify-between">
-        <div class="reply-author" @click="isUserModalOpen = true">
-          <figure class="image is-48x48 m-0 mr-2">
-            <img class="is-rounded" :src="reply.user.photo" />
-          </figure>
-          <p>
-            <span class="is-size-6">{{ reply.user.first_name}}</span>
-            <span class="is-size-7">
-              <timeago :datetime="reply.created_at" :auto-update="60"></timeago>
-            </span>
-          </p>
-        </div>
-        <span v-if="reply.comments_count > 0" class="tag is-rounded">{{ reply.comments_count }} comments</span>
-      </div>
-    </div>
-
-
-    <b-modal custom-class="has-background-white-bis reply-card-modal" :active.sync="is_open" has-modal-card trap-focus :destroy-on-hide="true" animation="zoom-in" aria-role="dialog" width="840px" aria-modal>
-
-      <div class="carousel-wrapper column is-two-thirds is-paddingless">
-        <div v-if="reply.feedback" class="feedback-toggle field has-addons">
-          <p class="control">
-            <button class="button is-small" :class="currentSlide == 0 ? 'is-selected is-success' : ''" @click.prevent="currentSlide = 0">Student response</button>
-          </p>
-          <p class="control">
-            <button class="button is-small" :class="currentSlide == 1 ? 'is-selected is-success' : ''" @click.prevent="currentSlide = 1">Teacher feedback</button>
-          </p>
-        </div>
-        <transition name="fade-up">
-          <b-button type="is-primary" icon-right="play" v-if="media_stopped && reply.feedback && (currentSlide == 0)" @click.prevent="currentSlide = 1" size="is-medium" class="feedback-button">
-            See teacher feedback
-          </b-button>
-        </transition>
-
-        <b-carousel animated="fade" @change="updateSlide($event)" :arrow="false" :indicator="false" :has-drag="false" v-model="currentSlide" :autoplay="false" icon-size="is-medium">
-          <b-carousel-item key="reply">
-            <video-player v-if="reply.type == 'video' && reply.video" @playing="media_stopped = null" @stopped="media_stopped = 'reply'" :should_autoplay="currentSlide == 0" :source="reply.video.playlist_path" :poster="reply.video.thumbnail_path" type="application/x-mpegURL"></video-player>
-            <audio-player v-else-if="reply.type == 'audio' && reply.audio" :source="reply.audio" @playing="media_stopped = null" @stopped="media_stopped = 'reply'" :should_autoplay="currentSlide == 0" v-else />
-            <div class="image is-square m-0" v-else-if="reply.type == 'text'">
-              <div class="text-preview">
-                <div v-html="reply.text" class="content text-preview--inner"></div>
-              </div>
-            </div>
-            <div class="image is-square m-0" v-else>
-              <b-loading class="reply-loading" :is-full-page="false" :active="true"></b-loading>
-            </div>
-          </b-carousel-item>
-          <b-carousel-item v-if="reply.feedback" key="feedback">
-            <video-player v-if="reply.feedback.type == 'video' && reply.feedback.video" @playing="media_stopped = null" @stopped="media_stopped = 'feedback'" :should_autoplay="currentSlide == 1" :source="reply.feedback.video.playlist_path" :poster="reply.feedback.video.thumbnail_path" type="application/x-mpegURL"></video-player>
-            <audio-player v-else-if="reply.feedback.type == 'audio' && reply.feedback.audio" :source="reply.feedback.audio" @playing="media_stopped = null" @stopped="media_stopped = 'feedback'" :should_autoplay="currentSlide == 1" />
-            <div class="image is-square m-0" v-else-if="reply.feedback.type == 'text'">
-              <div class="text-preview">
-                <div v-html="reply.feedback.text" class="content text-preview--inner"></div>
-              </div>
-            </div>
-            <div class="image is-square m-0" v-else>
-              <b-loading class="reply-loading" :is-full-page="false" :active="true"></b-loading>
-            </div>
-          </b-carousel-item>
-        </b-carousel>
-      </div>
-
-      <div class="modal-card">
-        <header class="modal-card-head is-radiusless">
-          <div class="reply-author" @click="isUserModalOpen = true">
-            <figure class="image is-48x48 mr-1">
-              <img class="is-rounded" :src="reply.user.photo" />
-            </figure>
-            <p>
-              <span class="is-size-6">{{ reply.user.first_name }}</span>
-              <span class="is-size-7">
-                <timeago :datetime="reply.created_at" :auto-update="60"></timeago>
-              </span>
-            </p>
-          </div>
-
-          <b-dropdown class="ml-a" v-if="$page.props.user.id == reply.user.id || $page.props.user.is_admin" position="is-bottom-left" aria-role="list">
-            <button class="button is-light" slot="trigger" slot-scope="{ active }">
-              <b-icon icon="cog"></b-icon>
-            </button>
-            <b-dropdown-item @click="confirmDelete(reply.id)" aria-role="listitem">Delete</b-dropdown-item>
-            <b-dropdown-item v-if="$page.props.user.is_admin && reply.feedback && reply.feedback.id" @click="confirmDelete(reply.feedback.id)" aria-role="listitem">Delete feedback</b-dropdown-item>
-            <b-dropdown-item v-if="$page.props.user.is_admin && !reply.feedback" @click="openReplyModal" aria-role="listitem">Add feedback</b-dropdown-item>
-          </b-dropdown>
-          <button class="button reply-card-modal__close is-light" @click="is_open = false">
-            <b-icon icon="close"></b-icon>
-          </button>
-        </header>
-        <comments :in_chatroom_manager="in_chatroom_manager" :include_already_replied_to="include_already_replied_to" :comments="comments" :reply="reply"></comments>
-      </div>
-    </b-modal>
-
-    <b-modal v-model="isUserModalOpen" :width="480" scroll="keep">
-      <div class="card">
-        <div class="card-content">
-          <div class="media ">
-            <div class="media-left">
-              <figure class="image is-64x64">
-                <img class="is-rounded" :src="reply.user.photo" alt="Image">
-              </figure>
-            </div>
-            <div class="media-content">
-              <p class="title is-4">{{ reply.user.first_name}} {{ reply.user.last_name}}</p>
-              <p class="subtitle is-6" v-if="$page.props.user.is_admin"><a :href="`mailto:${ reply.user.email }`">{{ reply.user.email }}</a></p>
-              <p>{{ reply.user.description }}</p>
-              <br>
-              <p><small>Joined <timeago :datetime="reply.user.created_at"></timeago></small></p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </b-modal>
-  </div>
-</transition>
+  </transition>
 </template>
 
 <script>
-import Comments from '@/components/Comments'
 import { Inertia } from '@inertiajs/inertia'
+
+import ReplyModal from '@/components/ReplyModal'
+import UserModal from '@/components/UserModal'
+import ReplyPreviewCard from '@/components/ReplyPreviewCard'
 
 export default {
   props: ['reply', 'in_chatroom_manager', 'include_already_replied_to', 'comments'],
   components: {
-    Comments
+    ReplyModal,
+    UserModal,
+    ReplyPreviewCard
   },
+
   data() {
     return {
-      is_open: false,
-      currentSlide: 0,
       isDeleted: false,
-      media_stopped: null,
-      open_reply_modal: false,
+      isCreateReplyModalOpen: false,
       isUserModalOpen: false,
       destroyReplyForm: this.$inertia.form({
-        in_chatroom_manager: this.in_chatroom_manager
+      in_chatroom_manager: this.in_chatroom_manager
       }),
     }
   },
 
   watch: {
-    is_open: function(value) {
-      if(value) {
-        if(!this.$page.props.parameters.reply) {
-          this.$inertia.visit(route(this.in_chatroom_manager ? 'chatroom.reply' : 'section.reply', {'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'reply': this.reply.id, 'include_already_replied_to': this.include_already_replied_to  }), {
-            only: ['comments', 'parameters'],
-            preserveScroll: true,
-            preserveState: true,
-          });
-          this.currentSlide = this.$page.props.parameters.show_feedback ? 1 : 0;
-        }
-      }
-      else {
-        this.$inertia.visit(route(this.in_chatroom_manager ? 'chatroom.section' : 'section.show', {'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'include_already_replied_to': this.include_already_replied_to  }), {
-          only: [],
-          preserveScroll: true,
-          preserveState: true,
-        });
-      }
-    }
   },
 
   mounted() {
-    if (this.$page.props.parameters.reply == this.reply.id && !this.is_open) {
-      this.is_open = true;
-    }
   },
 
   methods: {
-    onSubmit() {},
 
-    openReplyModal() {
-      // this.is_open = false;
-      this.open_reply_modal = true;
+    openReply() {
+      this.$inertia.visit(route(this.in_chatroom_manager ? 'chatroom.reply' : 'section.reply', {'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'reply': this.reply.id, 'include_already_replied_to': this.include_already_replied_to  }), {
+        only: ['comments', 'parameters'],
+        preserveScroll: true,
+        preserveState: true,
+      });
     },
 
-    updateSlide(value) {
-      this.media_stopped = null;
-      this.currentSlide = value;
+    closeReply() {
+      this.$inertia.visit(route(this.in_chatroom_manager ? 'chatroom.section' : 'section.show', {'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'include_already_replied_to': this.include_already_replied_to  }), {
+        only: [],
+        preserveScroll: true,
+        preserveState: true,
+      });
     },
 
     confirmDelete(id) {
