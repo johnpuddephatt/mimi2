@@ -123,6 +123,7 @@ export default {
       color: lighten($primary, 15%);
       line-height: 0;
     }
+
     &::before {
       content: open-quote;
       margin-left: -0.35em;
@@ -130,8 +131,10 @@ export default {
   }
 
   &--inner {
+    margin: auto 0;
     user-select: text;
     padding: 7.5rem 5rem;
+
     &::before,
     &::after {
       display: inline-block;
@@ -188,13 +191,14 @@ export default {
             transition: background-color 1s;
           }
         }
+
         &:hover {
-            &::before {
-                background-color: transparentize($turquoise,0);
-            }
+          &::before {
+            background-color: transparentize($turquoise,0);
+          }
         }
         img {
-            object-fit: cover;
+          object-fit: cover;
         }
     }
     &__loading {
