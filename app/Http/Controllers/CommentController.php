@@ -26,32 +26,14 @@ class CommentController extends Controller
       $this->middleware('auth');
     }
 
-    public function delete(Request $request, Course $course, Week $week, Lesson $lesson, Section $section, Reply $reply, Comment $comment) {
+    public function delete(Request $request, Course $course, Comment $comment) {
       $comment->delete();
-
       return redirect()->back();
-
-      // return redirect()->route($request->in_chatroom_manager ? 'chatroom.reply' : 'section.reply', [
-      //   'course' => $course,
-      //   'week' => $week,
-      //   'lesson' => $lesson,
-      //   'section' => $section,
-      //   'reply' => $reply
-      // ]);
     }
 
-    public function store(StoreComment $request, Course $course, Week $week, Lesson $lesson, Section $section, Reply $reply) {
+    public function store(StoreComment $request, Course $course) {
       Comment::create($request->all());
       return redirect()->back();
-
-      // return redirect()->route($request->in_chatroom_manager ? 'chatroom.reply' : 'section.reply', [
-      //   'course' => $course,
-      //   'week' => $week,
-      //   'lesson' => $lesson,
-      //   'section' => $section,
-      //   'reply' => $reply,
-      //   'include_already_replied_to' => $request->include_already_replied_to
-      // ]);
     }
 
     public function index(Lesson $lesson, Reply $reply) {

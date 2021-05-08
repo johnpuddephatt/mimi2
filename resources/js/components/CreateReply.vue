@@ -7,7 +7,7 @@
 
   <button v-else @click="openModal()" class="button is-primary">Add your reply</button>
 
-  <b-modal custom-class="create-reply-modal" :active.sync="isReplyModalActive" has-modal-card trap-focus :can-cancel="!reply.video && !isRecording" :destroy-on-hide="true" aria-role="dialog" width="420px" aria-modal>
+  <b-modal custom-class="create-reply-modal" :active.sync="isReplyModalActive" @close="$emit('close')" has-modal-card trap-focus :can-cancel="!reply.video && !isRecording" :destroy-on-hide="true" aria-role="dialog" width="420px" aria-modal>
 
     <div v-if="!replyMode">
       <b-button class="reply-button" @click="replyMode = 'video'" expanded size="is-medium is-primary" icon-right="plus-circle">
@@ -63,10 +63,10 @@
 <script>
 import NoSleep from 'nosleep.js';
 var platform = require('platform');
+
 import CameraField from '@/components/CameraField';
 import AudioField from '@/components/AudioField';
 import TipTap from '@/components/TipTap';
-
 
 export default {
   props: ['reply_id', 'mode', 'should_open'],
@@ -150,8 +150,6 @@ export default {
           this.isSaved = true;
           this.$emit('uploaded');
           this.successToast(`Upload successful. Your ${this.replyMode} will appear on the page shortly.`);
-
-
         }).catch(error => {
           noSleep.disable();
           this.isSaving = false;

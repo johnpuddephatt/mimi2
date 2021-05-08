@@ -5,10 +5,10 @@
         <b-tooltip v-if="reply.feedback" label="You’ve replied to this" type="is-dark" animated position="is-left" :delay="1000" class="admin-check-button--tooltip">
           <b-button class="admin-check-button" rounded type="is-light" icon-left="check"></b-button>
         </b-tooltip>
-        <create-reply v-else :mode="reply.type" :reply_id="reply.id" @uploaded="$emit('uploaded')" :should_open="isCreateReplyModalOpen"></create-reply>
+        <create-reply v-else :mode="reply.type" :reply_id="reply.id" @uploaded="$emit('uploaded')" :should_open="isCreateReplyModalOpen" @close="isCreateReplyModalOpen = false"></create-reply>
       </div>
       <reply-preview-card :reply="reply" @open-reply-modal="openReply" @openUserModal="isUserModalOpen = true"></reply-preview-card>
-      <reply-modal :reply="reply" :comments="comments" @close-reply-modal="closeReply" @open-create-reply-modal="isCreateReplyModalOpen = true" @delete="confirmDelete" @openUserModal="isUserModalOpen = true"></reply-modal>
+      <reply-modal :reply="reply" :comments="comments" :create_reply_modal_open="isCreateReplyModalOpen" @close-reply-modal="closeReply" @open-create-reply-modal="isCreateReplyModalOpen = true" @delete="confirmDelete" @openUserModal="isUserModalOpen = true"></reply-modal>
       <user-modal v-model="isUserModalOpen" :user="reply.user"></user-modal>
     </div>
   </transition>
@@ -35,7 +35,7 @@ export default {
       isCreateReplyModalOpen: false,
       isUserModalOpen: false,
       destroyReplyForm: this.$inertia.form({
-      in_chatroom_manager: this.in_chatroom_manager
+        in_chatroom_manager: this.in_chatroom_manager
       }),
     }
   },

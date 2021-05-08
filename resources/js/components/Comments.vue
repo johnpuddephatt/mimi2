@@ -185,7 +185,7 @@ export default {
     },
 
     delete(id) {
-      this.destroyCommentForm.delete(route('comment.delete', { 'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'reply': this.reply.id, 'comment': id }), {
+        this.destroyCommentForm.delete(route('comment.delete', { 'course': this.$page.props.parameters.course ,'comment': id }), {
         only: ['comments'],
         preserveScroll: true,
         onSuccess: () => {
@@ -206,7 +206,7 @@ export default {
 
     onSubmit() {
       this.isSaving = true;
-      this.form.post(route('comment.create', { 'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'reply': this.reply.id, 'include_already_replied_to': true }), {
+      this.form.post(route('comment.create', { 'course': this.$page.props.parameters.course }), {
         only: ['comments'],
         preserveScroll: true,
         preserveState: true,

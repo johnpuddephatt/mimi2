@@ -127,6 +127,7 @@ export default {
     startRefreshing() {
       Inertia.reload({ only: ['replies'] });
       setInterval(()=> {
+        console.log('reloading');
         Inertia.reload({ only: ['replies'] });
       }, 10000);
     }

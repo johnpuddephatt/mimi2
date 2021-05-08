@@ -11,15 +11,15 @@
         </p>
       </div>
       <transition name="fade-up">
-        <b-button type="is-primary" icon-right="play" v-if="media_stopped && reply.feedback && (currentSlide == 0)" @click.prevent="currentSlide = 1" size="is-medium" class="feedback-button">
+        <b-button type="is-primary" icon-right="play" v-if="media_stopped && reply.feedback && (currentSlide === 0)" @click.prevent="currentSlide = 1" size="is-medium" class="feedback-button">
           See teacher feedback
         </b-button>
       </transition>
 
       <b-carousel animated="fade" @change="updateSlide($event)" :arrow="false" :indicator="false" :has-drag="false" v-model="currentSlide" :autoplay="false" icon-size="is-medium">
         <b-carousel-item key="reply">
-          <video-player v-if="reply.type == 'video' && reply.video" @playing="media_stopped = null" @stopped="media_stopped = 'reply'" :should_autoplay="currentSlide == 0" :source="reply.video.playlist_path" :poster="reply.video.thumbnail_path" type="application/x-mpegURL"></video-player>
-          <audio-player v-else-if="reply.type == 'audio' && reply.audio" :source="reply.audio" @playing="media_stopped = null" @stopped="media_stopped = 'reply'" :should_autoplay="currentSlide == 0" v-else />
+          <video-player v-if="reply.type == 'video' && reply.video" @playing="media_stopped = null" @stopped="media_stopped = 'reply'" :should_autoplay="currentSlide === 0 && !create_reply_modal_open" :source="reply.video.playlist_path" :poster="reply.video.thumbnail_path" type="application/x-mpegURL"></video-player>
+          <audio-player v-else-if="reply.type == 'audio' && reply.audio" :source="reply.audio" @playing="media_stopped = null" @stopped="media_stopped = 'reply'" :should_autoplay="currentSlide === 0 && !create_reply_modal_open" v-else />
           <div class="image is-square m-0" v-else-if="reply.type == 'text'">
             <div class="text-preview">
               <div v-html="reply.text" class="content text-preview--inner"></div>
@@ -30,8 +30,8 @@
           </div>
         </b-carousel-item>
         <b-carousel-item v-if="reply.feedback" key="feedback">
-          <video-player v-if="reply.feedback.type == 'video' && reply.feedback.video" @playing="media_stopped = null" @stopped="media_stopped = 'feedback'" :should_autoplay="currentSlide == 1" :source="reply.feedback.video.playlist_path" :poster="reply.feedback.video.thumbnail_path" type="application/x-mpegURL"></video-player>
-          <audio-player v-else-if="reply.feedback.type == 'audio' && reply.feedback.audio" :source="reply.feedback.audio" @playing="media_stopped = null" @stopped="media_stopped = 'feedback'" :should_autoplay="currentSlide == 1" />
+          <video-player v-if="reply.feedback.type == 'video' && reply.feedback.video" @playing="media_stopped = null" @stopped="media_stopped = 'feedback'" :should_autoplay="currentSlide == 1 && !create_reply_modal_open" :source="reply.feedback.video.playlist_path" :poster="reply.feedback.video.thumbnail_path" type="application/x-mpegURL"></video-player>
+          <audio-player v-else-if="reply.feedback.type == 'audio' && reply.feedback.audio" :source="reply.feedback.audio" @playing="media_stopped = null" @stopped="media_stopped = 'feedback'" :should_autoplay="currentSlide == 1 && !create_reply_modal_open" />
           <div class="image is-square m-0" v-else-if="reply.feedback.type == 'text'">
             <div class="text-preview">
               <div v-html="reply.feedback.text" class="content text-preview--inner"></div>
@@ -83,7 +83,7 @@ export default {
     Comments
   },
 
-  props: ['reply', 'comments'],
+  props: ['reply', 'comments', 'create_reply_modal_open'],
 
   data() {
     return {
@@ -109,7 +109,6 @@ export default {
     },
 
     openReplyModal() {
-      this.currentSlide = null;
       this.$emit('open-create-reply-modal');
     }
   }

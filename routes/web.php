@@ -96,9 +96,9 @@ Route::get('course/{course}/week/{week:number}/lesson/{lesson}/print', 'LessonCo
 Route::post('lesson/{lesson}/section/{section}/reply', 'ReplyController@store')->name('reply.create')->middleware('auth','enrolled');
 Route::delete('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}/reply/{reply}/delete', 'ReplyController@destroy')->name('reply.delete')->middleware('auth','owner');
 
-Route::post('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}/reply/{reply}/comment', 'CommentController@store')->name('comment.create')->middleware('auth','enrolled');
+Route::post('course/{course}/comment/create', 'CommentController@store')->name('comment.create')->middleware('auth','enrolled');
 Route::get('lesson/{lesson}/reply/{reply}/comments', 'CommentController@index')->name('comment.index')->middleware('auth','enrolled');
-Route::delete('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}/reply/{reply}/comment/{comment}/delete', 'CommentController@delete')->name('comment.delete')->middleware('auth','enrolled');
+Route::delete('course/{course}/comment/{comment}/delete', 'CommentController@delete')->name('comment.delete')->middleware('auth','enrolled');
 
 Route::get('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}', 'SectionController@show')->name('section.show')->middleware('auth','enrolled');
 Route::get('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}/reply/{reply}/{show_feedback?}', 'SectionController@show')->name('section.reply')->middleware('auth','enrolled');
