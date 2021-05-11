@@ -97,6 +97,47 @@ export default {
 <style lang="scss">
 @import "../../../sass/variables";
 
+.navbar {
+  position: relative !important;
+  margin-bottom: 3rem;
+  background-color: transparent !important;
+
+  .navbar-brand {
+
+  }
+
+  .navbar-menu,
+  .navbar-burger {
+    display: none;
+  }
+}
+
+@media screen {
+  .print-wrapper {
+    max-width: 800px;
+    margin: 6rem auto;
+  }
+}
+
+@page {
+  padding-top: 84px;
+}
+
+.beacon-container,
+.footer {
+  display: none !important;
+}
+
+html {
+  background-color: #fff !important;
+}
+
+body {
+  font-size: 12pt !important;
+}
+
+
+
 .print-wrapper {
 
   h1, h2, h3, h4, h5 {
@@ -107,50 +148,14 @@ export default {
     page-break-inside: avoid;
   }
 
-  .content .editor-js-image img {
-    width: auto;
-    max-height: 300px;
-  }
-
-  .navbar {
-    position: relative !important;
-    margin-bottom: 3rem;
-    background-color: transparent !important;
-
-    .navbar-brand {
-
-    }
-
-    .navbar-menu,
-    .navbar-burger {
-      display: none;
-    }
-  }
-
-  @media screen {
-    .print-wrapper {
-      max-width: 800px;
-      margin: 6rem auto;
-    }
-  }
-
-  @page {
-    padding-top: 84px;
-  }
-
-  .beacon-container,
-  .footer,
   .editor-js-block__audio,
   .editor-js-block__video {
     display: none !important;
   }
 
-  html {
-    background-color: #fff !important;
-  }
-
-  body {
-    font-size: 12pt !important;
+  .content .editor-js-image img {
+    width: auto;
+    max-height: 300px;
   }
 
   .sections-box {
