@@ -24,7 +24,7 @@
             <h3>Learn the words</h3>
           </div>
           <ul>
-            <li v-for="word in wordList"><strong>{{word.word}}:</strong> {{ word.translation}}</li>
+            <li v-for="word in wordList"><strong v-html="word.word">:</strong> <span v-html="word.translation"></span></li>
           </ul>
         </div>
 
@@ -97,75 +97,81 @@ export default {
 <style lang="scss">
 @import "../../../sass/variables";
 
-h1, h2, h3, h4, h5 {
-  page-break-after: avoid;
-}
+.print-wrapper {
 
-table, figure {
-  page-break-inside: avoid;
-}
-
-
-.navbar {
-  position: relative !important;
-  margin-bottom: 3rem;
-  background-color: transparent !important;
-
-  .navbar-brand {
-
+  h1, h2, h3, h4, h5 {
+    page-break-after: avoid;
   }
 
-  .navbar-menu,
-  .navbar-burger {
-    display: none;
+  table, figure {
+    page-break-inside: avoid;
+  }
+
+  .content .editor-js-image img {
+    width: auto;
+    max-height: 300px;
+  }
+
+  .navbar {
+    position: relative !important;
+    margin-bottom: 3rem;
+    background-color: transparent !important;
+
+    .navbar-brand {
+
+    }
+
+    .navbar-menu,
+    .navbar-burger {
+      display: none;
+    }
+  }
+
+  @media screen {
+    .print-wrapper {
+      max-width: 800px;
+      margin: 6rem auto;
+    }
+  }
+
+  @page {
+    padding-top: 84px;
+  }
+
+  .beacon-container,
+  .footer,
+  .editor-js-block__audio,
+  .editor-js-block__video {
+    display: none !important;
+  }
+
+  html {
+    background-color: #fff !important;
+  }
+
+  body {
+    font-size: 12pt !important;
+  }
+
+  .sections-box {
+    margin-top: -0.5em;
+    margin-left: 2em;
+    margin-right: 0em;
+    margin-bottom: 3em;
+    float: right;
+    max-width: 16em;
+    position: relative;
+    z-index: 9;
+  }
+
+  .lesson-button {
+    line-height: 1.3;
+    border-color: $grey-lighter;
+    border-radius: 4px;
+  }
+
+  .clear-both {
+    clear: both;
   }
 }
-
-@media screen {
-  .print-wrapper {
-    max-width: 800px;
-    margin: 6rem auto;
-  }
-}
-
-@page {
-  padding-top: 84px;
-}
-
-.beacon-container,
-.footer,
-.editor-js-block__audio,
-.editor-js-block__video {
-  display: none !important;
-}
-
-html {
-  background-color: #fff !important;
-}
-
-body {
-  font-size: 12pt !important;
-}
-
-.sections-box {
-  margin-top: -0.5em;
-  margin-left: 2em;
-  margin-right: 0em;
-  margin-bottom: 3em;
-  float: right;
-  max-width: 16em;
-  position: relative;
-  z-index: 9;
-}
-
-.lesson-button {
-  line-height: 1.3;
-  border-color: $grey-lighter;
-  border-radius: 4px;
-}
-
-.clear-both {
-  clear: both;
-}
-
 </style>
