@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <b-button class="restart-camera" @click.prevent="confirmRestart">Start again</b-button>
+    <b-button class="restart-camera" @click.prevent="confirmRestart">Take a new {{ mode }}</b-button>
 
   </div>
 
@@ -370,6 +370,10 @@ export default {
 
 
 <style lang="scss">
+
+  .camera-wrapper {
+    position: relative;
+  }
 
   .restart-camera {
       position: absolute;

@@ -32,6 +32,7 @@ class StoreUser extends FormRequest
         // 'email' => ['required', 'email', \Illuminate\Validation\Rule::unique('users')->ignore(request()->field)],
         'password' => ['required_without:id'],
         'course' => ['nullable'],
+        'notification_emails' => ['nullable','array'],
         'admin' => ['nullable']
       ];
     }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,7 +26,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'photo', 'email', 'password', 'description', 'is_admin'
+        'first_name', 'last_name', 'photo', 'email', 'password', 'description', 'is_admin', 'notification_emails'
     ];
 
     /**
@@ -45,8 +46,21 @@ class User extends Authenticatable
     protected $casts = [
       'email_verified_at' => 'datetime',
       'is_admin' => 'boolean',
-      'trial_ends_at' => 'datetime'
+      'trial_ends_at' => 'datetime',
+      'notification_emails' => AsArrayObject::class
     ];
+
+    public static $notificationEmails = [
+        'StudentCommentReceived' => 'Another student leaves me a comment',
+        'TeacherCommentReceived' => 'A teacher leaves me a comment',
+        'FeedbackReceived' => 'A teacher leaves me feedback',
+    ];
+
+    public function receives($notification) {
+      if($this->notification_emails) {
+        return in_array($notification, $this->notification_emails->toArray());
+      }
+    }
 
     public function getPhotoAttribute($value) {
       if($value) {

@@ -28,7 +28,11 @@ class UserController extends Controller
     }
 
     public function showProfile() {
-      return Inertia::render('User/Profile', ['user' => \Auth::user()]);
+
+      return Inertia::render('User/Profile', [
+        'user' => \Auth::user(),
+        'notification_emails' => \App\Models\User::$notificationEmails
+      ]);
     }
 
     protected function updateProfile(StoreUser $request) {
@@ -50,9 +54,13 @@ class UserController extends Controller
             'last_name' => $request->last_name,
             'photo' => isset($photo_url) ? $photo_url : null,
             'description' => $request->description,
+            'notification_emails' => $request->notification_emails ?? []
         ]);
 
-        return Inertia::render('User/Profile', ['user' => \Auth::user()]);
+        return Inertia::render('User/Profile', [
+          'user' => \Auth::user(),
+          'notification_emails' => \App\Models\User::$notificationEmails
+        ]);
     }
 
     public function chatrooms() {

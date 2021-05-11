@@ -114,17 +114,19 @@ class Reply extends Model
     }
 
     // A top-level video comment from a student
-    public function sendReplyNotification() {
-      $email = new NewReply($this);
-      $recipient = User::where('is_admin', true)->get();
-      Mail::to($recipient)->send($email);
-    }
+    // public function sendReplyNotification() {
+    //   $email = new NewReply($this);
+    //   $recipient = User::where('is_admin', true)->get();
+    //   Mail::to($recipient)->send($email);
+    // }
 
     // Feedback video from an admin
     public function sendFeedbackNotification() {
-      $email = new NewFeedback($this);
       $recipient = $this->reply->user;
-      Mail::to($recipient)->send($email);
+      if($recipient->receives('FeedbackReceived')) {
+        $email = new NewFeedback($this);
+        Mail::to($recipient)->send($email);
+      }
     }
 
 }

@@ -254,6 +254,10 @@ export default {
 <style lang="scss">
 @import "../../sass/variables";
 
+.camera-wrapper {
+  position: relative;
+}
+
 .restart-audio {
   position: absolute;
   top: 10px;

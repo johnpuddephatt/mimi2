@@ -33,7 +33,7 @@ class Comment extends Model
       parent::boot();
 
       static::created(function($comment){
-        // $comment->sendCommentNotification();
+        $comment->sendCommentNotification();
       });
     }
 
@@ -62,11 +62,15 @@ class Comment extends Model
 
     // A text comment from another student
     public function sendCommentNotification() {
+
       $email = new NewComment($this);
       $recipient = $this->reply->user;
 
       if($this->user->id != $recipient->id) {
-        Mail::to($recipient)->send($email);
+        if(($this->user->is_admin && $recipient->receives('TeacherCommentReceived'))
+          || (!$this->user->is_admin && $recipient->receives('StudentCommentReceived'))) {
+            Mail::to($recipient)->send($email);
+        }
       }
     }
 
