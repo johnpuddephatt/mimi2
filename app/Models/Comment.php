@@ -60,18 +60,22 @@ class Comment extends Model
       return $this->belongsTo('App\Models\Comment', 'comment_id');
     }
 
-    // A text comment from another student
     public function sendCommentNotification() {
 
-      $email = new NewComment($this);
-      $recipient = $this->reply->user;
-
-      if($this->user->id != $recipient->id) {
-        if(($this->user->is_admin && $recipient->receives('TeacherCommentReceived'))
-          || (!$this->user->is_admin && $recipient->receives('StudentCommentReceived'))) {
+      if($this->user->id != $this->reply->user->id) {
+        if(($this->user->is_admin && $this->reply->user->receives('TeacherCommentReceived'))
+          || (!$this->user->is_admin && $this->reply->user->receives('StudentCommentReceived'))) {
+            $email = new NewComment($this);
+            $recipient = $this->reply->user;
             Mail::to($recipient)->send($email);
         }
       }
+      //
+      // elseif($this->parentComment && ($this->parentComment->user->id != $this->user->id) && $this->parentComment->user->receives('ChildCommentReceived')) {
+      //   $email = new NewChildComment($this);
+      //   $recipient = $this->parentComment->user;
+      //   Mail::to($recipient)->send($email);
+      // }
     }
 
 }

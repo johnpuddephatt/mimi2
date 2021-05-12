@@ -213,6 +213,7 @@ export default {
         onSuccess: () => {
           this.successToast('Comment created!');
           this.resetCommentInput();
+          this.scrollToBottom();
           setTimeout(()=>{ this.isSaving = false }, 2000);
         },
         onError: errors => {
