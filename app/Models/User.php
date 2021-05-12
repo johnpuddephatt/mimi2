@@ -51,10 +51,10 @@ class User extends Authenticatable
     ];
 
     public static $notificationEmails = [
-        'StudentCommentReceived' => 'Another student leaves a comment on my chatroom reply',
-        'TeacherCommentReceived' => 'A teacher leaves a comment on my chatroom reply',
-        'FeedbackReceived' => 'A teacher gives me feedback on my chatroom reply',
-        // 'ChildCommentReceived' => 'Someone replies to a comment I’ve left',
+      'FeedbackReceived' => 'A teacher leaves feedback on my chatroom reply',
+      'StudentCommentReceived' => 'Another student comments on my chatroom reply',
+      'TeacherCommentReceived' => 'A teacher comments on my chatroom reply',
+      // 'ChildCommentReceived' => 'Someone replies to a comment I’ve left',
     ];
 
     public function receives($notification) {
