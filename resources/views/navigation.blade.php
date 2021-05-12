@@ -2,7 +2,7 @@
 
     @if(config('app.alert'))
       <div class="notification has-text-centered is-warning m-1 is-light">
-        {{ config('app.alert') }}
+        {!! config('app.alert') !!}
       </div>
     @endif
 
