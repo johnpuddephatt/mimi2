@@ -80,7 +80,9 @@ class BillingController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'first_name' => $request->first_name,
-            'last_name' => $request->last_name
+            'last_name' => $request->last_name,
+            'notification_emails' => $request->notification_emails ?? []
+
           ]);
         }
 

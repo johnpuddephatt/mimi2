@@ -78,7 +78,8 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
             'course' => ['nullable'],
-            'admin' => ['nullable']
+            'admin' => ['nullable'],
+            'notification_emails' => ['nullable','array'],
         ]);
     }
 
@@ -101,7 +102,9 @@ class RegisterController extends Controller
             'description' => $data['description'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'is_admin' => isset($data['admin']) && ($data['admin'] == config('app.admin_invite_key'))
+            'is_admin' => isset($data['admin']) && ($data['admin'] == config('app.admin_invite_key')),
+            'notification_emails' => isset($data['notification_emails']) ? $data['notification_emails'] : []
+
         ]);
 
         if(isset($data['course'])) {
