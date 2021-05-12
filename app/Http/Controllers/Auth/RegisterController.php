@@ -55,10 +55,16 @@ class RegisterController extends Controller
     public function showRegistrationForm(Request $request)
      {
         if($request->query('admin') == config('app.admin_invite_key')) {
-          return Inertia::render('Registration', ['admin' => $request->query('admin')]);
+          return Inertia::render('Registration', [
+            'admin' => $request->query('admin'),
+            'notification_emails' => \App\Models\User::$notificationEmails
+          ]);
         }
         else {
-          return Inertia::render('Registration', ['course' => $request->query('course')]);
+          return Inertia::render('Registration', [
+            'course' => $request->query('course'),
+            'notification_emails' => \App\Models\User::$notificationEmails
+          ]);
         }
      }
 
@@ -103,7 +109,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'is_admin' => isset($data['admin']) && ($data['admin'] == config('app.admin_invite_key')),
-            'notification_emails' => isset($data['notification_emails']) ? $data['notification_emails'] : []
+            'notification_emails' => $data['notification_emails'] ?? []
 
         ]);
 

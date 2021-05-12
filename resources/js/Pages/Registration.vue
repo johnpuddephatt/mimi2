@@ -51,18 +51,28 @@
               </b-input>
             </b-field>
 
+            <b-field label="Introduce yourself">
+              <b-input v-model="form.description" name="description" type="textarea" maxlength="120" rows="4" required placeholder="Introduce yourself to the other students.">
+              </b-input>
+            </b-field>
+
             <hr>
 
             <button class="button is-fullwidth" @click.prevent="activeStep = 1">Next</button>
 
           </b-step-item>
 
-          <b-step-item label="Introduce" :clickable="true">
+          <b-step-item label="Notifications" :clickable="true">
 
-            <b-field label="Introduce yourself">
-              <b-input v-model="form.description" name="description" type="textarea" maxlength="120" rows="6" required placeholder="Introduce yourself to the other students.">
-              </b-input>
+            <b-field label="Email notifications">
+              <div class="mb-5">
+                <p class="mb-2">Send me an email when:</p>
+                <b-checkbox v-for="(value, key) in notification_emails" :key="key" v-model="form.notification_emails" :native-value="key">
+                  {{ value }}
+                </b-checkbox>
+              </div>
             </b-field>
+
 
             <button class="button is-fullwidth" @click.prevent="activeStep = 2">Next</button>
 
@@ -87,7 +97,7 @@ import AppLayout from '@/Layouts/AppLayout'
 import CameraField from '@/components/CameraField'
 
 export default {
-  props: ['errors', 'course', 'admin'],
+  props: ['errors', 'course', 'admin', 'notification_emails'],
   components: {
     AppLayout,
     CameraField
@@ -104,32 +114,30 @@ export default {
         password: null,
         description: null,
         photo: null,
+        notification_emails: [],
       })
     }
   },
   mounted() {
   },
   computed: {
-
   },
   methods: {
-
     onSubmit() {
       this.isRegistering = true;
-
       this.form.transform((data) => ({
-          ...data,
-          admin: this.admin ?? null,
-          course: this.course ?? null
-        }))
-        .post(route('register'), {
-          preserveScroll: true,
-          onError: errors => {
-            console.log(errors);
-            this.isRegistering = false;
-            this.errorToast('Check the form for errors');
-          },
-        })
+        ...data,
+        admin: this.admin ?? null,
+        course: this.course ?? null
+      }))
+      .post(route('register'), {
+        preserveScroll: true,
+        onError: errors => {
+          console.log(errors);
+          this.isRegistering = false;
+          this.errorToast('Check the form for errors');
+        },
+      })
     }
   }
 }

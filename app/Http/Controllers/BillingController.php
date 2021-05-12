@@ -81,8 +81,7 @@ class BillingController extends Controller
             'password' => Hash::make($request->password),
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
-            'notification_emails' => $request->notification_emails ?? []
-
+            'notification_emails' => []
           ]);
         }
 
@@ -166,7 +165,10 @@ class BillingController extends Controller
 
 
     public function showProfile() {
-      return Inertia::render('Billing/CompleteProfile', [ 'user' => \Auth::user() ]);
+      return Inertia::render('Billing/CompleteProfile', [
+        'user' => \Auth::user(),
+        'notification_emails' => \App\Models\User::$notificationEmails
+      ]);
     }
 
     public function updateProfile(StoreUser $request) {
@@ -179,8 +181,9 @@ class BillingController extends Controller
       }
 
       \Auth::user()->update([
-          'photo' => ($photo_path ? Storage::cloud()->url($photo_path) : null),
-          'description' => $request->description,
+        'photo' => ($photo_path ? Storage::cloud()->url($photo_path) : null),
+        'description' => $request->description,
+        'notification_emails' => $request->notification_emails ?? []
       ]);
       return redirect()->route('billing.success');
 

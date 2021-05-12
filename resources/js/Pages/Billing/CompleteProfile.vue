@@ -17,6 +17,15 @@
           </b-input>
         </b-field>
 
+        <b-field label="Email notifications">
+          <div class="mb-5">
+            <p class="mb-2">Send me an email when:</p>
+            <b-checkbox v-for="(value, key) in notification_emails" :key="key" v-model="form.notification_emails" :native-value="key">
+              {{ value }}
+            </b-checkbox>
+          </div>
+        </b-field>
+
         <b-field label="Photo">
           <camera-field mode="photo" v-model="form.photo"></camera-field>
         </b-field>
@@ -34,7 +43,7 @@ import AppLayout from '@/Layouts/AppLayout'
 import CameraField from '@/components/CameraField'
 
 export default {
-  props: ['errors', 'user'],
+  props: ['errors', 'user', 'notification_emails'],
   components: {
     AppLayout,
     CameraField
@@ -46,6 +55,7 @@ export default {
         id: this.user.id,
         description: null,
         photo: null,
+        notification_emails: [],
       })
     }
   },
