@@ -32,7 +32,7 @@
             >
             <span class="text-overflow-ellipsis mr-a">{{ lesson.title }}</span>
             <!-- <b-tooltip v-if="replies.find(entry => entry.lesson_id == lesson.id)" label="You’ve replied to this" type="is-success" position="is-bottom">
-              <b-icon type="is-success" icon="check-circle-outline" />
+              <b-icon type="is-success" icon="check-circle" />
             </b-tooltip> -->
             <b-icon icon="arrow-right" />
           </inertia-link>

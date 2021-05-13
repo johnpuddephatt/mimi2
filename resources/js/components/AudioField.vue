@@ -19,8 +19,8 @@
       <div class="has-square-media">
         <span v-if="isRecording"  class="recording-indicator tag" :class="timeRemaining < 30 ? 'is-red': 'is-black'">{{ timeRemaining > 30 ? 'Rec' : timeRemaininginMinutes }}</span>
         <b-notification type="is-dark" v-if="mode == 'video' && isLoaded" class="recording-instructions" v-model="showInstructions" aria-close-label="Close instructions">
-          <p class="is-size-7"><b-icon icon="alarm" />Aim for a reply between 30 seconds and two minutes long. Five minutes is the maximum.</p>
-          <p class="is-size-7"><b-icon icon="restart" />You’ll be able to play your audio back before uploading, and re-record it if you want to.</p>
+          <p class="is-size-7"><b-icon icon="check-circle" />Aim for a reply between 30 seconds and two minutes long. Five minutes is the maximum.</p>
+          <p class="is-size-7"><b-icon icon="check-circle" />You’ll be able to play your audio back before uploading, and re-record it if you want to.</p>
         </b-notification>
 
         <canvas width="420" height="420" ref="canvas" class="visualizer"></canvas>
