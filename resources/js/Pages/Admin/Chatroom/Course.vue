@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import Chatroom from '@/components/Chatroom'
-import ChatroomMenu from '@/components/ChatroomMenu'
+import Chatroom from '%/components/Chatroom'
+import ChatroomMenu from '%/components/ChatroomMenu'
 
 export default {
   props: ['courses', 'course', 'lessons'],

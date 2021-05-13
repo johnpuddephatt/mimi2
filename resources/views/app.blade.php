@@ -16,7 +16,6 @@
         <!-- Styles -->
         <link href="{{ mix('css/app.css') }}" rel="stylesheet">
         {{-- <link href="{{ mix('css/vue.css') }}" rel="stylesheet"> --}}
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.2.45/css/materialdesignicons.css" integrity="sha256-mHVnxh+7TPhWR15Mw9aeGEXnvJo75EqKr/zwS4pGIak=" crossorigin="anonymous" />
         <!-- Scripts -->
         @routes
         <script defer src="{{ mix('js/app.js') }}"></script>

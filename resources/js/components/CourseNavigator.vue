@@ -1,6 +1,6 @@
 <template>
 <div>
-  <b-button label="Course navigator" size="is-medium" type="is-primary" @click="isOpen = !isOpen" :icon-right="isOpen ? 'menu-up' : 'menu-down'" />
+  <b-button label="Course navigator" size="is-medium" type="is-primary" @click="isOpen = !isOpen" :icon-right="isOpen ? 'chevron-up' : 'chevron-down'" />
   <transition name="fade">
     <div @click="isOpen = false" v-if="isOpen" class="course-navigator-menu--mask">
       <div @click.stop aria-role="menu" class="menu course-navigator-menu has-background-light has-box-shadow p-4 pt-6">
@@ -14,14 +14,19 @@
               </p>
               <ul class="menu-list">
                 <li v-for="lesson in week.lessons" :key="lesson.id" :class="{'is-current' : (lesson.id == $page.props.parameters.lesson) }">
-                  <a class="menu-heading" @click="open = lesson.id" >{{ lesson.title }}</a>
+                  <div v-if="lesson.live && lesson.sections.length">
+                    <div v-if="lesson.sections.length > 1">
+                      <a class="menu-heading" @click="open = lesson.id" >{{ lesson.title }}</a>
 
-                  <ul v-if="(lesson.id == open) || (lesson.id == $page.props.parameters.lesson) || search">
-                    <li v-for="section in lesson.sections">
-                      <inertia-link :class="{'is-active' : (lesson.id == $page.props.parameters.lesson && section.id == $page.props.parameters.section) }" :href="route('section.show', {course: course.id, week: week.number, lesson: lesson.id, section: section.id })">{{ section.title }}</inertia-link>
-                    </li>
-                    <li v-if="!lesson.sections.length" class="notification is-size-7">No sections in this lesson</li>
-                  </ul>
+                      <ul v-if="(lesson.id == open) || (lesson.id == $page.props.parameters.lesson) || search">
+                        <li v-for="section in lesson.sections">
+                          <inertia-link :class="{'is-active' : (lesson.id == $page.props.parameters.lesson && section.id == $page.props.parameters.section) }" :href="route('section.show', {course: course.id, week: week.number, lesson: lesson.id, section: section.id })">{{ section.title }}</inertia-link>
+                        </li>
+                        <li v-if="!lesson.sections.length" class="notification is-size-7">No sections in this lesson</li>
+                      </ul>
+                    </div>
+                    <inertia-link v-else class="menu-heading" @click="open = lesson.id" :href="route('section.show', {course: course.id, week: week.number, lesson: lesson.id, section: lesson.sections[0].id })">{{ lesson.title }}</inertia-link>
+                  </div>
                 </li>
               </ul>
             </div>

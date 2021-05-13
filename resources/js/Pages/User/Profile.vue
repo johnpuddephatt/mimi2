@@ -54,8 +54,8 @@
 </template>
 
 <script>
-import AppLayout from '@/Layouts/AppLayout'
-import CameraField from '@/components/CameraField'
+import AppLayout from '%/Layouts/AppLayout'
+import CameraField from '%/components/CameraField'
 
 export default {
   props: ['errors', 'user', 'admin', 'notification_emails'],

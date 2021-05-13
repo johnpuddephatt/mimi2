@@ -49,7 +49,7 @@
 
                     <div :class="props.open ? 'has-background-success' : ''" class="is-radius is-size-6 p-2 pl-2 is-align-items-center is-flex" role="button">
                       <b-icon class="mr-2"
-                                :icon="props.open ? 'menu-down' : 'menu-right'">
+                                :icon="props.open ? 'chevron-down' : 'chevron-right'">
                             </b-icon>
                       <span class="text-overflow-ellipsis mr-2">{{ week.name }}</span>
 
@@ -58,7 +58,7 @@
                       </span>
 
                       <div class="ml-a has-text-weight-normal">
-                        <inertia-link @click.stop class="button is-small is-link is-outlined" :href="route('lesson.create', {course: $page.props.parameters.course, week: week.number })">Add lesson</inertia-link>
+                        <inertia-link @click.stop class="button is-small is-outlined" :href="route('lesson.create', {course: $page.props.parameters.course, week: week.number })">Add lesson</inertia-link>
                         <b-dropdown
                             position="is-bottom-left"
                             append-to-body
@@ -66,9 +66,7 @@
                             aria-role="menu"
                             @click.native.stop>
                             <template #trigger>
-                                <b-button class="is-small">
-                                  <b-icon icon="cog" size="is-small"></b-icon>
-                                </b-button>
+                                <b-button class="is-small" icon-left="settings"></b-button>
                             </template>
 
                             <b-dropdown-item has-link aria-role="menuitem">
@@ -126,8 +124,8 @@
 </template>
 
 <script>
-import TipTap from '@/components/TipTap';
-import CourseUsers from '@/components/CourseUsers';
+import TipTap from '%/components/TipTap';
+import CourseUsers from '%/components/CourseUsers';
 
 export default {
   props: ['errors', 'data'],

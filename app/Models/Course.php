@@ -23,6 +23,10 @@ class Course extends Model
     'hash'
   ];
 
+  public function scopeLive($query){
+    return $query->where('live', true);
+  }
+
   public function getHashAttribute() {
     return \Hashids::encode($this->id);
   }

@@ -41,19 +41,15 @@ class Section extends Model implements Sortable
     'sort_when_creating' => true,
   ];
 
-  protected static function boot() {
-    parent::boot();
+  protected static function booted() {
     static::addGlobalScope('order', function (Builder $builder) {
       $builder->orderBy('order', 'asc');
     });
-  }
 
-  protected static function booted()
-    {
-      static::updated(function ($section) {
-        Cache::forever('section_' . $section->id, view('editorjs', ['blocks' => $section->getBlocks()])->render());
-      });
-    }
+    static::updated(function ($section) {
+      Cache::forever('section_' . $section->id, view('editorjs', ['blocks' => $section->getBlocks()])->render());
+    });
+  }
 
   public function buildSortQuery()
   {

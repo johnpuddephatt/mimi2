@@ -25,11 +25,14 @@ class Lesson extends Model
       'live' => 'boolean'
     ];
 
-    protected static function boot() {
-      parent::boot();
+    protected static function booted() {
       static::addGlobalScope('order', function (Builder $builder) {
         $builder->orderBy('day', 'asc');
       });
+    }
+
+    public function scopeLive($query){
+      return $query->where('live', true);
     }
 
     public function getFeedbacklessReplyCountAttribute() {
@@ -37,7 +40,7 @@ class Lesson extends Model
     }
 
     public function next() {
-      return $this->week->lessons()->select('id','title')->where('day', '>', $this->day)->first();
+      return $this->week->lessons()->select('id','title')->where('day', '>', $this->day)->live()->first();
     }
 
     public function is_last() {

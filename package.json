@@ -63,6 +63,7 @@
         "tiptap": "^1.32.1",
         "tiptap-extensions": "^1.35.1",
         "vue-chartjs": "^3.5.1",
+        "vue-feather-icons": "^5.1.0",
         "vue-timeago": "^5.1.2",
         "vue-web-cam": "^1.9.0",
         "vuedraggable": "^2.24.3",

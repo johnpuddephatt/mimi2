@@ -9,7 +9,7 @@
             class="button is-fullwidth navbar-item text-overflow-ellipsis"
             role="button">
             <span class="">{{ current }}</span>
-            <b-icon icon="menu-down"></b-icon>
+            <b-icon icon="chevron-down"></b-icon>
         </button>
     </template>
 

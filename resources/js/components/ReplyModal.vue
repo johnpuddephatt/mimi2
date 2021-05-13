@@ -59,16 +59,12 @@
         </div>
 
         <b-dropdown class="ml-a" v-if="$page.props.user.id == reply.user.id || $page.props.user.is_admin" position="is-bottom-left" aria-role="list">
-          <button class="button is-light" slot="trigger" slot-scope="{ active }">
-            <b-icon icon="cog"></b-icon>
-          </button>
+          <b-button class="is-light" slot="trigger" slot-scope="{ active }" icon-left="settings"></b-button>
           <b-dropdown-item @click="$emit('delete',reply.id)" aria-role="listitem">Delete</b-dropdown-item>
           <b-dropdown-item v-if="$page.props.user.is_admin && reply.feedback && reply.feedback.id" @click="$emit('delete',reply.feedback.id)" aria-role="listitem">Delete feedback</b-dropdown-item>
           <b-dropdown-item v-if="$page.props.user.is_admin && !reply.feedback" @click="openReplyModal" aria-role="listitem">Add feedback</b-dropdown-item>
         </b-dropdown>
-        <button class="button reply-card-modal__close is-light" @click="$emit('close-reply-modal')">
-          <b-icon icon="close"></b-icon>
-        </button>
+        <b-button class="reply-card-modal__close is-light" @click="$emit('close-reply-modal')" icon-left="x"></b-button>
       </header>
       <comments :comments="comments" :reply="reply"></comments>
     </div>
@@ -76,7 +72,7 @@
 </template>
 
 <script>
-import Comments from '@/components/Comments'
+import Comments from '%/components/Comments'
 
 export default {
   components: {

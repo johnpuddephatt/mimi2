@@ -2,7 +2,7 @@
 <div v-if="!isSaved">
 
   <b-tooltip v-if="reply_id" label="Record admin reply" type="is-dark" animated position="is-left" :delay="1000" class="admin-reply-button--tooltip">
-    <b-button class="admin-reply-button" @click="openModal(mode)" size="is-light" icon-right="reply" />
+    <b-button class="admin-reply-button" @click="openModal(mode)" size="is-light" icon-right="plus" />
   </b-tooltip>
 
   <button v-else @click="openModal()" class="button is-primary">Add your reply</button>
@@ -64,9 +64,9 @@
 import NoSleep from 'nosleep.js';
 var platform = require('platform');
 
-import CameraField from '@/components/CameraField';
-import AudioField from '@/components/AudioField';
-import TipTap from '@/components/TipTap';
+import CameraField from '%/components/CameraField';
+import AudioField from '%/components/AudioField';
+import TipTap from '%/components/TipTap';
 
 export default {
   props: ['reply_id', 'mode', 'should_open'],

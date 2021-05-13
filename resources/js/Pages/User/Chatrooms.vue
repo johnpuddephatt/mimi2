@@ -11,7 +11,7 @@
           <template #trigger>
               <button class="button is-fullwidth navbar-item text-overflow-ellipsis" role="button">
                   <span class="">{{ course.title }}</span>
-                  <b-icon icon="menu-down"></b-icon>
+                  <b-icon icon="chevron-down"></b-icon>
               </button>
           </template>
 
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import AppLayout from '@/Layouts/AppLayout'
+import AppLayout from '%/Layouts/AppLayout'
 
 export default {
   props: ['course','courses','lessons', 'replies'],

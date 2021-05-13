@@ -35,7 +35,7 @@ import ImageTool from '@editorjs/image';
 import VideoTool from 'editorjs-video-jdp';
 import AudioTool from 'editorjs-attaches-audio';
 import PairedHeading from 'editorjs-pairedheading';
-import MarkerTool from '@/components/editorjs/plugins/Translate';
+import MarkerTool from '%/components/editorjs/plugins/Translate';
 import Hyperlink from 'editorjs-hyperlink';
 import Delimiter from '@editorjs/delimiter';
 import Undo from 'editorjs-undo';

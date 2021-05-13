@@ -24,15 +24,18 @@ class Week extends Model
       'live' => 'boolean'
     ];
 
-    protected static function boot() {
-      parent::boot();
+    protected static function booted() {
       static::addGlobalScope('order', function (Builder $builder) {
         $builder->orderBy('number', 'asc');
       });
     }
 
+    public function scopeLive($query){
+      return $query->where('live', true);
+    }
+
     public function next() {
-      return $this->course->weeks()->select('id','name','number')->where('number', '>', $this->number)->first();
+      return $this->course->weeks()->select('id','name','number')->where('number', '>', $this->number)->live()->first();
     }
 
     public function is_last() {

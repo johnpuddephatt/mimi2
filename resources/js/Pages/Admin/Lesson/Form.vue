@@ -49,9 +49,9 @@
               <nav v-if="$page.props.parameters.lesson" class="panel is-shadowless is-bordered">
 
                 <draggable v-model="form.sections" @start="drag=true" @end="onMoveEnd">
-                  <div v-for="section in form.sections" :key="section.id" class="panel-block is-justify-between">
-                    <p class="text-overflow-ellipsis">
-                      <b-icon icon="drag" type="is-dark"></b-icon>
+                  <div v-for="section in form.sections" :key="section.id" class="panel-block">
+                    <b-icon icon="menu" type="is-dark"></b-icon>
+                    <p class="pl-2 ml-a text-overflow-ellipsis">
                       {{ section.title }}
                       <span v-if="section.is_chatroom" class="tag is-rounded">chatroom</span>
                     </p>
@@ -81,9 +81,9 @@
 
 <script>
 import { Inertia } from '@inertiajs/inertia';
-import CameraField from "@/components/CameraField";
+import CameraField from "%/components/CameraField";
 import draggable from 'vuedraggable'
-import TipTap from '@/components/TipTap';
+import TipTap from '%/components/TipTap';
 
 export default {
   props: ['errors', 'data', 'latest_lesson_number'],

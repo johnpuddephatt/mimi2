@@ -16,10 +16,10 @@
   </app-layout>
 </template>
 <script>
-import AppLayout from '@/Layouts/AppLayout'
-import ChartTeacherWeekly from '@/components/charts/TeacherWeekly'
-import ChartTeacherMonthly from '@/components/charts/TeacherMonthly'
-import ChartRepliesMonthly from '@/components/charts/RepliesMonthly'
+import AppLayout from '%/Layouts/AppLayout'
+import ChartTeacherWeekly from '%/components/charts/TeacherWeekly'
+import ChartTeacherMonthly from '%/components/charts/TeacherMonthly'
+import ChartRepliesMonthly from '%/components/charts/RepliesMonthly'
 
 export default {
   props: {
