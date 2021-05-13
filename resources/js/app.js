@@ -6,7 +6,7 @@ import Buefy from 'buefy'
 import VueTimeago from 'vue-timeago'
 import { ToastProgrammatic as Toast } from 'buefy'
 import { InertiaProgress } from '@inertiajs/progress'
-import SvgIcon from '%/components/SVGIcon'
+import SvgIcon from '@/components/SVGIcon'
 
 Vue.use(plugin)
 Vue.use(Buefy, {
@@ -43,7 +43,7 @@ Vue.mixin({
   }
 });
 
-Vue.component('app-layout', require('%/Layouts/AppLayout').default);
+Vue.component('app-layout', require('@/Layouts/AppLayout').default);
 Vue.component('course-navigator', require('./components/CourseNavigator.vue').default);
 Vue.component('video-player', require('./components/VideoPlayer.vue').default);
 Vue.component('audio-player', require('./components/AudioPlayer.vue').default);

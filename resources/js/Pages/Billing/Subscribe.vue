@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import AppLayout from '%/Layouts/AppLayout'
+import AppLayout from '@/Layouts/AppLayout'
 import { StripeElementCard } from '@vue-stripe/vue-stripe';
 
 

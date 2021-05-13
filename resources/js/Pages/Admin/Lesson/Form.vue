@@ -81,9 +81,9 @@
 
 <script>
 import { Inertia } from '@inertiajs/inertia';
-import CameraField from "%/components/CameraField";
+import CameraField from "@/components/CameraField";
 import draggable from 'vuedraggable'
-import TipTap from '%/components/TipTap';
+import TipTap from '@/components/TipTap';
 
 export default {
   props: ['errors', 'data', 'latest_lesson_number'],

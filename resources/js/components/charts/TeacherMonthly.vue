@@ -13,7 +13,7 @@
 </template>
 <script>
   import dayjs from 'dayjs';
-  import Chart from '%/components/chart';
+  import Chart from '@/components/chart';
 
   export default {
     components: {

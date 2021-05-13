@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import Chatroom from '%/components/Chatroom'
+import Chatroom from '@/components/Chatroom'
 
 export default {
   props: ['blocks_prerendered', 'comments', 'replies', 'course', 'week', 'lesson', 'section', 'next_lesson', 'next_week', 'end_of_course'],

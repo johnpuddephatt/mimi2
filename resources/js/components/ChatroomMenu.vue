@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import CourseDropdown from '%/components/CourseDropdown'
+import CourseDropdown from '@/components/CourseDropdown'
 
 export default {
 

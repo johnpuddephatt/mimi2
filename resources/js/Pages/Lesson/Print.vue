@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import Chatroom from '%/components/Chatroom'
+import Chatroom from '@/components/Chatroom'
 
 export default {
   props: ['blocks_prerendered', 'comments', 'replies', 'course', 'lesson', 'section'],

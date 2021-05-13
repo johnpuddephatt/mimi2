@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import TipTap from '%/components/TipTap';
+import TipTap from '@/components/TipTap';
 
 export default {
 

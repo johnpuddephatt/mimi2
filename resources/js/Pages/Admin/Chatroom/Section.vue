@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import Chatroom from '%/components/Chatroom'
-import ChatroomMenu from '%/components/ChatroomMenu'
+import Chatroom from '@/components/Chatroom'
+import ChatroomMenu from '@/components/ChatroomMenu'
 
 export default {
   props: ['courses', 'course', 'lesson', 'lessons', 'comments', 'replies', 'include_already_replied_to'],

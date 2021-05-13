@@ -124,8 +124,8 @@
 </template>
 
 <script>
-import TipTap from '%/components/TipTap';
-import CourseUsers from '%/components/CourseUsers';
+import TipTap from '@/components/TipTap';
+import CourseUsers from '@/components/CourseUsers';
 
 export default {
   props: ['errors', 'data'],

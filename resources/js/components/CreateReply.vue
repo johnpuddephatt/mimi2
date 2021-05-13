@@ -64,9 +64,9 @@
 import NoSleep from 'nosleep.js';
 var platform = require('platform');
 
-import CameraField from '%/components/CameraField';
-import AudioField from '%/components/AudioField';
-import TipTap from '%/components/TipTap';
+import CameraField from '@/components/CameraField';
+import AudioField from '@/components/AudioField';
+import TipTap from '@/components/TipTap';
 
 export default {
   props: ['reply_id', 'mode', 'should_open'],

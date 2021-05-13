@@ -80,7 +80,7 @@
 
 <script>
 import { Inertia } from '@inertiajs/inertia'
-import AppLayout from '%/Layouts/AppLayout'
+import AppLayout from '@/Layouts/AppLayout'
 
 export default {
   props: ['stripe_public_key', 'payment', 'stripe_authentication_failure_code'],

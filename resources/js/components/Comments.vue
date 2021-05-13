@@ -94,7 +94,7 @@
 
 <script>
 var platform = require('platform');
-import Comment from '%/components/Comment';
+import Comment from '@/components/Comment';
 
 export default {
   props: ['reply', 'comments'],

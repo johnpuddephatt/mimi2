@@ -17,9 +17,9 @@
 <script>
 import { Inertia } from '@inertiajs/inertia'
 
-import ReplyModal from '%/components/ReplyModal'
-import UserModal from '%/components/UserModal'
-import ReplyPreviewCard from '%/components/ReplyPreviewCard'
+import ReplyModal from '@/components/ReplyModal'
+import UserModal from '@/components/UserModal'
+import ReplyPreviewCard from '@/components/ReplyPreviewCard'
 
 export default {
   props: ['reply', 'in_chatroom_manager', 'include_already_replied_to', 'comments'],
