@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import { ArrowLeftIcon, ArrowRightIcon, CheckCircleIcon, CheckIcon, ChevronRightIcon, ChevronDownIcon, ChevronUpIcon, MinusIcon, MenuIcon, PlusIcon, SettingsIcon, XIcon } from 'vue-feather-icons'
+import { ArrowLeftIcon, ArrowRightIcon, CheckCircleIcon, CheckIcon, ChevronRightIcon, ChevronDownIcon, ChevronUpIcon, MinusIcon, MenuIcon, PlusIcon, SendIcon, SettingsIcon, XIcon } from 'vue-feather-icons'
 
 export default {
   components: {
@@ -18,6 +18,7 @@ export default {
     MinusIcon,
     MenuIcon,
     PlusIcon,
+    SendIcon,
     SettingsIcon,
     XIcon
   },

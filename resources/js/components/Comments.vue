@@ -281,15 +281,15 @@ export default {
 
   button {
     position: absolute;
-    right: 0.1rem;
+    right: 0.25rem;
     bottom: 0.2rem;
     border-radius: 99999px;
     border: none !important;
     background-color: transparent !important;
 
-    i {
-      font-size: 1.5em;
-      color: $success;
+    svg {
+      transform-origin: center;
+      transform: rotate(45deg);
     }
   }
 }
