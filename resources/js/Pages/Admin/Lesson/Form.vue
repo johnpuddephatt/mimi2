@@ -22,16 +22,24 @@
                 <b-input required name="title" v-model="form.title" placeholder="Enter the title for this lesson"></b-input>
               </b-field>
 
-              <b-field grouped label="Day">
-                <b-select v-model="form.day" placeholder="Select a day">
-                  <option value="1">Monday</option>
-                  <option value="2">Tuesday</option>
-                  <option value="3">Wednesday</option>
-                  <option value="4">Thursday</option>
-                  <option value="5">Friday</option>
-                  <option value="6">Saturday</option>
-                  <option value="7">Sunday</option>
-                </b-select>
+              <b-field grouped>
+                <b-field expanded label="Week">
+                  <b-select v-model="form.week" placeholder="Select a week">
+                    <option v-for="week in weeks" :value="week.number">{{ week.name}}</option>
+                  </b-select>
+                </b-field>
+                <b-field expanded label="Day">
+                  <b-select v-model="form.day" placeholder="Select a day">
+                    <option value="1">Monday</option>
+                    <option value="2">Tuesday</option>
+                    <option value="3">Wednesday</option>
+                    <option value="4">Thursday</option>
+                    <option value="5">Friday</option>
+                    <option value="6">Saturday</option>
+                    <option value="7">Sunday</option>
+                  </b-select>
+                </b-field>
+
               </b-field>
 
               <b-field label="Instructions" :message="errors.instructions" :type="errors.instructions ? 'is-danger' : null">
@@ -86,7 +94,7 @@ import draggable from 'vuedraggable'
 import TipTap from '@/components/TipTap';
 
 export default {
-  props: ['errors', 'data', 'latest_lesson_number'],
+  props: ['errors', 'data', 'weeks', 'latest_lesson_number'],
   components: {
      CameraField,
      TipTap,
@@ -101,6 +109,7 @@ export default {
         title: this.data?.title ?? null,
         instructions: this.data?.instructions ?? null,
         day: this.data?.day ?? this.latest_lesson_number + 1,
+        week: this.data?.week ?? this.$page.props.parameters.week,
         sections: this.data?.sections ?? [],
         live: this.data?.live ?? true
       }),
@@ -118,10 +127,9 @@ export default {
     },
 
     onSubmit() {
-      let postRoute = this.data ? route('lesson.update', { course: this.$page.props.parameters.course, week: this.$page.props.parameters.week, lesson: this.form.id }) : route('lesson.store', { course: this.$page.props.parameters.course, week: this.$page.props.parameters.week });
+      let postRoute = this.data ? route('lesson.update', { course: this.$page.props.parameters.course, week: this.form.week, lesson: this.form.id }) : route('lesson.store', { course: this.$page.props.parameters.course, week: this.form.week });
       this.form.transform((data) => ({
           ...data,
-          course_id: this.$page.props.parameters.course,
           _method: (this.data ? 'PUT' : 'POST'),
         }))
         .post(postRoute, {

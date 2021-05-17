@@ -22,13 +22,15 @@ class LessonController extends Controller
     }
 
     public function create(Course $course, Week $week) {
+        $weeks = $course->weeks()->select(['id','name','number'])->get();
         $latest_lesson_number = ($week->lessons->count() ? $week->lessons()->orderBy('day', 'desc')->first()->day : 0);
-        return Inertia::render('Admin/Lesson/Form', ['latest_lesson_number' => $latest_lesson_number ]);
+        return Inertia::render('Admin/Lesson/Form', ['latest_lesson_number' => $latest_lesson_number, 'weeks' => $weeks ]);
     }
 
     public function edit(Course $course, Week $week, Lesson $lesson) {
+      $weeks = $course->weeks()->select(['id','name','number'])->get();
       $lesson->sections = $lesson->sections()->select('id','title')->get();
-      return Inertia::render('Admin/Lesson/Form', ['data' => $lesson ]);
+      return Inertia::render('Admin/Lesson/Form', ['data' => $lesson, 'weeks' => $weeks ]);
     }
 
     public function store(StoreLesson $request, Course $course, Week $week) {
@@ -55,7 +57,13 @@ class LessonController extends Controller
         'day' => $request->day,
         'week_id' => $week->id
       ]);
-      return Inertia::render('Admin/Lesson/Form', ['data' => $lesson ]);
+      // return redirect()->back();
+      return Redirect::route('lesson.edit', [
+            'course' => $course,
+            'week' => $week,
+            'lesson' => $lesson,
+        ]);
+      // return Inertia::render('Admin/Lesson/Form', ['data' => $lesson ]);
     }
 
     // public function show(Course $course, Lesson $lesson, $reply_id = null, $show_feedback = false) {
