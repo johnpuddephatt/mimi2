@@ -4,10 +4,11 @@
 </template>
 
 <script>
-import { ApertureIcon, ArrowLeftIcon, ArrowRightIcon, BarChartIcon, CheckCircleIcon, CheckIcon, ChevronRightIcon, ChevronDownIcon, ChevronUpIcon, CircleIcon, MinusIcon, MenuIcon, PlusIcon, RefreshCwIcon, SendIcon, SettingsIcon, StarIcon, UploadIcon, XIcon } from 'vue-feather-icons'
+import { AlertCircleIcon, ApertureIcon, ArrowLeftIcon, ArrowRightIcon, BarChartIcon, CheckCircleIcon, CheckIcon, ChevronRightIcon, ChevronDownIcon, ChevronUpIcon, CircleIcon, MinusIcon, MenuIcon, PlusIcon, RefreshCwIcon, SendIcon, SettingsIcon, StarIcon, UploadIcon, XIcon } from 'vue-feather-icons'
 
 export default {
   components: {
+    AlertCircleIcon,
     ApertureIcon,
     ArrowLeftIcon,
     ArrowRightIcon,

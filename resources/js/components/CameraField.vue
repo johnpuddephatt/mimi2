@@ -27,7 +27,7 @@
       <div class="reply-card__add">
         <b-upload @input="onFileInputChange" type="file" name="file" :accept="accept[mode]" capture="user">
           <a class="button">
-            <b-icon icon="camera"></b-icon>
+            <b-icon icon="upload"></b-icon>
             <span>Add your {{ mode }}</span>
           </a>
         </b-upload>

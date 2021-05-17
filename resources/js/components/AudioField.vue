@@ -15,10 +15,21 @@
   <!-- Audio capture -->
   <div v-else>
 
-    <div>
+    <section v-if="cameraType == 'fallback'" class="section has-background-light has-text-centered">
+      <div class="reply-card__add">
+        <b-upload @input="onFileInputChange" type="file" name="file" :accept="accept[mode]">
+          <a class="button">
+            <b-icon icon="upload"></b-icon>
+            <span>Add your {{ mode }}</span>
+          </a>
+        </b-upload>
+      </div>
+    </section>
+
+    <div v-else>
       <div class="has-square-media">
         <span v-if="isRecording"  class="recording-indicator tag" :class="timeRemaining < 30 ? 'is-red': 'is-black'">{{ timeRemaining > 30 ? 'Rec' : timeRemaininginMinutes }}</span>
-        <b-notification type="is-dark" v-if="mode == 'video' && isLoaded" class="recording-instructions" v-model="showInstructions" aria-close-label="Close instructions">
+        <b-notification type="is-dark" v-if="isLoaded" class="recording-instructions" v-model="showInstructions" aria-close-label="Close instructions">
           <p class="is-size-7"><b-icon icon="check-circle" />Aim for a reply between 30 seconds and two minutes long. Five minutes is the maximum.</p>
           <p class="is-size-7"><b-icon icon="check-circle" />You’ll be able to play your audio back before uploading, and re-record it if you want to.</p>
         </b-notification>
@@ -30,6 +41,13 @@
 
         <b-tooltip :label="isRecording ? 'Stop recording' : 'Start recording'" type="is-dark" animated position="is-bottom" :delay="1000" class="shutter-tooltip">
           <b-button size="is-large" type="is-danger" @click.prevent="onRecordToggle" class="take-photo" icon-right="circle" />
+        </b-tooltip>
+
+        <b-tooltip label="Select a file from your device" type="is-dark" animated position="is-bottom" :delay="1000" class="file-upload-tooltip">
+          <b-upload @input="onFileInputChange" type="file" name="file" :accept="accept[mode]">
+            <b-button tag="a" size="is-medium" class="file-upload" icon-right="upload">
+            </b-button>
+          </b-upload>
         </b-tooltip>
 
       </div>
@@ -47,15 +65,13 @@ export default {
     'vue-web-cam': VueWebCam
   },
   props: {
-    mode: {
-      default: 'photo',
-      type: String
-    },
     value: {
     }
   },
   data() {
     return {
+      mode: 'audio',
+      isLoaded: false,
       shouldStop: false,
       audioCtx: null,
       analyser: null,
@@ -78,8 +94,7 @@ export default {
         audio: 128000
       },
       accept: {
-        photo: 'audio/*',
-        video: 'audio/mpeg,audio/mp4,video/*'
+        audio: 'audio/*'
       }
     };
   },
@@ -112,8 +127,14 @@ export default {
         const constraints = { audio: true };
         navigator.mediaDevices.getUserMedia(constraints).then(this.onSuccess, this.onError);
       } else {
-         console.log('getUserMedia not supported on your browser!');
+        this.cameraType = 'fallback';
+        console.log('getUserMedia not supported on your browser!');
       }
+    },
+
+    onFileInputChange(file) {
+      this.rawMimeType = file.type || '';
+      this.$emit('input', file);
     },
 
     onRecordToggle() {
@@ -162,6 +183,8 @@ export default {
     onSuccess(stream) {
       this.mediaRecorder = new MediaRecorder(stream, this.options);
       this.visualize(stream);
+      this.isLoaded = true;
+
 
       this.mediaRecorder.onstop = (e) => {
         const blob = new Blob(this.chunks, { 'type' : this.mediaRecorder.mimeType });
