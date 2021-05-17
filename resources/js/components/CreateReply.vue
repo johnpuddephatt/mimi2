@@ -10,13 +10,13 @@
   <b-modal custom-class="create-reply-modal" :active.sync="isReplyModalActive" @close="$emit('close')" has-modal-card trap-focus :can-cancel="!reply.video && !isRecording" :destroy-on-hide="true" aria-role="dialog" width="420px" aria-modal>
 
     <div v-if="!replyMode">
-      <b-button class="reply-button" @click="replyMode = 'video'" expanded size="is-medium is-primary" icon-right="plus-circle">
+      <b-button class="reply-button" @click="replyMode = 'video'" expanded size="is-medium is-primary" icon-right="plus">
         Add video reply
       </b-button>
-      <b-button class="reply-button" @click="replyMode = 'audio'" expanded size="is-medium is-primary" icon-right="plus-circle">
+      <b-button class="reply-button" @click="replyMode = 'audio'" expanded size="is-medium is-primary" icon-right="plus">
         Add audio reply
       </b-button>
-      <b-button class="reply-button" @click="replyMode = 'text'" expanded size="is-medium is-primary" icon-right="plus-circle">
+      <b-button class="reply-button" @click="replyMode = 'text'" expanded size="is-medium is-primary" icon-right="plus">
         Add text reply
       </b-button>
     </div>

@@ -29,7 +29,7 @@
       <div class="camera-controls has-background-light is-bordered has-text-centered">
 
         <b-tooltip :label="isRecording ? 'Stop recording' : 'Start recording'" type="is-dark" animated position="is-bottom" :delay="1000" class="shutter-tooltip">
-          <b-button size="is-large" type="is-danger" @click.prevent="onRecordToggle" class="take-photo" icon-right="radiobox-blank" />
+          <b-button size="is-large" type="is-danger" @click.prevent="onRecordToggle" class="take-photo" icon-right="circle" />
         </b-tooltip>
 
       </div>

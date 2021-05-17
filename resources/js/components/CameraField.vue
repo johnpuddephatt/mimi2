@@ -46,20 +46,20 @@
       </div>
       <div class="camera-controls has-background-light is-bordered has-text-centered">
         <b-tooltip v-if="devices.length > 1" v-show="!isRecording" label="Change camera" type="is-dark" animated position="is-bottom" :delay="1000" class="change-camera-tooltip">
-          <b-button size="is-medium" class="change-camera" icon-right="camera-switch" @click.prevent="nextCamera"/>
+          <b-button size="is-medium" class="change-camera" icon-right="refresh-cw" @click.prevent="nextCamera"/>
         </b-tooltip>
 
         <b-tooltip v-if="mode == 'video'" :label="isRecording ? 'Stop recording' : 'Start recording'" type="is-dark" animated position="is-bottom" :delay="1000" class="shutter-tooltip">
-          <b-button size="is-large" type="is-danger" @click.prevent="onRecordToggle" class="take-photo" icon-right="radiobox-blank" />
+          <b-button size="is-large" type="is-danger" @click.prevent="onRecordToggle" class="take-photo" icon-right="circle" />
         </b-tooltip>
 
         <b-tooltip v-else label="Take photo" type="is-dark" animated position="is-bottom" :delay="1000" class="shutter-tooltip">
-          <b-button size="is-large" type="is-danger" @click.prevent="onCapture" class="take-photo" icon-right="camera-iris"/>
+          <b-button size="is-large" type="is-danger" @click.prevent="onCapture" class="take-photo" icon-right="aperture"/>
         </b-tooltip>
 
         <b-tooltip label="Select a file from your device" type="is-dark" animated position="is-bottom" :delay="1000" class="file-upload-tooltip">
           <b-upload @input="onFileInputChange" size="is-medium" type="file" name="file" :accept="accept[mode]" capture="user">
-            <b-button tag="a" size="is-medium" class="file-upload" icon-right="file-upload">
+            <b-button tag="a" size="is-medium" class="file-upload" icon-right="upload">
             </b-button>
           </b-upload>
         </b-tooltip>

@@ -4,22 +4,28 @@
 </template>
 
 <script>
-import { ArrowLeftIcon, ArrowRightIcon, CheckCircleIcon, CheckIcon, ChevronRightIcon, ChevronDownIcon, ChevronUpIcon, MinusIcon, MenuIcon, PlusIcon, SendIcon, SettingsIcon, XIcon } from 'vue-feather-icons'
+import { ApertureIcon, ArrowLeftIcon, ArrowRightIcon, BarChartIcon, CheckCircleIcon, CheckIcon, ChevronRightIcon, ChevronDownIcon, ChevronUpIcon, CircleIcon, MinusIcon, MenuIcon, PlusIcon, RefreshCwIcon, SendIcon, SettingsIcon, StarIcon, UploadIcon, XIcon } from 'vue-feather-icons'
 
 export default {
   components: {
+    ApertureIcon,
     ArrowLeftIcon,
     ArrowRightIcon,
+    BarChartIcon,
     CheckCircleIcon,
     CheckIcon,
     ChevronDownIcon,
     ChevronUpIcon,
     ChevronRightIcon,
+    CircleIcon,
     MinusIcon,
     MenuIcon,
     PlusIcon,
+    RefreshCwIcon,
     SendIcon,
     SettingsIcon,
+    StarIcon,
+    UploadIcon,
     XIcon
   },
   props: ['icon','size'],

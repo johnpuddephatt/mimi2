@@ -6,12 +6,13 @@
     <div class="comment-card--text">
       <p class="is-size-7 has-text-weight-semibold">
         {{ comment.user.first_name }}
-        <span v-if="comment.user.is_admin" class="is-rounded has-background-success" title="Teacher">
-          <b-icon
-            icon="school"
+        <span v-if="comment.user.is_admin" class="is-rounded has-background-success has-text-white" title="Teacher">
+          Teacher
+          <!-- <b-icon
+            icon="star"
             size="is-small"
             type="is-white">
-          </b-icon>
+          </b-icon> -->
         </span>
         <timeago class="has-text-grey has-text-weight-light" :datetime="comment.created_at" :auto-update="60"></timeago>
       </p>

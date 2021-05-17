@@ -33,9 +33,10 @@
                           'id': 'Newest',
                           'comments_count': 'Most commented'
                         }[sortBy]"
+                        class="mr-1"
                         type="is-text"
-                        icon-right="menu-down"
-                        icon-left="sort-alphabetical-variant" />
+                        icon-right="chevron-down"
+                        icon-left="bar-chart" />
                 </template>
                 <b-dropdown-item value="id" aria-role="listitem">Newest</b-dropdown-item>
                 <b-dropdown-item value="comments_count" aria-role="listitem">Most commented</b-dropdown-item>
