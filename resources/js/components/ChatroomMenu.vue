@@ -1,7 +1,7 @@
 <template>
   <aside class="column is-one-third p-5 mt-5">
     <div class="menu">
-      <h2 class="title is-size-3">Chatroom manager</h2>
+      <h2 class="title is-size-3">Chatroom manager <span :title="`${new_count} replies awaiting feedback`" class="tag is-success is-rounded ml-a">{{ new_count }} new</span></h2>
       <course-dropdown :courses="courses" :current="current" />
 
       <ul class="mt-4 menu-list">
@@ -28,7 +28,7 @@ import CourseDropdown from '@/components/CourseDropdown'
 
 export default {
 
-  props: ['courses','lessons', 'current'],
+  props: ['new_count','courses','lessons', 'current'],
 
   components: {
     CourseDropdown
