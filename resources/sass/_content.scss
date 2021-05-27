@@ -1,7 +1,8 @@
 .content {
   line-height: 2;
 
-  video, iframe {
+  video,
+  iframe {
     max-width: 100%;
   }
 
@@ -57,6 +58,11 @@
 
     &__video {
       clear: both;
+
+      figure {
+        margin-left: 0;
+        margin-right: 0;
+      }
     }
   }
 
@@ -86,9 +92,9 @@
     }
 
     &.with-border {
-        img {
-          border: 1px solid $grey-lighter;
-        }
+      img {
+        border: 1px solid $grey-lighter;
+      }
     }
 
     figcaption {
@@ -129,7 +135,7 @@
     text-decoration-thickness: 0.15em;
 
     &:hover {
-      text-decoration-color: darken($primary,15%);
+      text-decoration-color: darken($primary, 15%);
     }
   }
 
@@ -165,7 +171,8 @@
         left: 50%;
         transform: translate(-50%, 0%);
         background-color: white;
-        box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%), 0 0px 0 1px rgb(10 10 10 / 2%);
+        box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%),
+          0 0px 0 1px rgb(10 10 10 / 2%);
         border-radius: 3px;
         padding: 10px;
         white-space: normal;
@@ -185,7 +192,7 @@
         display: block;
         border: 0.5em solid transparent;
         border-top-color: white;
-        content: '';
+        content: "";
         left: 50%;
         transform: translate(-50%, 0%);
         bottom: calc(100% - 0.5em);

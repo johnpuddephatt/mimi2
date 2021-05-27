@@ -42,6 +42,7 @@ class UploadController extends Controller
 
       // $playlist_path = Storage::cloud()->url(Section::$uploadPaths['video_playlist'] . $request->video->hashName() . '.m3u8');
       $playlist_path = Section::$uploadPaths['video_playlist'] . $request->video->hashName() . '.m3u8';
+      // $thumbnail_path = Section::$uploadPaths['video_playlist'] . $request->video->hashName() . '.jpg';
       ConvertSectionVideoForStreaming::dispatch($temporary_video_path, $playlist_path);
 
 
