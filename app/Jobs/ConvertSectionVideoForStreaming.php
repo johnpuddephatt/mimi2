@@ -69,7 +69,8 @@ class ConvertSectionVideoForStreaming implements ShouldQueue
             });
           })
           ->save($this->playlist_path);
-         // Storage::disk('local')->delete($this->temporary_video_path);
-         // FFMpeg::cleanupTemporaryFiles();
+          
+         Storage::disk('local')->delete($this->temporary_video_path);
+         FFMpeg::cleanupTemporaryFiles();
     }
 }

@@ -31,7 +31,7 @@
       dateRange() {
         var startDate = dayjs(this.dateRange[0]).startOf('month');
         this.startDate = startDate.format("YYYY-MM-DD");
-        var endDate = dayjs(this.dateRange[1]).endOf('month');
+        var endDate = dayjs(this.dateRange[1]);
         this.endDate = endDate.format("YYYY-MM-DD");
         this.months = [];
         while (startDate.isBefore(endDate)) {
