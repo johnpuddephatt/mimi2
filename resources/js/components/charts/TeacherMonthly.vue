@@ -40,7 +40,7 @@
       },
       endDate() {
         if(this.dateRange) {
-          return dayjs(this.dateRange[1]).endOf('month').format("YYYY-MM-DD");
+          return dayjs(this.dateRange[1]).endOf('month').add(1, 'day').format("YYYY-MM-DD");
         }
       }
     },

@@ -18,10 +18,10 @@ class StatController extends Controller
 
   public function repliesMonthly($from, $to) {
     $replies_by_month = Reply::select('created_at')->where('reply_id', null)->whereBetween('created_at',[date($from),date($to)])
-            ->get()
-            ->groupBy(function($val) {
-              return Carbon::parse($val->created_at)->format('M');
-            });
+      ->get()
+      ->groupBy(function($val) {
+        return Carbon::parse($val->created_at)->format('M');
+      });
 
     $counts = [];
 
