@@ -3,52 +3,75 @@
     <h3 class="subtitle is-4 has-text-weight-bold">{{ course.title }}</h3>
     <h3 class="title is-2">{{ lesson.title }}</h3>
 
-
-    <div v-for="(currentSection, index) in lesson.sections" class="section-content">
-
-      <div class="box" v-if="index == 0 && lesson.instructions && lesson.instructions.length && lesson.instructions != '<p></p>'">
+    <div
+      v-for="(currentSection, index) in lesson.sections"
+      :key="index"
+      class="section-content"
+    >
+      <div
+        class="box"
+        v-if="
+          index == 0 &&
+            lesson.instructions &&
+            lesson.instructions.length &&
+            lesson.instructions != '<p></p>'
+        "
+      >
         <h3 class="has-text-weight-bold is-size-4">Instructions</h3>
         <div class="content" v-html="lesson.instructions"></div>
       </div>
 
-      <h3 class="title is-3 has-text-weight-bold mt-6 mb-3">{{ currentSection.title }}</h3>
+      <h3 class="title is-3 has-text-weight-bold mt-6 mb-3">
+        {{ currentSection.title }}
+      </h3>
 
-
-      <div class="container content" :class="{'clear-both': currentSection.order == 1 && lesson.instructions && lesson.instructions.length }">
-
+      <div
+        class="container content"
+        :class="{
+          'clear-both':
+            currentSection.order == 1 &&
+            lesson.instructions &&
+            lesson.instructions.length
+        }"
+      >
         <div :is="dynamicComponent(blocks_prerendered[index])"></div>
-
-        <div v-if="wordList.length">
-          <div class="editor-js-block editor-js-block__paired-heading">
-            <h2>Impare le parole 🔎</h2>
-            <h3>Learn the words</h3>
-          </div>
-          <ul>
-            <li v-for="word in wordList"><strong v-html="word.word">:</strong> <span v-html="word.translation"></span></li>
-          </ul>
-        </div>
-
       </div>
 
-
-
+      <div v-if="wordList.length">
+        <div class="editor-js-block editor-js-block__paired-heading">
+          <h2>Impare le parole 🔎</h2>
+          <h3>Learn the words</h3>
+        </div>
+        <ul>
+          <li v-for="(word, index) in wordList" :key="index">
+            <strong v-html="word.word">:</strong>
+            <span v-html="word.translation"></span>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import Chatroom from '@/components/Chatroom'
+import Chatroom from "@/components/Chatroom";
 
 export default {
-  props: ['blocks_prerendered', 'comments', 'replies', 'course', 'lesson', 'section'],
+  props: [
+    "blocks_prerendered",
+    "comments",
+    "replies",
+    "course",
+    "lesson",
+    "section"
+  ],
 
   components: {
-    Chatroom,
+    Chatroom
   },
 
   data() {
-    return {
-    }
+    return {};
   },
 
   mounted() {
@@ -59,28 +82,31 @@ export default {
     dynamicComponent(content) {
       return {
         template: `<div>${content}</div>`
-      }
-    },
+      };
+    }
   },
 
   computed: {
-
     wordList() {
-      var temp = document.createElement('template');
+      var temp = document.createElement("template");
       temp.innerHTML = this.blocks_prerendered;
-      let domWords = temp.content.querySelectorAll('mark[data-translation]');
+      let domWords = temp.content.querySelectorAll("mark[data-translation]");
       let arrayWords = [];
       domWords.forEach(node => {
         arrayWords.push({
-          'word': node.innerHTML,
-          'translation': node.dataset.translation
+          word: node.innerHTML,
+          translation: node.dataset.translation
         });
-      })
+      });
       return arrayWords;
     },
 
     currentSectionIndex() {
-      return this.lesson.sections.map((section) => { return section.id }).indexOf(this.section.id);
+      return this.lesson.sections
+        .map(section => {
+          return section.id;
+        })
+        .indexOf(this.section.id);
     },
 
     nextSectionID() {
@@ -103,7 +129,6 @@ export default {
   background-color: transparent !important;
 
   .navbar-brand {
-
   }
 
   .navbar-menu,
@@ -136,15 +161,17 @@ body {
   font-size: 12pt !important;
 }
 
-
-
 .print-wrapper {
-
-  h1, h2, h3, h4, h5 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
     page-break-after: avoid;
   }
 
-  table, figure {
+  table,
+  figure {
     page-break-inside: avoid;
   }
 
