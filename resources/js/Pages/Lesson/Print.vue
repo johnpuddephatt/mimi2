@@ -39,8 +39,8 @@
     </div>
     <div class="container content" v-if="wordList.length">
       <div class="editor-js-block editor-js-block__paired-heading">
-        <h2>Impare le parole 🔎</h2>
-        <h3>Learn the words</h3>
+        <h2>Definizioni 🔎</h2>
+        <h3>Definitions</h3>
       </div>
       <ul>
         <li v-for="(word, index) in wordList" :key="index">
