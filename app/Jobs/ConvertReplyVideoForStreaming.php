@@ -81,7 +81,7 @@ class ConvertReplyVideoForStreaming implements ShouldQueue
              'unprocessed_path' => null
          ]);
 
-         Storage::disk($this->video->disk)->delete($this->video->video_path);
+         Storage::disk($this->video->disk)->delete($this->video->unprocessed_path);
          FFMpeg::cleanupTemporaryFiles();
     }
 }
