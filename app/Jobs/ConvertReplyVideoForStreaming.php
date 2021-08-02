@@ -52,6 +52,8 @@ class ConvertReplyVideoForStreaming implements ShouldQueue
           ["-preset", "medium"]
         );
 
+
+
         FFMpeg::fromDisk($this->video->disk)
           ->open($this->video->unprocessed_path)
           // ->addLegacyFilter('-vf', "crop='min(iw,ih)':'min(iw,ih)',scale=480:480")
@@ -74,14 +76,14 @@ class ConvertReplyVideoForStreaming implements ShouldQueue
           ->toDisk('digitalocean')
           ->save($thumbnail_path);
 
+        Storage::disk($this->video->disk)->delete($this->video->unprocessed_path);
+        FFMpeg::cleanupTemporaryFiles();
+
          $this->video->update([
              'converted_for_streaming_at' => Carbon::now(),
              'thumbnail_path' => Storage::cloud()->url($thumbnail_path),
              'playlist_path' => Storage::cloud()->url($playlist_path),
              'unprocessed_path' => null
          ]);
-
-         Storage::disk($this->video->disk)->delete($this->video->unprocessed_path);
-         FFMpeg::cleanupTemporaryFiles();
     }
 }
