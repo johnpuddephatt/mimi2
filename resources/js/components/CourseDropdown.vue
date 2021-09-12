@@ -26,7 +26,9 @@
           })
         "
       >
-        {{ cohort.course.title }}&nbsp;<em>{{ cohort.title }}</em>
+        {{ cohort.course.title }}&nbsp;<em v-if="cohort.title != 'Default'">{{
+          cohort.title
+        }}</em>
       </inertia-link>
     </b-dropdown-item>
   </b-dropdown>
