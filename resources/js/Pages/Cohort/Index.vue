@@ -40,7 +40,7 @@
           </inertia-link>
 
           <h3 class="heading mt-4 mb-2" v-if="inactive_cohorts.length">
-            Inactive classes
+            Past classes
           </h3>
 
           <inertia-link
@@ -65,7 +65,7 @@
           </inertia-link>
 
           <section
-            v-if="!cohorts.length"
+            v-if="!cohorts.length && !inactive_cohorts.length"
             class="section is-medium has-background-light has-text-centered"
           >
             <p>You’re not enrolled in any classes.</p>

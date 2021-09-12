@@ -33,6 +33,11 @@ class RedirectIfNotEnrolled
         return $next($request);
       }
 
+      // TEMPORARY: if cohort is inactive (i.e. old) allow access regardless... allows for lifelong members to access
+      if(!$request->route('cohort')->active) {
+        return $next($request);
+      }
+
       // Return next if cohort is companion and user is enrolled in an active non-companion cohort
       if($request->route('cohort')->companion && (Auth::User()->hasActiveCohort() || Auth::User()->subscribed())) {
         return $next($request);
