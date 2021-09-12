@@ -10,12 +10,13 @@
           <p class="subtitle has-text-centered">Log in or register to join this course</p>
 
           <div class="buttons mt-4">
-            <a class="button is-primary is-medium is-fullwidth" href="{{ route('login', ['cohort' => $cohort ])}}">Log
+            <a class="button is-primary is-medium is-fullwidth"
+              href="{{ route('login', ['cohort' => $cohortHash ])}}">Log
               in to your account</a>
           </div>
 
           <p>If you haven’t created an account on the site yet, <a
-              href="{{ route('register', ['cohort' => $cohort ])}}">you can register one here</a></p>
+              href="{{ route('register', ['cohort' => $cohortHash ])}}">you can register one here</a></p>
         </div>
       </div>
     </div>

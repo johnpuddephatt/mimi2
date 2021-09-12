@@ -149,7 +149,7 @@ class CohortController extends Controller
       }
       // The below allows unregistered users to create an account to enrol.
       else {
-        return view('enrol', compact('cohort'));
+        return view('enrol', compact('cohortHash'));
       }
 
       // else {  
