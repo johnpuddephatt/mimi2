@@ -164,6 +164,7 @@
                 <inertia-link
                   :href="
                     route('lesson.show', {
+                      cohort: $page.props.parameters.cohort,
                       course: $page.props.parameters.course,
                       week: $page.props.parameters.week,
                       lesson: next_lesson.id
