@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Course;
+use App\Models\Cohort;
 use App\Models\User;
 use App\Http\Requests\StoreUser;
 use App\Providers\RouteServiceProvider;
@@ -64,21 +65,32 @@ class UserController extends Controller
     }
 
     public function chatrooms() {
-      $courses = \Auth::User()->courses;
-      $courses = $courses->merge(Course::open()->get());
+       $cohorts = \Auth::User()->cohorts()->where('enable_chatroom')->active()->get();
+        
+        if(\Auth::User()->subscribed() || \Auth::User()->hasActiveCohort()) {
+            $cohorts = $cohorts->merge(Cohort::companion()->where('enable_chatroom')->get());
+        }
 
-      return redirect()->route('user.chatroom.course', [
-        'course' => $courses->first()
-      ]);
+        if(!$cohorts->count()) {
+          abort(404);
+        }
+        else {
+          return redirect()->route('user.chatroom.cohort', [
+            'cohort' => $cohorts->first()
+          ]);
+        }
 
     }
 
-    public function chatroomCourse(Course $course) {
+    public function chatroomCohort(Cohort $cohort) {
 
-      $courses = \Auth::User()->courses;
-      $courses = $courses->merge(Course::open()->get());
+        $cohorts = \Auth::User()->cohorts()->where('enable_chatroom')->active()->get();
+        
+        if(\Auth::User()->subscribed() || \Auth::User()->hasActiveCohort()) {
+            $cohorts = $cohorts->merge(Cohort::companion()->where('enable_chatroom')->get());
+        }
 
-      $lessons = $course->lessons()->whereHas('sections', function ($query) {
+      $lessons = $cohort->course->lessons()->whereHas('sections', function ($query) {
         $query->where('is_chatroom', '=', true);
       })->with('week:id,number')->get();
 
@@ -87,12 +99,11 @@ class UserController extends Controller
         $query->where('is_chatroom', '=', true)->select(['lesson_id','id']);
       }]);
 
-
       $replies = \Auth::User()->replies()->select(['id','lesson_id'])->get()->toArray();
 
       return Inertia::render('User/Chatrooms', [
-        'course' => $course,
-        'courses' => $courses,
+        'cohort' => $cohort,
+        'cohorts' => $cohorts,
         'lessons' => $lessons,
         'replies' => $replies
       ]);

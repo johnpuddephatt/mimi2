@@ -34,7 +34,7 @@ Route::get('user/profile', 'UserController@showProfile')->name('profile.show')->
 Route::put('user/profile', 'UserController@updateProfile')->name('profile.update')->middleware('auth');
 
 Route::get('user/chatrooms', 'UserController@chatrooms')->name('user.chatrooms')->middleware('auth');
-Route::get('user/chatrooms/course/{course}', 'UserController@chatroomCourse')->name('user.chatroom.course')->middleware('auth');
+Route::get('user/chatrooms/class/{cohort}', 'UserController@chatroomCohort')->name('user.chatroom.cohort')->middleware('auth');
 
 Route::middleware(['nonpaying'])->group(function () {
 

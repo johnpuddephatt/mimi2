@@ -50,16 +50,16 @@
             <a class="navbar-item" href="{{ route('chatroom.index') }}">
               Chatroom manager
             </a>
-            <a class="navbar-item" href="{{ route('admin.emails') }}">
-              Emails
-            </a>
-            <a class="navbar-item" href="/admin/activity">
+            {{-- <a class="navbar-item" href="{{ route('admin.emails') }}">
+            Emails
+            </a> --}}
+            {{-- <a class="navbar-item" href="/admin/activity">
               Activity
             </a>
             <a class="navbar-item" href="/admin/logs">
               Logs
             </a>
-            <hr class="navbar-divider">
+            <hr class="navbar-divider"> --}}
             @endif
             {{-- <a class="navbar-item" href="{{ route('scheduler') }}">
             Speaking club bookings
