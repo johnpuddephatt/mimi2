@@ -29,7 +29,9 @@
               })
             "
           >
-            <span class="text-overflow-ellipsis">{{ cohort.title }}</span>
+            <span class="text-overflow-ellipsis">{{
+              cohort.course.title
+            }}</span>
             <span v-if="!cohort.active" class="tag is-light ml-2"
               >Archived</span
             >
@@ -52,7 +54,9 @@
               })
             "
           >
-            <span class="text-overflow-ellipsis">{{ cohort.title }}</span>
+            <span class="text-overflow-ellipsis">{{
+              cohort.course.title
+            }}</span>
             <span v-if="!cohort.active" class="tag is-light ml-2"
               >Archived</span
             >

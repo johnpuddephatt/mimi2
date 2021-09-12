@@ -29,6 +29,8 @@ class Cohort extends Model
     'hash'
     ]; 
 
+    protected $with = ['course'];
+
     public function getHashAttribute() {
       return \Hashids::encode($this->id);
     }
