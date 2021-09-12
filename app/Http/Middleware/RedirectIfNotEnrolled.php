@@ -25,9 +25,9 @@ class RedirectIfNotEnrolled
         return $next($request);
       }
 
-      if($request->route('cohort')) {
-        $cohort_id = $request->route('cohort')->id;
-      }
+      
+        $cohort_id = $request->route('cohort') ? $request->route('cohort')->id : null;
+      
       
       // Check user has subscription or active cohort if we’re not looking at a cohort
       if(!$cohort_id && (Auth::User()->hasActiveCohort() || Auth::User()->subscribed())) {
@@ -36,17 +36,17 @@ class RedirectIfNotEnrolled
 
 
       // TEMPORARY: if cohort is inactive (i.e. old) allow access regardless... allows for lifelong members to access
-      if(!$request->route('cohort')->active) {
+      if($cohort_id && !$request->route('cohort')->active) {
         return $next($request);
       }
 
       // Return next if cohort is companion and user is enrolled in an active non-companion cohort
-      if($request->route('cohort')->companion && (Auth::User()->hasActiveCohort() || Auth::User()->subscribed())) {
+      if($cohort_id && $request->route('cohort')->companion && (Auth::User()->hasActiveCohort() || Auth::User()->subscribed())) {
         return $next($request);
       }
 
       // Return next if user is enrolled on cohort and either has subscription OR the enrolment wasn’t subscription based
-      if(Auth::User()->cohorts()->find($cohort_id) && (Auth::User()->subscribed() || !Auth::User()->cohorts()->find($cohort_id)->pivot->is_subscription_based)) {
+      if($cohort_id && Auth::User()->cohorts()->find($cohort_id) && (Auth::User()->subscribed() || !Auth::User()->cohorts()->find($cohort_id)->pivot->is_subscription_based)) {
         return $next($request);
       }
 
