@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Requests\StoreCohort;
+use App\Providers\RouteServiceProvider;
 
 class CohortController extends Controller
 {
