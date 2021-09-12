@@ -50,7 +50,9 @@ class User extends Resource
     public function fields(Request $request)
     {
         return [
-            Avatar::make('Photo')->disableDownload()->rounded(),
+            Avatar::make('Photo')->disableDownload()->preview(function ($value, $disk) {
+                return $value;
+            })->rounded(),
 
             Text::make('First name')
                 ->sortable()
