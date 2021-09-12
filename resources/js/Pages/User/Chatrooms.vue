@@ -36,7 +36,8 @@
                 :key="cohort.id"
                 :href="route('user.chatroom.cohort', { cohort: cohort.id })"
               >
-                {{ cohort.course.title }} – {{ cohort.title }}
+                {{ cohort.course.title }} –
+                <em v-if="cohort.title !== 'Default'">{{ cohort.title }}</em>
               </inertia-link>
             </b-dropdown-item>
           </b-dropdown>

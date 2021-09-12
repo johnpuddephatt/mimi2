@@ -111,11 +111,10 @@ class CohortController extends Controller
     }
 
     public function enrollCurrentUser($cohortHash) {
+      $cohort_id = \Hashids::decode($cohortHash)[0];
+      $cohort = App\Models\Cohort::find($cohort_id);
+
       if (\Auth::guard()->check()) {
-
-        $cohort_id = \Hashids::decode($cohortHash)[0];
-        $cohort = App\Models\Cohort::find($cohort_id);
-
         if(!$cohort) {
           return redirect(RouteServiceProvider::HOME)->with('message', 'Invalid registration link');
         }
