@@ -87,6 +87,21 @@ class LessonController extends Controller
       ]);
     }
 
+     public function redirect(Request $request, Course $course, Week $week, Lesson $lesson) {
+      if(\Auth::user()) {
+        $cohort = \Auth::user()->cohorts()->where('course_id', $course->id)->latest()->first();
+        if($cohort) {
+          return redirect()->route('lesson.show', ['cohort' => $cohort, 'course' => $course, 'week' => $week, 'lesson' => $lesson]) ;
+        }
+        else {
+          abort(404);
+        }
+      }
+      else {
+        return abort(404);
+      }
+    }
+
     public function print(Cohort $cohort, Course $course, Week $week, Lesson $lesson) {
       if(!$lesson->live && !\Auth::user()->is_admin) {
         return back()->with('message', 'Sorry, this lesson isn’t live yet.');

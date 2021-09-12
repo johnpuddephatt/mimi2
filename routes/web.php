@@ -84,10 +84,11 @@ Route::get('class/{cohort}/enroll', 'CohortController@enrollCurrentUser')->name(
 Route::post('class/{cohort}/enroll', 'CohortController@enroll')->name('cohort.enroll')->middleware('admin');
 Route::get('class/{cohort}/unenroll/user/{user}', 'CohortController@unenroll')->name('cohort.unenroll')->middleware(['admin']);
 
-// Section redirect
+// Section && lesson redirect
 // ... this allows links without a cohort ID to work
 // ... it looks at the user's registered courses and redirects to the first one that matches
 Route::get('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}', 'SectionController@redirect')->name('section.redirect')->middleware(['auth']);
+Route::get('course/{course}/week/{week:number}/lesson/{lesson}', 'LessonController@redirect')->name('lesson.redirect')->middleware(['auth']);
 
 // Lessons
 
