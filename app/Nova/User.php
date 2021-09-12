@@ -52,6 +52,8 @@ class User extends Resource
         return [
             Image::make('Photo')->disableDownload()->preview(function ($value, $disk) {
                 return $value;
+            })->thumbnail(function ($value, $disk) {
+                return $value;
             })->rounded(),
 
             Text::make('First name')
