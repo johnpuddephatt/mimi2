@@ -87,7 +87,7 @@ class LessonController extends Controller
       ]);
     }
 
-    public function print(Course $course, Week $week, Lesson $lesson) {
+    public function print(Cohort $cohort, Course $course, Week $week, Lesson $lesson) {
       if(!$lesson->live && !\Auth::user()->is_admin) {
         return back()->with('message', 'Sorry, this lesson isn’t live yet.');
       }
