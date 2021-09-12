@@ -19,17 +19,18 @@ class RedirectIfNotEnrolled
      */
     public function handle($request, Closure $next, $guard = null)
     {
-      if($request->route('cohort')) {
-        $cohort_id = $request->route('cohort')->id;
-      }
 
       // Return next if user is an admin
       if(Auth::User()->is_admin) {
         return $next($request);
       }
+
+      if($request->route('cohort')) {
+        $cohort_id = $request->route('cohort')->id;
+      }
       
-      // Return next if we’re not looking at a cohort
-      if(!$cohort_id) {
+      // Check user has subscription or active cohort if we’re not looking at a cohort
+      if(!$cohort_id && (Auth::User()->hasActiveCohort() || Auth::User()->subscribed())) {
         return $next($request);
       }
 

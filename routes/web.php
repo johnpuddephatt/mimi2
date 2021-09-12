@@ -18,14 +18,9 @@ Route::post('log', function (\Illuminate\Http\Request $request) {
   Log::channel('frontend')->info($request->error . ', user: ' . (Auth::user() ? (Auth::user()->first_name . ' ' . Auth::user()->last_name . ' (' . Auth::user()->id . ')'): null ));
 });
 
-Route::get('/forbidden', function(){
-  return 'forbidden!';
-})->name('forbidden')->middleware('auth');
-
-
 Route::get('/scheduler', function(){
   return view('scheduler');
-})->name('scheduler')->middleware('auth');
+})->name('scheduler')->middleware(['auth','enrolled']);
 
 Route::get('/terms', function(){
   return view('terms');

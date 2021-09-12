@@ -32,14 +32,15 @@
             <span class="text-overflow-ellipsis">{{
               cohort.course.title
             }}</span>
-            <span v-if="!cohort.active" class="tag is-light ml-2"
-              >Archived</span
+            <span
+              v-if="cohort.title != 'Default'"
+              class="tag is-primary ml-2"
+              >{{ cohort.title }}</span
             >
-            <b-icon v-if="cohort.active" icon="arrow-right" />
-            <span v-else class="tag is-primary ml-2">Coming soon</span>
+            <b-icon icon="arrow-right" />
           </inertia-link>
 
-          <h3 class="heading mt-4 mb-2" v-if="inactive_cohorts.length">
+          <h3 class="heading mt-8 mb-2" v-if="inactive_cohorts.length">
             Past classes
           </h3>
 
