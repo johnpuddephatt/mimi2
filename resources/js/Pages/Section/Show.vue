@@ -63,6 +63,7 @@
               target="_blank"
               :href="
                 route('lesson.print', {
+                  cohort: $page.props.parameters.cohort,
                   course: $page.props.parameters.course,
                   week: $page.props.parameters.week,
                   lesson: $page.props.parameters.lesson
