@@ -65,6 +65,7 @@
                               }"
                               :href="
                                 route('section.show', {
+                                  cohort: $page.props.parameters.cohort,
                                   course: course.id,
                                   week: week.number,
                                   lesson: lesson.id,

@@ -48,6 +48,7 @@
               :key="section.id"
               :href="
                 route('section.show', {
+                  cohort: $page.props.parameters.cohort,
                   course: $page.props.parameters.course,
                   week: $page.props.parameters.week,
                   lesson: $page.props.parameters.lesson,
@@ -119,6 +120,7 @@
               v-if="previousSection"
               :href="
                 route('section.show', {
+                  cohort: $page.props.parameters.cohort,
                   course: $page.props.parameters.course,
                   week: $page.props.parameters.week,
                   lesson: $page.props.parameters.lesson,
@@ -137,6 +139,7 @@
               v-if="nextSection"
               :href="
                 route('section.show', {
+                  cohort: $page.props.parameters.cohort,
                   course: $page.props.parameters.course,
                   week: $page.props.parameters.week,
                   lesson: $page.props.parameters.lesson,
