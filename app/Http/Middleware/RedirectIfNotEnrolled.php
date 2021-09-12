@@ -33,7 +33,7 @@ class RedirectIfNotEnrolled
         return $next($request);
       }
 
-      dd($request->route('cohort')->active);
+      dd(!$request->route('cohort')->active);
 
       // TEMPORARY: if cohort is inactive (i.e. old) allow access regardless... allows for lifelong members to access
       if(!$request->route('cohort')->active) {
