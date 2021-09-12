@@ -26,7 +26,7 @@
           })
         "
       >
-        {{ cohort.title }}
+        {{ cohort.course.title }}&nbsp;<em>{{ cohort.title }}</em>
       </inertia-link>
     </b-dropdown-item>
   </b-dropdown>
