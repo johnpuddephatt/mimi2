@@ -6,7 +6,7 @@
   <div class="container">
     <div class="columns is-centered">
       <div class="column is-6-tablet is-5-desktop is-4-widescreen is-paddingless">
-        <form action="{{ isset($_GET['course']) ? '/login?course=' . $_GET['course'] : '/login' }}" method="post"
+        <form action="{{ isset($_GET['cohort']) ? '/login?cohort=' . $_GET['cohort'] : '/login' }}" method="post"
           class="box">
           @csrf
           <h3 class="title has-text-centered">Ciao! <span class="emoji">😃</span></h3>
@@ -54,6 +54,8 @@
               Remember me
             </label>
           </div>
+
+          <input type="hidden" value="{{ $_GET['cohort'] }}">
 
 
           <div class="field">
