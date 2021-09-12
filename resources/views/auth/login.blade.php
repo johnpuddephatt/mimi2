@@ -55,9 +55,6 @@
             </label>
           </div>
 
-          <input type="hidden" value="{{ $_GET['cohort'] }}">
-
-
           <div class="field">
             <input type="submit" class="button is-primary is-fullwidth" value="Login">
           </div>
