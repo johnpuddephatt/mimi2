@@ -112,7 +112,7 @@ class CohortController extends Controller
 
     public function enrollCurrentUser($cohortHash) {
       $cohort_id = \Hashids::decode($cohortHash)[0];
-      $cohort = App\Models\Cohort::find($cohort_id);
+      $cohort = Cohort::find($cohort_id);
 
       if (\Auth::guard()->check()) {
         if(!$cohort) {
