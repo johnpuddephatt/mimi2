@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Models\Lesson;
 use App\Models\Course;
+use App\Models\Cohort;
 use App\Models\Week;
 use Redirect;
 use Illuminate\Support\Facades\Cache;
@@ -72,12 +73,13 @@ class LessonController extends Controller
     // }
 
 
-    public function show(Course $course, Week $week, Lesson $lesson) {
+    public function show(Cohort $cohort, Course $course, Week $week, Lesson $lesson) {
       if(!$lesson->live && !\Auth::user()->is_admin) {
         return back()->with('message', 'Sorry, this lesson isn’t live yet.');
       }
       $section = $lesson->sections()->firstOrFail();
       return Redirect::route('section.show', [
+        'cohort' => $cohort,
         'course' => $course,
         'week' => $week,
         'lesson' => $lesson,

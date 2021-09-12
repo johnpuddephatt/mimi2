@@ -105,6 +105,25 @@
     }
   }
 
+  .editor-js-block__translate-block--row {
+    border-left: 0.25em solid $primary;
+    padding: 0.5em;
+    margin-bottom: 0.25em;
+    line-height: 1.3;
+
+    &--original {
+      margin-bottom: 0 !important;
+      cursor: help;
+    }
+    &--translated {
+      height: 0px;
+      color: $grey;
+      font-size: 0.9rem;
+      overflow: hidden;
+      transition: height 0.5s;
+    }
+  }
+
   .editor-js-audio {
     width: 100%;
     max-width: 480px;

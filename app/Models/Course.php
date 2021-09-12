@@ -20,16 +20,16 @@ class Course extends Model
   ];
 
   protected $appends = [
-    'hash'
+    // 'hash'
   ];
 
   public function scopeLive($query){
     return $query->where('live', true);
   }
 
-  public function getHashAttribute() {
-    return \Hashids::encode($this->id);
-  }
+  // public function getHashAttribute() {
+  //   return \Hashids::encode($this->id);
+  // }
 
   public function scopeOpen($query) {
     return $query->where('is_open', true);
@@ -38,6 +38,11 @@ class Course extends Model
   public function users()
   {
     return $this->belongsToMany('App\Models\User', 'enrolments')->withPivot('is_subscription_based');
+  }
+
+  public function cohorts()
+  {
+    return $this->hasMany('App\Models\Cohort');
   }
 
   public function weeks()

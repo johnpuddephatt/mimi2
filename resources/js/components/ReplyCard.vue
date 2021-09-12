@@ -49,7 +49,7 @@ export default {
   methods: {
 
     openReply() {
-      this.$inertia.visit(route(this.in_chatroom_manager ? 'chatroom.reply' : 'section.reply', {'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'reply': this.reply.id, 'include_already_replied_to': this.include_already_replied_to  }), {
+      this.$inertia.visit(route(this.in_chatroom_manager ? 'chatroom.reply' : 'section.reply', {'cohort': this.$page.props.parameters.cohort, 'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'reply': this.reply.id, 'include_already_replied_to': this.include_already_replied_to  }), {
         only: ['comments', 'parameters'],
         preserveScroll: true,
         preserveState: true,
@@ -57,7 +57,7 @@ export default {
     },
 
     closeReply() {
-      this.$inertia.visit(route(this.in_chatroom_manager ? 'chatroom.section' : 'section.show', {'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'include_already_replied_to': this.include_already_replied_to  }), {
+      this.$inertia.visit(route(this.in_chatroom_manager ? 'chatroom.section' : 'section.show', {'cohort': this.$page.props.parameters.cohort, 'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'include_already_replied_to': this.include_already_replied_to  }), {
         only: [],
         preserveScroll: true,
         preserveState: true,
@@ -76,7 +76,7 @@ export default {
     },
 
     delete(id) {
-      this.destroyReplyForm.delete(route('reply.delete', { 'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'reply': id }),
+      this.destroyReplyForm.delete(route('reply.delete', {'cohort': this.$page.props.parameters.cohort, 'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'reply': id }),
       {
         preserveScroll: true,
         onSuccess: () => {

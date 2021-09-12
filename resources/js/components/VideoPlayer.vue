@@ -5,7 +5,7 @@
       <video
         class="video-js vjs-big-play-centered"
         controls
-        :preload="auto"
+        preload="auto"
         width="640"
         height="264"
         :poster="poster"

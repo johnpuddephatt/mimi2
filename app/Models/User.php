@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Cashier\Billable;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\SubscriptionsSync;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
@@ -76,9 +77,23 @@ class User extends Authenticatable
       return $this->credits > 0;
     }
 
+    public function hasActiveCohort() {
+      return $this->cohorts()->where('active', true)->where('companion', false)->count();
+    }
+
     public function courses()
     {
       return $this->belongsToMany('App\Models\Course', 'enrolments')->withPivot('is_subscription_based');
+    }
+
+    public function cohorts()
+    {
+      return $this->belongsToMany('App\Models\Cohort', 'user_cohorts')->withPivot('is_subscription_based');
+    }
+
+    public function inactiveCohorts()
+    {
+      return $this->belongsToMany('App\Models\Cohort', 'user_cohorts')->withoutGlobalScopes()->where('active',false)->withPivot('is_subscription_based');
     }
 
     public function comments()

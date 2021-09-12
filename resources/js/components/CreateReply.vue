@@ -133,7 +133,7 @@ export default {
 
       axios({
           method: 'post',
-          url: route('reply.create', { lesson: this.$page.props.parameters.lesson, section: this.$page.props.parameters.section }),
+          url: route('reply.create', { cohort: this.$page.props.parameters.cohort, lesson: this.$page.props.parameters.lesson, section: this.$page.props.parameters.section }),
           data: data,
           headers: {
             'Content-Type': `multipart/form-data; boundary=${data._boundary}`

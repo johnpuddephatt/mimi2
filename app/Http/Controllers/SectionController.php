@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use App\Models\Cohort;
 use App\Models\Course;
 use App\Models\Reply;
 use App\Models\Week;
@@ -27,7 +28,22 @@ class SectionController extends Controller
         $this->middleware('auth');
     }
 
-    public function show(Request $request, Course $course, Week $week, Lesson $lesson, Section $section, Reply $reply = null) {
+    public function redirect(Request $request, Course $course, Week $week, Lesson $lesson, Section $section) {
+      if(\Auth::user()) {
+        $cohort = \Auth::user()->cohorts()->where('course_id', $course->id)->latest()->first();
+        if($cohort) {
+          return redirect()->route('section.show', ['cohort' => $cohort, 'course' => $course, 'week' => $week, 'lesson' => $lesson, 'section' => $section]) ;
+        }
+        else {
+          abort(404);
+        }
+      }
+      else {
+        return abort(404);
+      }
+    }
+
+    public function show(Request $request, Cohort $cohort, Course $course, Week $week, Lesson $lesson, Section $section, Reply $reply = null) {
 
         if(!$lesson->live && !\Auth::user()->is_admin) {
           return back()->with('message', 'This lesson is not live yet.');
@@ -39,7 +55,7 @@ class SectionController extends Controller
           'week' => fn () => $week->only('id','name','number'),
           'lesson' => fn () => $lesson_with_sections,
           'section' => fn () => $section->only('id','title','order','is_chatroom'),
-          'replies' => $section->is_chatroom ? fn () => $lesson->replies()->with('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video')->get() : null,
+          'replies' => $section->is_chatroom ? fn () => $lesson->replies()->where('cohort_id',$cohort->id)->with('user:id,first_name,last_name,description,photo,email,created_at','video', 'feedback.video')->get() : null,
           'next_lesson' => fn () => ($section->is_last() && !$lesson->is_last()) ? $lesson->next() : null,
           'next_week' => fn () => ($section->is_last() && $lesson->is_last() && !$week->is_last()) ? $week->next() : null,
           'end_of_course' => fn () => ($section->is_last() && $lesson->is_last() && $week->is_last()) ? true : false,

@@ -1,137 +1,286 @@
 <template>
-<app-layout>
-  <div class="columns is-centered">
-    <div class="column is-7-tablet is-6-desktop is-5-widescreen">
-      <inertia-link class="back-link has-text-dark" :href="route('courses.manage')">&larr; Back to admin</inertia-link>
-      <div class="box">
-        <h3 class="title has-text-centered">{{ data ? 'Modifica' : 'Creare' }} corso <span class="emoji">✏️</span></h3>
-        <p class="subtitle has-text-centered">{{ data ? 'Edit the' : 'Set up a new'  }} course below</p>
-        <b-notification v-if="errors.course" type="is-danger" has-icon role="alert" :closable="false" :message="errors.course[0]">
-        </b-notification>
+  <app-layout>
+    <div class="columns is-centered">
+      <div class="column is-7-tablet is-6-desktop is-5-widescreen">
+        <inertia-link
+          class="back-link has-text-dark"
+          :href="route('courses.manage')"
+          >&larr; Back to admin</inertia-link
+        >
+        <div class="box">
+          <h3 class="title has-text-centered">
+            {{ data ? "Modifica" : "Creare" }} corso
+            <span class="emoji">✏️</span>
+          </h3>
+          <p class="subtitle has-text-centered">
+            {{ data ? "Edit the" : "Set up a new" }} course below
+          </p>
+          <b-notification
+            v-if="errors.course"
+            type="is-danger"
+            has-icon
+            role="alert"
+            :closable="false"
+            :message="errors.course[0]"
+          >
+          </b-notification>
 
-        <b-tabs>
-          <b-tab-item label="Overview">
+          <b-tabs>
+            <b-tab-item label="Overview">
+              <b-field
+                label="Title"
+                :message="errors.title"
+                :type="errors.title ? 'is-danger' : null"
+              >
+                <b-input
+                  required
+                  name="title"
+                  v-model="form.title"
+                  placeholder="Enter the title for this course"
+                ></b-input>
+              </b-field>
 
-            <b-field label="Title" :message="errors.title" :type="errors.title ? 'is-danger' : null">
-              <b-input required name="title" v-model="form.title" placeholder="Enter the title for this course"></b-input>
-            </b-field>
+              <b-field
+                label="Description"
+                :message="errors.description"
+                :type="errors.description ? 'is-danger' : null"
+              >
+                <tip-tap v-model="form.description" />
+              </b-field>
 
-            <b-field label="Description" :message="errors.description" :type="errors.description ? 'is-danger' : null">
-              <tip-tap v-model="form.description"/>
-            </b-field>
+              <b-checkbox v-if="data" v-model="form.archived"
+                >Archive this course?</b-checkbox
+              ><br />
+              <b-checkbox v-model="form.live">Make this course live?</b-checkbox
+              ><br />
+              <b-checkbox v-model="form.is_open"
+                >Make this course open to all?</b-checkbox
+              >
+            </b-tab-item>
 
+            <b-tab-item v-if="$page.props.parameters.course" label="Classes">
+              <nav class="mb-6">
+                <div
+                  class="is-flex is-justify-content-space-between is-align-items-center mb-2"
+                >
+                  <h3 class="label">Classes</h3>
+                  <inertia-link
+                    class="button is-primary is-small"
+                    :href="
+                      route('cohort.create', {
+                        course: $page.props.parameters.course
+                      })
+                    "
+                  >
+                    Add a new class</inertia-link
+                  >
+                </div>
+              </nav>
 
-            <b-checkbox v-if="data" v-model="form.archived">Archive this course?</b-checkbox><br>
-            <b-checkbox v-model="form.live">Make this course live?</b-checkbox><br>
-            <b-checkbox v-model="form.is_open">Make this course open to all?</b-checkbox>
+              <div
+                class="panel-block is-justify-between mb-4"
+                v-for="cohort in data.cohorts"
+                :key="cohort.id"
+              >
+                <div>
+                  <p>{{ cohort.title }}</p>
+                </div>
+                <inertia-link
+                  :href="
+                    route('cohort.edit', {
+                      course: cohort.course_id,
+                      cohort: cohort.id
+                    })
+                  "
+                  class="button is-small"
+                  >Edit</inertia-link
+                >
+              </div>
+            </b-tab-item>
 
+            <b-tab-item v-if="$page.props.parameters.course" label="Lessons">
+              <div
+                class="is-flex is-justify-content-space-between is-align-items-center mb-2"
+              >
+                <h3 class="label">Lessons</h3>
+                <inertia-link
+                  class="button is-primary is-small"
+                  :href="
+                    route('week.create', {
+                      course: $page.props.parameters.course
+                    })
+                  "
+                >
+                  Add a new week</inertia-link
+                >
+              </div>
 
-          </b-tab-item>
-
-          <b-tab-item label="Lessons">
-            <div class="is-flex is-justify-content-space-between is-align-items-center mb-2">
-              <h3 class="label">Lessons</h3>
-              <inertia-link v-if="$page.props.parameters.course" class="button is-primary is-small" :href="route('week.create', {course: $page.props.parameters.course })">
-                Add a new week</inertia-link>
-            </div>
-
-            <nav v-if="$page.props.parameters.course" class="mb-6">
-
-              <b-collapse
+              <nav class="mb-6">
+                <b-collapse
                   class="collapse"
                   animation="slide"
                   v-for="(week, index) of data.weeks"
                   :key="index"
                   :open="isOpen == index"
-                  @open="isOpen = index">
-
+                  @open="isOpen = index"
+                >
                   <template #trigger="props">
-
-                    <div :class="props.open ? 'has-background-success' : ''" class="is-radius is-size-6 p-2 pl-2 is-align-items-center is-flex" role="button">
-                      <b-icon class="mr-2"
-                                :icon="props.open ? 'chevron-down' : 'chevron-right'">
-                            </b-icon>
-                      <span class="text-overflow-ellipsis mr-2">{{ week.name }}</span>
+                    <div
+                      :class="props.open ? 'has-background-success' : ''"
+                      class="is-radius is-size-6 p-2 pl-2 is-align-items-center is-flex"
+                      role="button"
+                    >
+                      <b-icon
+                        class="mr-2"
+                        :icon="props.open ? 'chevron-down' : 'chevron-right'"
+                      >
+                      </b-icon>
+                      <span class="text-overflow-ellipsis mr-2">{{
+                        week.name
+                      }}</span>
 
                       <span class="is-size-7 ml-2 mr-2 has-text-weight-normal">
-                        {{ week.lessons.length || 'No' }} lessons
+                        {{ week.lessons.length || "No" }} lessons
                       </span>
 
                       <div class="ml-a has-text-weight-normal">
-                        <inertia-link @click.stop class="button is-small is-outlined" :href="route('lesson.create', {course: $page.props.parameters.course, week: week.number })">Add lesson</inertia-link>
+                        <inertia-link
+                          @click.stop
+                          class="button is-small is-outlined"
+                          :href="
+                            route('lesson.create', {
+                              course: $page.props.parameters.course,
+                              week: week.number
+                            })
+                          "
+                          >Add lesson</inertia-link
+                        >
                         <b-dropdown
-                            position="is-bottom-left"
-                            append-to-body
+                          position="is-bottom-left"
+                          append-to-body
+                          aria-role="menu"
+                          @click.native.stop
+                        >
+                          <template #trigger>
+                            <b-button
+                              class="is-small"
+                              icon-left="settings"
+                            ></b-button>
+                          </template>
 
-                            aria-role="menu"
-                            @click.native.stop>
-                            <template #trigger>
-                                <b-button class="is-small" icon-left="settings"></b-button>
-                            </template>
-
-                            <b-dropdown-item has-link aria-role="menuitem">
-                              <inertia-link @click.stop :href="route('week.edit', {course: $page.props.parameters.course, week: week.number})">Edit</inertia-link>
-                            </b-dropdown-item>
-                            <b-dropdown-item has-link aria-role="menuitem">
-                              <a href="#" role="button" @click.stop="confirmWeekDelete(week.number)">Delete</a>
-                            </b-dropdown-item>
+                          <b-dropdown-item has-link aria-role="menuitem">
+                            <inertia-link
+                              @click.stop
+                              :href="
+                                route('week.edit', {
+                                  course: $page.props.parameters.course,
+                                  week: week.number
+                                })
+                              "
+                              >Edit</inertia-link
+                            >
+                          </b-dropdown-item>
+                          <b-dropdown-item has-link aria-role="menuitem">
+                            <a
+                              href="#"
+                              role="button"
+                              @click.stop="confirmWeekDelete(week.number)"
+                              >Delete</a
+                            >
+                          </b-dropdown-item>
                         </b-dropdown>
                       </div>
                     </div>
                   </template>
 
-                  <div class="notification has-background-white mb-0 is-size-7 has-text-centered" v-if="!week.lessons.length">
-                    No lessons in this week. <inertia-link :href="route('lesson.create', {course: $page.props.parameters.course, week: week.number })">Add the first</inertia-link>.
+                  <div
+                    class="notification has-background-white mb-0 is-size-7 has-text-centered"
+                    v-if="!week.lessons.length"
+                  >
+                    No lessons in this week.
+                    <inertia-link
+                      :href="
+                        route('lesson.create', {
+                          course: $page.props.parameters.course,
+                          week: week.number
+                        })
+                      "
+                      >Add the first</inertia-link
+                    >.
                   </div>
 
-                  <div class="panel-block pl-6 has-background-white-bis is-justify-between" v-for="lesson in week.lessons" :key="lesson.id">
-                    <span class="text-overflow-ellipsis is-size-6">{{ lesson.title }}</span>
+                  <div
+                    class="panel-block pl-6 has-background-white-bis is-justify-between"
+                    v-for="lesson in week.lessons"
+                    :key="lesson.id"
+                  >
+                    <span class="text-overflow-ellipsis is-size-6">{{
+                      lesson.title
+                    }}</span>
                     <div class="is-size-6 ml-2">
-                      <inertia-link class="button has-text-grey is-small" :href="route('lesson.edit', { course: $page.props.parameters.course, week: week.number, lesson: lesson.id })">Edit</inertia-link>
-                      <button class="button has-text-grey is-small" @click="confirmLessonDelete(week.number, lesson.id)">Delete</button>
+                      <inertia-link
+                        class="button has-text-grey is-small"
+                        :href="
+                          route('lesson.edit', {
+                            course: $page.props.parameters.course,
+                            week: week.number,
+                            lesson: lesson.id
+                          })
+                        "
+                        >Edit</inertia-link
+                      >
+                      <button
+                        class="button has-text-grey is-small"
+                        @click="confirmLessonDelete(week.number, lesson.id)"
+                      >
+                        Delete
+                      </button>
                     </div>
                   </div>
-              </b-collapse>
+                </b-collapse>
 
-              <section v-if="!data.weeks" class="section is-medium has-background-light has-text-centered">
-                Start by <inertia-link :href="route('week.create', {course: $page.props.parameters.course })">adding a week</inertia-link>. Once you’ve added a week, you can then add lessons to it.
-              </section>
+                <section
+                  v-if="!data.weeks"
+                  class="section is-medium has-background-light has-text-centered"
+                >
+                  Start by
+                  <inertia-link
+                    :href="
+                      route('week.create', {
+                        course: $page.props.parameters.course
+                      })
+                    "
+                    >adding a week</inertia-link
+                  >. Once you’ve added a week, you can then add lessons to it.
+                </section>
+              </nav>
+            </b-tab-item>
+          </b-tabs>
 
-            </nav>
-
-            <div class="notification is-size-7" v-else>
-              Save this course before adding lessons.
-            </div>
-          </b-tab-item>
-          <b-tab-item  v-if="$page.props.parameters.course" label="Students">
-
-            <course-users :course_id="$page.props.parameters.course"/>
-
-            <div class="notification has-background-light">
-              <h3>Invite people</h3>
-              <p class="is-size-7">Share the link below with people to invite them to this course. If they don’t already have an account they'll be prompted to create one.</p>
-              <input id="course-invite-link" class="input is-small" type="text" :value="route('course.enrollCurrentUser', {'course' : data.hash })">
-            </div>
-          </b-tab-item>
-        </b-tabs>
-
-        <hr>
-        <b-button type="is-primary" :disabled="!form.title" @click.prevent="onSubmit" :loading="form.processing" expanded>{{ data ? 'Update' : 'Create' }}</b-button>
+          <hr />
+          <b-button
+            type="is-primary"
+            :disabled="!form.title"
+            @click.prevent="onSubmit"
+            :loading="form.processing"
+            expanded
+            >{{ data ? "Update" : "Create" }}</b-button
+          >
+        </div>
       </div>
     </div>
-  </div>
-</app-layout>
+  </app-layout>
 </template>
 
 <script>
-import TipTap from '@/components/TipTap';
-import CourseUsers from '@/components/CourseUsers';
+import TipTap from "@/components/TipTap";
+// import CourseUsers from "@/components/CourseUsers";
 
 export default {
-  props: ['errors', 'data'],
+  props: ["errors", "data"],
   components: {
-    TipTap,
-    CourseUsers
+    TipTap
+    // CourseUsers
   },
   data() {
     return {
@@ -142,84 +291,95 @@ export default {
         archived: this.data?.archived ?? false,
         is_open: this.data?.is_open ?? false,
         live: this.data?.live ?? true
-
       }),
       destroyWeekForm: this.$inertia.form(),
       destroyLessonForm: this.$inertia.form(),
-      isOpen: null,
-    }
+      isOpen: null
+    };
   },
 
   mounted() {},
 
   methods: {
-
-
     confirmLessonDelete(weekNumber, lessonId) {
       this.$buefy.dialog.confirm({
-        type: 'is-danger',
+        type: "is-danger",
         hasIcon: true,
-        title: 'Confirm lesson deletion',
-        message: '<strong>Are you sure you want to delete this lesson?</strong>',
-        onConfirm: () => this.destroyLessonForm.transform((data) => ({
-            _method: 'DELETE',
-          }))
-          .post(route('lesson.delete', {
-            week: weekNumber,
-            lesson: lessonId,
-            course: this.$page.props.parameters.course
-          }), {
-            preserveScroll: true,
-            onSuccess: () => {
-              this.successToast('Week deleted');
-            },
-            onError: errors => {
-              this.errorToast('Could not delete week.');
-            },
-          })
-      })
+        title: "Confirm lesson deletion",
+        message:
+          "<strong>Are you sure you want to delete this lesson?</strong>",
+        onConfirm: () =>
+          this.destroyLessonForm
+            .transform(data => ({
+              _method: "DELETE"
+            }))
+            .post(
+              route("lesson.delete", {
+                week: weekNumber,
+                lesson: lessonId,
+                course: this.$page.props.parameters.course
+              }),
+              {
+                preserveScroll: true,
+                onSuccess: () => {
+                  this.successToast("Week deleted");
+                },
+                onError: errors => {
+                  this.errorToast("Could not delete week.");
+                }
+              }
+            )
+      });
     },
 
     confirmWeekDelete(weekNumber) {
       this.$buefy.dialog.confirm({
-        title: 'Confirm week deletion',
-        type: 'is-danger',
+        title: "Confirm week deletion",
+        type: "is-danger",
         hasIcon: true,
-        message: 'Are you sure you want to delete this week?<br> <strong>This will also delete any lessons within this week.</strong>',
-        onConfirm: () => this.destroyWeekForm.delete(route('week.delete', {
-            week: weekNumber,
-            course: this.$page.props.parameters.course
-          }), {
-            preserveScroll: true,
-            onSuccess: () => {
-              this.successToast('Week deleted');
-            },
-            onError: errors => {
-              this.errorToast('Could not delete week.');
-            },
-          })
-      })
+        message:
+          "Are you sure you want to delete this week?<br> <strong>This will also delete any lessons within this week.</strong>",
+        onConfirm: () =>
+          this.destroyWeekForm.delete(
+            route("week.delete", {
+              week: weekNumber,
+              course: this.$page.props.parameters.course
+            }),
+            {
+              preserveScroll: true,
+              onSuccess: () => {
+                this.successToast("Week deleted");
+              },
+              onError: errors => {
+                this.errorToast("Could not delete week.");
+              }
+            }
+          )
+      });
     },
 
     onSubmit() {
-      let postRoute = this.data ? route('course.update', {
-        course: this.$page.props.parameters.course
-      }) : route('course.create');
+      let postRoute = this.data
+        ? route("course.update", {
+            course: this.$page.props.parameters.course
+          })
+        : route("course.create");
 
-      this.form.transform((data) => ({
+      this.form
+        .transform(data => ({
           ...data,
           course_id: this.$page.props.parameters.course,
-          _method: (this.data ? 'PUT' : 'POST'),
+          _method: this.data ? "PUT" : "POST"
         }))
         .post(postRoute, {
           preserveScroll: true,
           onSuccess: () => {
-            this.successToast('Course saved');
+            this.successToast("Course saved");
           },
           onError: errors => {
-            this.errorToast('Check the form for errors');
-          },
-        })
+            this.errorToast("Check the form for errors");
+          }
+        });
     }
   }
 };

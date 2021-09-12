@@ -5,6 +5,26 @@
 
 return [
   'tools' => [
+    'translateBlock' => [
+      'content' => [
+        'type' => 'array',
+        'data' => [
+          '-' => [
+            'type' => 'array',
+            'data' => [
+              'original' => [
+                'type' => 'string',
+                'allowedTags' => '*',
+              ],
+              'translated' => [
+                'type' => 'string',
+                'allowedTags' => '*',
+              ]
+            ],      
+          ],
+        ],
+      ]
+    ],
     'embed' => [
       'service' => 'string',
       'source' => 'string',

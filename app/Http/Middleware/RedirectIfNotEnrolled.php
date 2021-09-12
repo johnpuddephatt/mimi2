@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class RedirectIfNotEnrolled
 {
@@ -18,34 +19,46 @@ class RedirectIfNotEnrolled
      */
     public function handle($request, Closure $next, $guard = null)
     {
-      if($request->route('course')) {
-        $course_id = $request->route('course')->id;
-      }
-      else if($request->route('lesson')) {
-
-        $course_id = $request->route('lesson')->week->course->id;
+      if($request->route('cohort')) {
+        $cohort_id = $request->route('cohort')->id;
       }
 
-      // Return next if user is an admin or we’re not looking at a course or course is open access
-      if(!$course_id || Auth::User()->is_admin || \App\Models\Course::find($course_id)->is_open){
+      // Return next if user is an admin
+      if(Auth::User()->is_admin) {
+        return $next($request);
+      }
+      
+      // Return next if we’re not looking at a cohort
+      if(!$cohort_id) {
         return $next($request);
       }
 
-      // Return next if user is enrolled on course and either has subscription OR the enrolment isn’t subscription based
-
-      // if(Auth::User()->courses()->find($course_id) && (Auth::User()->subscribed() || !Auth::User()->courses()->find($course_id)->pivot->is_subscription_based)) {
-
-      if(Auth::User()->courses()->find($course_id)) {
+      // Return next if cohort is companion and user is enrolled in an active non-companion cohort
+      if($request->route('cohort')->companion && (Auth::User()->hasActiveCohort() || Auth::User()->subscribed())) {
         return $next($request);
       }
 
-      if ($request->expectsJson()) {
+      // Return next if user is enrolled on cohort and either has subscription OR the enrolment wasn’t subscription based
+      if(Auth::User()->cohorts()->find($cohort_id) && (Auth::User()->subscribed() || !Auth::User()->cohorts()->find($cohort_id)->pivot->is_subscription_based)) {
+        return $next($request);
+      }
+
+    if($request->hasHeader('X-Inertia')) {
+      
+      return \Inertia\Inertia::render('Error', ['status' => '403']);
+            
+    }
+
+    elseif ($request->expectsJson()) {
+        
         abort(
-          response()->json(['message' => 'You’re not enrolled on this course'], 403)
+          response()->json(['message' => 'You’re not enrolled on this class'], 403)
         );
       }
+
       else {
-        return redirect(RouteServiceProvider::HOME)->with('message', 'You’re not enrolled on this course or your subscription has expired.');
+
+        return redirect(RouteServiceProvider::HOME)->with('message', 'You’re not enrolled on this class or your subscription has expired.');
       }
     }
 }

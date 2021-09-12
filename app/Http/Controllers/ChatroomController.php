@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use Illuminate\Database\Eloquent\Builder;
 
 use App\Models\Course;
+use App\Models\Cohort;
 use App\Models\Lesson;
 use App\Models\Week;
 use App\Models\Section;
@@ -16,39 +17,40 @@ class ChatroomController extends Controller
 {
     public function index()
     {
-        return redirect()->route('chatroom.course', ['course' => Course::first()]);
+        return redirect()->route('chatroom.cohort', ['cohort' => Cohort::first(), 'course' => Cohort::first()->course_id ]);
     }
 
-    public function course(Course $course)
+    public function cohort(Cohort $cohort, Course $course)
     {
-        $lessons = $course->lessons()->whereHas('sections', function ($query) {
+        $lessons = $cohort->course->lessons()->whereHas('sections', function ($query) {
             $query->where('is_chatroom', '=', true);
         })->with('week:id,name')->get();
 
         if ($lessons->count()) {
-            return redirect()->route('chatroom.lesson', ['course' => $course, 'lesson' => $lessons->first()]);
+            return redirect()->route('chatroom.lesson', ['cohort' => $cohort, 'course' => $course, 'lesson' => $lessons->first()]);
         }
 
-        return Inertia::render('Admin/Chatroom/Course', [
+        return Inertia::render('Admin/Chatroom/Cohort', [
           'new_count' => Reply::whereNull('reply_id')->feedbackless()->count(),
-          'courses' => Course::all(),
+          'cohorts' => Cohort::all(),
+          'cohort' => $cohort,
           'course' => $course
         ]);
     }
 
-    public function lesson(Request $request, Course $course, Lesson $lesson)
+    public function lesson(Request $request, Cohort $cohort, Course $course, Lesson $lesson)
     {
         $section = $lesson->sections()->where('is_chatroom', true)->first();
 
         if ($section) {
-            return redirect()->route('chatroom.section', ['course' => $course, 'week' => $lesson->week, 'lesson' => $lesson, 'section' => $section ]);
+            return redirect()->route('chatroom.section', ['cohort' => $cohort, 'course' => $course, 'week' => $lesson->week, 'lesson' => $lesson, 'section' => $section ]);
         } else {
             abort(404);
         }
     }
 
 
-    public function section(Request $request, Course $course, Week $week, Lesson $lesson, Section $section, Reply $reply = null)
+    public function section(Request $request, Cohort $cohort, Course $course, Week $week, Lesson $lesson, Section $section, Reply $reply = null)
     {
         $lessons = $course->lessons()->whereHas('sections', function ($query) {
             $query->where('is_chatroom', '=', true);
@@ -68,14 +70,15 @@ class ChatroomController extends Controller
         }
 
         return Inertia::render('Admin/Chatroom/Section', [
-      'new_count' => Reply::whereNull('reply_id')->feedbackless()->count(),
-      'courses' => fn () => Course::all(),
-      'course' => fn () => $course,
-      'lesson' => fn () => $lesson->load('week'),
-      'lessons' => fn () => $lessons,
-      'include_already_replied_to' => $request->include_already_replied_to,
-      'comments' => $reply ? fn () => $reply->parent_comments : null,
-      'replies' => fn () => $replies
-    ]);
+            'new_count' => Reply::whereNull('reply_id')->feedbackless()->count(),
+            'cohorts' => fn () => Cohort::all(),
+            'cohort' => fn () => $cohort,
+            'course' => fn () => $course,
+            'lesson' => fn () => $lesson->load('week'),
+            'lessons' => fn () => $lessons,
+            'include_already_replied_to' => $request->include_already_replied_to,
+            'comments' => $reply ? fn () => $reply->parent_comments : null,
+            'replies' => fn () => $replies
+        ]);
     }
 }

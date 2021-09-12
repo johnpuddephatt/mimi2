@@ -26,17 +26,17 @@ class CommentController extends Controller
       $this->middleware('auth');
     }
 
-    public function delete(Request $request, Course $course, Comment $comment) {
+    public function delete(Request $request, Comment $comment) {
       $comment->delete();
       return redirect()->back();
     }
 
-    public function store(StoreComment $request, Course $course) {
+    public function store(StoreComment $request) {
       Comment::create($request->all());
       return redirect()->back();
     }
 
-    public function index(Lesson $lesson, Reply $reply) {
+    public function index(Reply $reply) {
       return $reply->parent_comments;
     }
 }

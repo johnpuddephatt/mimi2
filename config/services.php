@@ -14,7 +14,9 @@ return [
     |
     */
 
+    // Secret and public are the same... but Cashier uses public and Nova Stripe uses key...
     'stripe' => [
+        'key' => env('STRIPE_PUBLIC'),
         'secret' => env('STRIPE_SECRET'),
         'public' => env('STRIPE_PUBLIC'),
     ],

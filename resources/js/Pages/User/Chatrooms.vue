@@ -80,8 +80,8 @@ export default {
     getLessonOrReplyLink(lesson) {
       // return this.repliesAreForLesson(lesson.id) ?
       return true ?
-        route('section.reply', {'course': this.course.id, 'week': lesson.week.number, 'lesson': lesson.id, 'section' : lesson.sections[0].id, 'reply': this.replies.find(reply => reply.lesson_id == lesson.id).id })
-          : route('section.show', {'course': this.course.id, 'week': lesson.week.number, 'lesson': lesson.id, 'section' : lesson.sections[0].id });
+        route('section.reply', {'cohort': this.$page.props.parameters.cohort, 'course': this.course.id, 'week': lesson.week.number, 'lesson': lesson.id, 'section' : lesson.sections[0].id, 'reply': this.replies.find(reply => reply.lesson_id == lesson.id).id })
+          : route('section.show', {'cohort': this.$page.props.parameters.cohort, 'course': this.course.id, 'week': lesson.week.number, 'lesson': lesson.id, 'section' : lesson.sections[0].id });
     }
   }
 }

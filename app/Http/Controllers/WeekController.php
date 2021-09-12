@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use Redirect;
 use App\Models\Week;
 use App\Models\Course;
+use App\Models\Cohort;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreWeek;
 
@@ -55,7 +56,7 @@ class WeekController extends Controller
      * @param  \App\Models\Week  $week
      * @return \Illuminate\Http\Response
      */
-    public function show(Course $course, Week $week)
+    public function show(Cohort $cohort, Course $course, Week $week)
     {
       $week->load('lessons');
       return Inertia::render('Week/Show', ['course' => $course, 'week' => $week]);

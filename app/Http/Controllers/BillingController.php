@@ -135,6 +135,9 @@ class BillingController extends Controller
           \Auth::user()->credits ? (\Auth::user()->credits->increment($product->metadata->credits ?? 1)) : (\Auth::user()->credits = $product->metadata->credits ?? 1);
           \Auth::user()->save();
         }
+        else {
+          return redirect()->route('billing.error');
+        }
       }
 
       return redirect()->route('billing.show-profile');

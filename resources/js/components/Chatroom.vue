@@ -121,7 +121,7 @@ export default {
 
   methods: {
     toggle_already_replied_to(value) {
-      this.$inertia.visit(route('chatroom.section', {'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'include_already_replied_to': value }), {
+      this.$inertia.visit(route('chatroom.section', {'cohort': this.$page.props.parameters.cohort, 'course': this.$page.props.parameters.course, 'week': this.$page.props.parameters.week, 'lesson': this.$page.props.parameters.lesson, 'section': this.$page.props.parameters.section, 'include_already_replied_to': value }), {
         preserveScroll: true
       })
     },

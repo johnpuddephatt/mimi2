@@ -62,7 +62,7 @@ class RegisterController extends Controller
         }
         else {
           return Inertia::render('Registration', [
-            'course' => $request->query('course'),
+            'cohort' => $request->query('cohort'),
             'notification_emails' => \App\Models\User::$notificationEmails
           ]);
         }
@@ -83,7 +83,7 @@ class RegisterController extends Controller
             'description' => ['required','string', 'max:120'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
-            'course' => ['nullable'],
+            'cohort' => ['nullable'],
             'admin' => ['nullable'],
             'notification_emails' => ['nullable','array'],
         ]);
@@ -113,8 +113,8 @@ class RegisterController extends Controller
 
         ]);
 
-        if(isset($data['course'])) {
-          $user->courses()->attach(\Hashids::decode($data['course']));
+        if(isset($data['cohort'])) {
+          $user->cohorts()->attach(\Hashids::decode($data['cohort']));
         }
 
         return $user;

@@ -1,0 +1,64 @@
+.cdx-translation-block-wrapper {
+  border: 0.1em solid #eee;
+  border-radius: 0.5em;
+  box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+  padding: 1.5em;
+}
+
+.cdx-translation-block {
+  border-left: 0.25em solid hsl(188, 52%, 59%);
+  padding-left: 1em;
+  margin-bottom: 1em;
+  padding-right: 3em;
+  position: relative;
+}
+
+.cdx-translation-block--delete-button {
+  appearance: none;
+  padding: 0;
+  border: 0;
+  background-color: #eff2ee;
+  border-radius: 4px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  opacity: 0;
+  width: 2em;
+  height: 2em;
+}
+
+.cdx-translation-block:hover .cdx-translation-block--delete-button {
+  opacity: 1;
+}
+
+.cdx-translation-block .cdx-translation-block--original:focus,
+.cdx-translation-block .cdx-translation-block--translated:focus {
+  box-shadow: none !important;
+  outline: none !important;
+  border: none !important;
+}
+
+.cdx-translation-block .cdx-translation-block--original,
+.cdx-translation-block .cdx-translation-block--translated {
+  line-height: 1.3;
+}
+
+.cdx-translation-block .cdx-translation-block--translated {
+  font-size: 90%;
+  color: gray;
+}
+
+.cdx-translation-block [contentEditable="true"][data-placeholder]::before {
+  position: absolute;
+  content: attr(data-placeholder);
+  color: #c2c2c2;
+  font-weight: normal;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.cdx-translation-block
+  [contentEditable="true"][data-placeholder]:empty::before {
+  opacity: 1;
+}

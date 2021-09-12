@@ -14,8 +14,6 @@
 
   <!-- Styles -->
   <link href="{{ mix('css/app.css') }}" rel="stylesheet">
-  {{-- <link href="{{ mix('css/vue.css') }}" rel="stylesheet"> --}}
-  <!-- Scripts -->
   @routes
 
 </head>
@@ -28,6 +26,8 @@
     </main>
     @include('footer')
   </div>
+  @yield('js')
+
 </body>
 
 </html>

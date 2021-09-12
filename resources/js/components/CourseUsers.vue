@@ -1,12 +1,10 @@
 <template>
   <div class="user-list">
-
     <div class="notification is-danger" v-if="errorLoading">
       An error occured while trying to load users
     </div>
 
     <div v-else-if="isLoaded">
-
       <b-field v-if="users" class="mt-4 mb-4">
         <b-taginput
           v-model="newUsers"
@@ -21,8 +19,10 @@
           @typing="getFilteredUsers"
         >
           <template slot-scope="props">
-            <div>{{ props.option.first_name }} {{ props.option.last_name }}</div>
-            <div class="is-size-7">{{ props.option.email}}</div>
+            <div>
+              {{ props.option.first_name }} {{ props.option.last_name }}
+            </div>
+            <div class="is-size-7">{{ props.option.email }}</div>
           </template>
         </b-taginput>
         <p class="control">
@@ -30,133 +30,154 @@
         </p>
       </b-field>
 
-      <div class="panel-block is-justify-between mb-4" v-for="user in enrolledUsers" :key="user.id">
+      <div
+        class="panel-block is-justify-between mb-4"
+        v-for="user in enrolledUsers"
+        :key="user.id"
+      >
         <div>
           <p>{{ user.first_name }} {{ user.last_name }}</p>
           <p class="is-size-7">{{ user.email }}</p>
         </div>
-        <button class="button is-small" @click="onUnenroll(user.id)">Unenroll</button>
+        <button class="button is-small" @click="onUnenroll(user.id)">
+          Unenroll
+        </button>
       </div>
-
     </div>
 
     <b-loading v-else :is-full-page="false" :active="!isLoaded"></b-loading>
   </div>
-
 </template>
 
 <script>
-var platform = require('platform');
+var platform = require("platform");
 
 export default {
-  props: ['course_id'],
+  props: ["cohort_id"],
   data() {
     return {
       isLoaded: false,
       isSaving: false,
       errorLoading: false,
       newUsers: [],
-      errors: '',
+      errors: "",
       enrolledUsers: [],
       users: [],
       filteredUsers: this.users
-    }
+    };
   },
 
   mounted() {
     axios({
-        method: 'get',
-        url: `/course/${this.course_id}/users`,
-        timeout: 15000
-      })
+      method: "get",
+      url: route("cohort.users", { cohort: this.cohort_id }),
+      timeout: 15000
+    })
       .then(response => {
         this.enrolledUsers = response.data;
         this.isLoaded = true;
       })
       .catch(error => {
         this.errorLoading = true;
-        axios.post('/log', {'error': `COURSE ENROLLED USERS GET ERROR, ${ platform.description }, ${ JSON.stringify(error) }`});
+        axios.post("/log", {
+          error: `COHORT ENROLLED USERS GET ERROR, ${
+            platform.description
+          }, ${JSON.stringify(error)}`
+        });
       }),
-
       axios({
-          method: 'get',
-          url: `/users`,
-        })
+        method: "get",
+        url: `/users`
+      })
         .then(response => {
           this.users = response.data;
         })
         .catch(error => {
           this.errorLoading = true;
-          axios.post('/log', {'error': `COURSE USERS GET ERROR, ${ platform.description }, ${ JSON.stringify(error) }`});
-        })
+          axios.post("/log", {
+            error: `COHORT USERS GET ERROR, ${
+              platform.description
+            }, ${JSON.stringify(error)}`
+          });
+        });
   },
 
   watch: {
-    isLoaded() {
-
-    }
+    isLoaded() {}
   },
 
   methods: {
-
     getFilteredUsers(text) {
-        this.filteredUsers = this.users.filter((user) => {
-            return (
-              (user.first_name + ' ' + user.last_name)
-                .toString()
-                .toLowerCase()
-                .indexOf(text.toLowerCase()) >= 0
-                || user.email.toString()
-                    .toLowerCase()
-                    .indexOf(text.toLowerCase()) >= 0
-              )
-        })
+      this.filteredUsers = this.users.filter(user => {
+        return (
+          (user.first_name + " " + user.last_name)
+            .toString()
+            .toLowerCase()
+            .indexOf(text.toLowerCase()) >= 0 ||
+          user.email
+            .toString()
+            .toLowerCase()
+            .indexOf(text.toLowerCase()) >= 0
+        );
+      });
     },
 
     enrollSelected() {
       axios({
-        method: 'post',
-        url: `/course/${this.course_id}/enroll`,
+        method: "post",
+        url: route("cohort.enroll", { cohort: this.cohort_id }),
         data: this.newUsers.map(user => user.id),
         timeout: 90000
       })
-      .then(response => {
-        this.enrolledUsers = this.enrolledUsers.concat(this.newUsers);
-        this.newUsers = [];
-      })
-      .catch(error => {
-        this.isSaving = false;
-        this.displayErrorNotification(error.response.data.message);
-        axios.post('/log', {'error': `COURSE USER ENROLMENT ERROR\n${ platform.description }\n${ error.name }: ${ error.message }\nReply data: ${JSON.stringify(data)}\n\n`});
-        this.errors = error.response.data.errors || '';
-      });
-    },
-
-    onUnenroll(user_id) {
-
-      axios({
-          method: 'get',
-          url: `/course/${this.course_id}/unenroll/user/${user_id}`
-        })
         .then(response => {
-          setTimeout(()=>{
-            this.isSaving = false;
-          }, 2000);
-          this.enrolledUsers = this.enrolledUsers.filter(user => user.id != user_id);
+          this.enrolledUsers = this.enrolledUsers.concat(this.newUsers);
+          this.newUsers = [];
         })
         .catch(error => {
           this.isSaving = false;
           this.displayErrorNotification(error.response.data.message);
-          axios.post('/log', {'error': `COURSE USER DELETE ERROR\n${ platform.description }\n${ error.name }: ${ error.message }\nReply data: ${JSON.stringify(data)}\n\n`});
-          this.errors = error.response.data.errors || '';
+          axios.post("/log", {
+            error: `COHORT USER ENROLMENT ERROR\n${platform.description}\n${
+              error.name
+            }: ${error.message}\nReply data: ${JSON.stringify(data)}\n\n`
+          });
+          this.errors = error.response.data.errors || "";
+        });
+    },
+
+    onUnenroll(user_id) {
+      axios({
+        method: "get",
+        url: route("cohort.unenroll", {
+          cohort: this.cohort_id,
+          user: user_id
+        })
+      })
+        .then(response => {
+          setTimeout(() => {
+            this.isSaving = false;
+          }, 2000);
+          this.enrolledUsers = this.enrolledUsers.filter(
+            user => user.id != user_id
+          );
+        })
+        .catch(error => {
+          this.isSaving = false;
+          this.displayErrorNotification(error.response.data.message);
+          axios.post("/log", {
+            error: `COHORT USER DELETE ERROR\n${platform.description}\n${
+              error.name
+            }: ${error.message}\nReply data: ${JSON.stringify(data)}\n\n`
+          });
+          this.errors = error.response.data.errors || "";
         });
     },
 
     displayErrorNotification(error) {
       this.$buefy.snackbar.open({
         message: `<b>Error:</b> ${error}`,
-        type: 'is-danger',
-        position: 'is-bottom',
+        type: "is-danger",
+        position: "is-bottom",
         duration: 5000
       });
     }
@@ -164,6 +185,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

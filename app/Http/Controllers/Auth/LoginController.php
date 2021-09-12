@@ -31,8 +31,8 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request)
     {
-      if(isset($_GET['course'])) {
-        return redirect()->route('course.enrollCurrentUser', ['course' => $_GET['course']]);
+      if(isset($_GET['cohort'])) {
+        return redirect()->route('cohort.enrollCurrentUser', ['cohort' => $_GET['cohort']]);
       }
       else {
         return redirect(RouteServiceProvider::HOME);

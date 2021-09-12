@@ -18,6 +18,10 @@ Route::post('log', function (\Illuminate\Http\Request $request) {
   Log::channel('frontend')->info($request->error . ', user: ' . (Auth::user() ? (Auth::user()->first_name . ' ' . Auth::user()->last_name . ' (' . Auth::user()->id . ')'): null ));
 });
 
+Route::get('/forbidden', function(){
+  return 'forbidden!';
+})->name('forbidden')->middleware('auth');
+
 
 Route::get('/scheduler', function(){
   return view('scheduler');
@@ -27,7 +31,9 @@ Route::get('/terms', function(){
   return view('terms');
 })->name('terms');
 
-Route::get('/', 'CourseController@index')->name('home')->middleware('auth');
+Route::get('/', function() {
+  return redirect()->route('cohort.index');
+})->name('home');
 
 Route::get('user/profile', 'UserController@showProfile')->name('profile.show')->middleware('auth');
 Route::put('user/profile', 'UserController@updateProfile')->name('profile.update')->middleware('auth');
@@ -72,45 +78,52 @@ Route::get('stats/replies-monthly/{from}/{to}', 'StatController@repliesMonthly')
 
 Route::get('section/{section}', 'SectionController@single')->name('section.single')->middleware('auth');
 
+// These should maybe be prefixed /admin/ – need to check ajax call uses ziggy or update.
 Route::get('users', 'UserController@index')->name('users.index')->middleware('admin');
-
-Route::get('courses', function() {
-  return redirect()->route('home');
-})->name('course.index')->middleware('auth');
+Route::get('class/{cohort}/users', 'CohortController@users')->name('cohort.users')->middleware('admin');
 
 
-Route::get('course/{course}/enroll', 'CourseController@enrollCurrentUser')->name('course.enrollCurrentUser');
-Route::post('course/{course}/enroll', 'CourseController@enroll')->name('course.enroll')->middleware('admin');
-Route::get('course/{course}/unenroll/user/{user}', 'CourseController@unenroll')->name('course.unenroll')->middleware('admin');
+Route::get('classes', 'CohortController@index')->name('cohort.index')->middleware('auth');
 
-Route::get('course/{course}', 'CourseController@show')->name('course.show')->middleware('auth','enrolled');
-Route::get('course/{course}/users', 'CourseController@users')->name('course.users')->middleware('admin');
-Route::get('course/{course}/map', 'CourseController@map')->name('course.map')->middleware('auth', 'enrolled');
+Route::get('class/{cohort}/enroll', 'CohortController@enrollCurrentUser')->name('cohort.enrollCurrentUser');
+Route::post('class/{cohort}/enroll', 'CohortController@enroll')->name('cohort.enroll')->middleware('admin');
+Route::get('class/{cohort}/unenroll/user/{user}', 'CohortController@unenroll')->name('cohort.unenroll')->middleware(['admin']);
 
-Route::get('course/{course}/week/{week:number}', 'WeekController@show')->name('week.show')->middleware('auth','enrolled');
+// Section redirect
+// ... this allows links without a cohort ID to work
+// ... it looks at the user's registered courses and redirects to the first one that matches
+Route::get('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}', 'SectionController@redirect')->name('section.redirect')->middleware(['auth']);
 
+// Lessons
 
-Route::get('course/{course}/week/{week:number}/lesson/{lesson}', 'LessonController@show')->name('lesson.show')->middleware('auth','enrolled');
-Route::get('course/{course}/week/{week:number}/lesson/{lesson}/print', 'LessonController@print')->name('lesson.print')->middleware('auth','enrolled');
+Route::get('class/{cohort}/course/{course}', 'CohortController@show')->name('cohort.show')->middleware(['auth','enrolled']);
+Route::get('class/{cohort}/course/{course}/map', 'CourseController@map')->name('course.map')->middleware(['auth','enrolled']);
+Route::get('class/{cohort}/course/{course}/week/{week:number}', 'WeekController@show')->name('week.show')->middleware(['auth','enrolled']);
+Route::get('class/{cohort}/course/{course}/week/{week:number}/lesson/{lesson}', 'LessonController@show')->name('lesson.show')->middleware(['auth','enrolled']);
+Route::get('class/{cohort}/course/{course}/week/{week:number}/lesson/{lesson}/print', 'LessonController@print')->name('lesson.print')->middleware(['auth','enrolled']);
+Route::get('class/{cohort}/course/{course}/week/{week:number}/lesson/{lesson}/section/{section}', 'SectionController@show')->name('section.show')->middleware(['auth','enrolled']);
+Route::get('class/{cohort}/course/{course}/week/{week:number}/lesson/{lesson}/section/{section}/reply/{reply}/{show_feedback?}', 'SectionController@show')->name('section.reply')->middleware(['auth','enrolled']);
 
-Route::post('lesson/{lesson}/section/{section}/reply', 'ReplyController@store')->name('reply.create')->middleware('auth','enrolled');
-Route::delete('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}/reply/{reply}/delete', 'ReplyController@destroy')->name('reply.delete')->middleware('auth','owner');
+// Replies
 
-Route::post('course/{course}/comment/create', 'CommentController@store')->name('comment.create')->middleware('auth','enrolled');
-Route::get('lesson/{lesson}/reply/{reply}/comments', 'CommentController@index')->name('comment.index')->middleware('auth','enrolled');
-Route::delete('course/{course}/comment/{comment}/delete', 'CommentController@delete')->name('comment.delete')->middleware('auth','enrolled');
+Route::post('class/{cohort}/lesson/{lesson}/section/{section}/reply', 'ReplyController@store')->name('reply.create')->middleware(['auth']);
+Route::delete('class/{cohort}/course/{course}/week/{week:number}/lesson/{lesson}/section/{section}/reply/{reply}/delete', 'ReplyController@destroy')->name('reply.delete')->middleware(['auth','owner']);
 
-Route::get('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}', 'SectionController@show')->name('section.show')->middleware('auth','enrolled');
-Route::get('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}/reply/{reply}/{show_feedback?}', 'SectionController@show')->name('section.reply')->middleware('auth','enrolled');
-Route::get('course/{course}/week/{week:number}/lesson/{lesson}/section/{section}/delete', 'SectionController@delete')->name('section.delete')->middleware('auth','enrolled');
+// Comments
 
+Route::post('comment/create', 'CommentController@store')->name('comment.create')->middleware('auth');
+Route::get('reply/{reply}/comments', 'CommentController@index')->name('comment.index')->middleware('auth');
+Route::delete('comment/{comment}/delete', 'CommentController@delete')->name('comment.delete')->middleware('auth');
+
+// Chatroom Manager
 
 Route::get('admin/chatroom/', 'ChatroomController@index')->name('chatroom.index')->middleware('admin');
-Route::get('admin/chatroom/course/{course}', 'ChatroomController@course')->name('chatroom.course')->middleware('admin');
-Route::get('admin/chatroom/course/{course}/lesson/{lesson}', 'ChatroomController@lesson')->name('chatroom.lesson')->middleware('admin');
-Route::get('admin/chatroom/course/{course}/week/{week:number}/lesson/{lesson}/section/{section}', 'ChatroomController@section')->name('chatroom.section')->middleware('admin');
-Route::get('admin/chatroom/course/{course}/week/{week:number}/lesson/{lesson}/section/{section}/reply/{reply}/{show_feedback?}', 'ChatroomController@section')->name('chatroom.reply')->middleware('admin');
+Route::get('admin/chatroom/class/{cohort}/course/{course}', 'ChatroomController@cohort')->name('chatroom.cohort')->middleware('admin');
+Route::get('admin/chatroom/class/{cohort}/course/{course}/lesson/{lesson}', 'ChatroomController@lesson')->name('chatroom.lesson')->middleware('admin');
+Route::get('admin/chatroom/class/{cohort}/course/{course}/week/{week:number}/lesson/{lesson}/section/{section}', 'ChatroomController@section')->name('chatroom.section')->middleware('admin');
+Route::get('admin/chatroom/class/{cohort}/course/{course}/week/{week:number}/lesson/{lesson}/section/{section}/reply/{reply}/{show_feedback?}', 'ChatroomController@section')->name('chatroom.reply')->middleware('admin');
 
+// Course Manager
 
 Route::get('admin/courses', 'CourseController@manage')->name('courses.manage')->middleware('admin');
 Route::get('admin/course/new', 'CourseController@create')->name('course.new')->middleware('admin');
@@ -132,6 +145,12 @@ Route::put('admin/course/{course}/week/{week:number}/lesson/{lesson}', 'LessonCo
 Route::delete('admin/course/{course}/week/{week:number}/lesson/{lesson}', 'LessonController@destroy')->name('lesson.delete')->middleware('admin');
 Route::post('admin/course/{course}/week/{week:number}/lesson/{lesson}/reordersections/{newOrder}', 'LessonController@reorderSections')->name('lesson.reorderSections')->middleware('admin');
 
+Route::get('admin/course/{course}/class/new', 'CohortController@create')->name('cohort.create')->middleware('admin');
+Route::post('admin/course/{course}/class/create', 'CohortController@store')->name('cohort.store')->middleware('admin');
+Route::get('admin/course/{course}/class/{cohort}', 'CohortController@edit')->name('cohort.edit')->middleware('admin');
+Route::put('admin/course/{course}/class/{cohort}', 'CohortController@update')->name('cohort.update')->middleware('admin');
+Route::delete('admin/course/{course}/class/{cohort}', 'CohortController@destroy')->name('cohort.delete')->middleware('admin');
+
 Route::get('admin/course/{course}/week/{week:number}/lesson/{lesson}/section/new', [App\Http\Controllers\SectionController::class, 'create'])->name('section.create')->middleware('admin');
 Route::post('admin/course/{course}/week/{week:number}/lesson/{lesson}/section/create', 'SectionController@store')->name('section.store')->middleware('admin');
 Route::put('admin/course/{course}/week/{week:number}/lesson/{lesson}/section/{section}', 'SectionController@update')->name('section.update')->middleware('admin');
@@ -139,9 +158,11 @@ Route::get('admin/course/{course}/week/{week:number}/lesson/{lesson}/section/{se
 Route::delete('admin/course/{course}/week/{week:number}/lesson/{lesson}/section/{section}', 'SectionController@delete')->name('section.delete')->middleware('admin');
 
 Route::post('admin/upload/store', 'UploadController@store')->name('upload.store')->middleware('admin');
-
-
 Route::get('admin/activity', 'ActivityController@index')->name('activities')->middleware('admin');
+
+
+
+// Email previews
 
 Route::get('admin/emails', 'AdminController@emails')->name('admin.emails')->middleware('admin');
 

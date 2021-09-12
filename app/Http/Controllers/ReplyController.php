@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Reply;
 use App\Models\Lesson;
 use App\Models\Course;
+use App\Models\Cohort;
 use App\Models\Week;
 use App\Models\Section;
 use App\Models\Video;
@@ -28,10 +29,11 @@ class ReplyController extends Controller
       $this->middleware('auth');
     }
 
-    public function destroy(Request $request, Course $course, Week $week, Lesson $lesson, Section $section, Reply $reply) {
+    public function destroy(Request $request, Cohort $cohort, Course $course, Week $week, Lesson $lesson, Section $section, Reply $reply) {
       $reply->delete();
 
       return redirect()->route($request->in_chatroom_manager ? 'chatroom.section' : 'section.show', [
+        'cohort' => $cohort,
         'course' => $course,
         'week' => $week,
         'lesson' => $lesson,
@@ -45,7 +47,7 @@ class ReplyController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function store(StoreReply $request, Lesson $lesson, Section $section) {
+    public function store(StoreReply $request, Cohort $cohort, Lesson $lesson, Section $section) {
 
       if($request->video) {
         $video = Video::create([
@@ -58,14 +60,15 @@ class ReplyController extends Controller
 
 
       $reply = Reply::create([
-          'user_id' => $request->user_id,
-          'reply_id' => $request->reply_id,
-          'lesson_id' => $request->reply_id ? null : $lesson->id,
-          'section_id' => $request->reply_id ? null : $section->id,
-          'video_id' => $request->video ? $video->id : null,
-          'text' => $request->text,
-          'type' => $request->audio ? 'audio' :
-                      ($request->video ? 'video' : 'text')
+        'cohort_id' => $cohort->id,
+        'user_id' => $request->user_id,
+        'reply_id' => $request->reply_id,
+        'lesson_id' => $request->reply_id ? null : $lesson->id,
+        'section_id' => $request->reply_id ? null : $section->id,
+        'video_id' => $request->video ? $video->id : null,
+        'text' => $request->text,
+        'type' => $request->audio ? 'audio' :
+                    ($request->video ? 'video' : 'text')
       ]);
 
 

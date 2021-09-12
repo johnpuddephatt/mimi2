@@ -24,6 +24,7 @@ class Reply extends Model
 
     protected $fillable = [
         'video_id',
+        'cohort_id',
         'audio',
         'text',
         'lesson_id',
@@ -35,6 +36,7 @@ class Reply extends Model
 
     protected $casts = [
       'user_id' => 'integer',
+      'cohort_id' => 'integer',
       'lesson_id' => 'integer',
       'section_id' => 'integer',
       'reply_id' => 'integer',

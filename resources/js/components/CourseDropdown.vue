@@ -3,52 +3,51 @@
     class="is-block"
     position="is-bottom-right"
     append-to-body
-    aria-role="menu">
+    aria-role="menu"
+  >
     <template #trigger>
-        <button
-            class="button is-fullwidth navbar-item text-overflow-ellipsis"
-            role="button">
-            <span class="">{{ current }}</span>
-            <b-icon icon="chevron-down"></b-icon>
-        </button>
+      <button
+        class="button is-fullwidth navbar-item text-overflow-ellipsis"
+        role="button"
+      >
+        <span class="">{{ current }}</span>
+        <b-icon icon="chevron-down"></b-icon>
+      </button>
     </template>
 
     <b-dropdown-item has-link aria-role="menuitem">
       <inertia-link
-        v-for="course in courses"
-        :key="course.id"
-        :href="route('chatroom.course', {'course': course.id })"
-        >
-        {{ course.title }}
+        v-for="cohort in cohorts"
+        :key="cohort.id"
+        :href="
+          route('chatroom.cohort', {
+            cohort: cohort.id,
+            course: cohort.course_id
+          })
+        "
+      >
+        {{ cohort.title }}
       </inertia-link>
     </b-dropdown-item>
   </b-dropdown>
-
 </template>
 
 <script>
 export default {
-  props: ['courses', 'current'],
+  props: ["cohorts", "current"],
 
   data() {
-    return {
-    }
+    return {};
   },
 
-  computed: {
-
-  },
+  computed: {},
 
   mounted() {},
 
-  watch: {
+  watch: {},
 
-  },
-
-  methods: {
-
-  }
-}
+  methods: {}
+};
 </script>
 
 <style lang="scss">
