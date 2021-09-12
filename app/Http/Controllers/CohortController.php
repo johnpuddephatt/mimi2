@@ -124,18 +124,26 @@ class CohortController extends Controller
           return redirect(RouteServiceProvider::HOME)->with('message', 'You are already enrolled in this class');
         }
         else {
-          if(\Auth::User()->subscribed() || \Auth::User()->hasCredits() || $cohort->companion) {
-            \Auth::User()->cohorts()->attach($cohort_id, [
-              'is_subscription_based' => ((\Auth::User()->hasCredits() || $cohort->companion) ? false : true)
-            ]);
-            if(!$cohort->companion && \Auth::User()->hasCredits()) {
-              \Auth::User()->decrement('credits');
-            }
-            return redirect(RouteServiceProvider::HOME)->with('message', 'You have been enrolled.');
+          \Auth::User()->cohorts()->attach($cohort_id, [
+            'is_subscription_based' => ((\Auth::User()->hasCredits() || $cohort->companion) ? false : true)
+          ]);
+          if(!$cohort->companion && \Auth::User()->hasCredits()) {
+            \Auth::User()->decrement('credits');
           }
-          else {
-            return redirect(RouteServiceProvider::HOME)->with('message', 'You do not have a active payment plan.');
-          }
+          return redirect(RouteServiceProvider::HOME)->with('message', 'You have been enrolled.');
+
+          // if(\Auth::User()->subscribed() || \Auth::User()->hasCredits() || $cohort->companion) {
+          //   \Auth::User()->cohorts()->attach($cohort_id, [
+          //     'is_subscription_based' => ((\Auth::User()->hasCredits() || $cohort->companion) ? false : true)
+          //   ]);
+          //   if(!$cohort->companion && \Auth::User()->hasCredits()) {
+          //     \Auth::User()->decrement('credits');
+          //   }
+          //   return redirect(RouteServiceProvider::HOME)->with('message', 'You have been enrolled.');
+          // }
+          // else {
+          //   return redirect(RouteServiceProvider::HOME)->with('message', 'You do not have a active payment plan.');
+          // }
 
         }
       }
