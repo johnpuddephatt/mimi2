@@ -7,17 +7,16 @@
       <div class="column is-7-tablet is-6-desktop is-5-widescreen is-paddingless">
         <div class="box">
           <h3 class="title has-text-centered">Registrati 💡️</h3>
-          <p class="subtitle has-text-centered">Log in or register to access this course</p>
+          <p class="subtitle has-text-centered">Log in or register to join this course</p>
 
           <div class="buttons">
-            <a class="button is-fullwidth" href="{{ route('register', ['cohort' => $cohort ])}}">Register a new
-              account</a>
-            <a class="button is-fullwidth" href="{{ route('login', ['cohort' => $cohort ])}}">Log in to your existing
+            <a class="button is-primary is-fullwidth" href="{{ route('login', ['cohort' => $cohort ])}}">Log in to your
+              existing
               account</a>
           </div>
 
-          <p>If this is your first time using the chat room, choose <strong>Register</strong>. If you’ve used it before,
-            choose <strong>Log in</strong></p>
+          <p>If you haven’t created an account on the site yet, <a
+              href="{{ route('register', ['cohort' => $cohort ])}}">you can register one here</a></p>
         </div>
       </div>
     </div>

@@ -143,8 +143,8 @@ class CohortController extends Controller
         return view('enrol', compact('cohort'));
       }
 
-      // else {
-      //   return redirect()->route('login', ['course' => $course ]);
+      // else {  
+      //   return redirect()->route('login', ['cohort' => $cohort ]);
       // }
     }
 
