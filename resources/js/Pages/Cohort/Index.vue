@@ -57,11 +57,11 @@
             <span class="text-overflow-ellipsis">{{
               cohort.course.title
             }}</span>
-            <span v-if="!cohort.active" class="tag is-light ml-2"
+            <!-- <span v-if="!cohort.active" class="tag is-light ml-2"
               >Archived</span
-            >
+            > -->
             <b-icon v-if="cohort.active" icon="arrow-right" />
-            <span v-else class="tag is-primary ml-2">Coming soon</span>
+            <!-- <span v-else class="tag is-primary ml-2">Coming soon</span> -->
           </inertia-link>
 
           <section
