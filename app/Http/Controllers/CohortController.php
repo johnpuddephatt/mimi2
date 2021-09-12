@@ -125,7 +125,7 @@ class CohortController extends Controller
         }
         else {
           \Auth::User()->cohorts()->attach($cohort_id, [
-            'is_subscription_based' => ((\Auth::User()->hasCredits() || $cohort->companion) ? false : true)
+            'is_subscription_based' => ((\Auth::User()->subscribed() && !$cohort->companion) ? true : false)
           ]);
           if(!$cohort->companion && \Auth::User()->hasCredits()) {
             \Auth::User()->decrement('credits');
