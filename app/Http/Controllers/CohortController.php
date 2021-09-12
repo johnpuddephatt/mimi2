@@ -66,9 +66,9 @@ class CohortController extends Controller
      */
     public function show(Cohort $cohort, Course $course)
     {
-      if(!$cohort->active && !\Auth::user()->is_admin) {
-        return back()->with('message', 'This class is not live yet.');
-      }
+      // if(!$cohort->active && !\Auth::user()->is_admin) {
+      //   return back()->with('message', 'This class is not live yet.');
+      // }
       $course->load(['weeks' => function ($query) {
         $query->where('live', true);
       }]);
