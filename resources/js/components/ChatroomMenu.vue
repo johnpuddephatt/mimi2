@@ -27,7 +27,7 @@
             <strong class="mr-1">{{ lesson.week.name }}</strong>
             <span class="text-overflow-ellipsis">{{ lesson.title }}</span>
             <span class="ml-1 tag is-rounded"
-              >{{ lesson.feedbackless_reply_count }} new</span
+              >{{ lesson.replies_count }} new</span
             >
           </inertia-link>
         </li>
