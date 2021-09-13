@@ -24,13 +24,12 @@ class RedirectIfNotEnrolled
       if(Auth::User()->is_admin) {
         return $next($request);
       }
-
       
-        $cohort_id = $request->route('cohort') ? $request->route('cohort')->id : null;
+      $cohort_id = $request->route('cohort') ? $request->route('cohort')->id : null;
       
       
       // Check user has subscription or active cohort if we’re not looking at a cohort
-      if(!$cohort_id && (Auth::User()->hasActiveCohort() || Auth::User()->subscribed())) {
+      if(!$cohort_id && (Auth::User()->hasActiveCohort() || Auth::User()->subscribed() || Auth::User()->hasCredits())) {
         return $next($request);
       }
 
@@ -40,8 +39,8 @@ class RedirectIfNotEnrolled
         return $next($request);
       }
 
-      // Return next if cohort is companion and user is enrolled in an active non-companion cohort
-      if($cohort_id && $request->route('cohort')->companion && (Auth::User()->hasActiveCohort() || Auth::User()->subscribed())) {
+      // Return next if cohort is companion and user is enrolled in an active non-companion cohort OR has a subscription OR has credits (useful at start of term when people haven't been enrolled yet)
+      if($cohort_id && $request->route('cohort')->companion && (Auth::User()->hasActiveCohort() || Auth::User()->subscribed() || Auth::User()->hasCredits())) {
         return $next($request);
       }
 

@@ -19,14 +19,14 @@ class CohortController extends Controller
      */
     public function index()
     {
-        if(\Auth::User()->is_admin) {
+      if(\Auth::User()->is_admin) {
         $cohorts = Cohort::active()->get();
         $inactive_cohorts = Cohort::withoutGlobalScopes()->inactive()->get();
       }
       else {
         $cohorts = \Auth::User()->cohorts()->active()->get();
         
-        if(\Auth::User()->subscribed() || \Auth::User()->hasActiveCohort()) {
+        if(\Auth::User()->subscribed() || \Auth::User()->hasActiveCohort() || Auth::User()->hasCredits()) {
             $cohorts = $cohorts->merge(Cohort::companion()->get());
         }
         $inactive_cohorts = \Auth::User()->inactiveCohorts()->get();
