@@ -33,7 +33,8 @@
         &nbsp;
         <span
           :title="`${cohort.replies_count} replies awaiting feedback`"
-          class="tag is-success is-rounded ml-a"
+          class="tag is-rounded ml-a"
+          :class="cohort.replies_count == 0 ? '' : 'is-success'"
           >{{ cohort.replies_count }} new</span
         >
       </inertia-link>
