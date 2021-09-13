@@ -28,7 +28,12 @@
             <span class="text-overflow-ellipsis">{{ lesson.title }}</span>
             <span
               class="ml-1 tag is-rounded"
-              :class="lesson.replies_count == 0 ? '' : 'is-success'"
+              :class="
+                lesson.id == $page.props.parameters.lesson ||
+                lesson.replies_count == 0
+                  ? ''
+                  : 'is-success'
+              "
               >{{ lesson.replies_count }} new</span
             >
           </inertia-link>
