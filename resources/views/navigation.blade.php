@@ -67,9 +67,9 @@
             <a class="navbar-item" href="{{ route('profile.show') }}">
               My profile
             </a>
-            <a class="navbar-item" href="{{ route('user.chatrooms') }}">
-              My chatroom replies
-            </a>
+            {{-- <a class="navbar-item" href="{{ route('user.chatrooms') }}">
+            My chatroom replies
+            </a> --}}
             @if(Auth::user()->subscribed() || (Auth::user()->subscription('default') &&
             Auth::user()->subscription('default')->onGracePeriod()))
             <a class="navbar-item" href="{{ route('billing.portal') }}">
