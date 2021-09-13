@@ -5,7 +5,7 @@
         :new_count="new_count"
         :cohorts="cohorts"
         :lessons="lessons"
-        :current="`${cohort.course.title} <em>${cohort.title}</em>`"
+        :current="`${cohort.course.title} (${cohort.title})`"
       />
 
       <div class="column"></div>
