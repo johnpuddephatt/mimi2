@@ -112,8 +112,6 @@ class User extends Resource
 			    'hideText' => true,
 			]),
 
-            ResourceActivities::make(),
-
             NotesField::make('Notes')
             ->placeholder('Add new note') // Optional
             ->addingNotesEnabled(true) // Optional
