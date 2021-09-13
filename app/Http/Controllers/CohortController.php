@@ -26,7 +26,7 @@ class CohortController extends Controller
       else {
         $cohorts = \Auth::User()->cohorts()->active()->get();
         
-        if(\Auth::User()->subscribed() || \Auth::User()->hasActiveCohort() || Auth::User()->hasCredits()) {
+        if(\Auth::User()->subscribed() || \Auth::User()->hasActiveCohort() || \Auth::User()->hasCredits()) {
             $cohorts = $cohorts->merge(Cohort::companion()->get());
         }
         $inactive_cohorts = \Auth::User()->inactiveCohorts()->get();
