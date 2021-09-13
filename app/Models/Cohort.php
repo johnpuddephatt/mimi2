@@ -44,7 +44,7 @@ class Cohort extends Model
     }
 
     public function scopeCompanion($query) {
-        return $query->where('companion')->where('active');
+        return $query->where('companion', true)->where('active', true);
     }
 
   public function course()
