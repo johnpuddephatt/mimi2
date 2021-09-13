@@ -59,7 +59,7 @@ class ChatroomController extends Controller
         $lessons->each->append('feedbackless_reply_count');
 
         $replies = $request->include_already_replied_to ?
-                                $lesson->replies()->with('user:id,first_name,last_name,description,photo,email,created_at', 'video', 'feedback.video')->get() : $lesson->replies()->feedbackless()->with('user:id,first_name,last_name,description,photo,email,created_at', 'video', 'feedback.video')->get();
+                                $lesson->replies()->where('cohort_id',$cohort->id)->with('user:id,first_name,last_name,description,photo,email,created_at', 'video', 'feedback.video')->get() : $lesson->replies()->where('cohort_id',$cohort->id)->feedbackless()->with('user:id,first_name,last_name,description,photo,email,created_at', 'video', 'feedback.video')->get();
 
         if ($reply && !$request->include_already_replied_to && !$replies->contains(
             function ($value) use ($reply) {
