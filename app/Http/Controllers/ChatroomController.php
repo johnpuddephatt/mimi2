@@ -59,8 +59,6 @@ class ChatroomController extends Controller
             $query->feedbackless();
         }])->get();
 
-        dd($lessons);
-
         // $lessons->each->append('feedbackless_reply_count');
         
         $replies = $request->include_already_replied_to ?

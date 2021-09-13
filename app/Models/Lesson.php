@@ -35,9 +35,9 @@ class Lesson extends Model
       return $query->where('live', true);
     }
 
-    public function getFeedbacklessReplyCountAttribute() {
-      return $this->replies()->feedbackless()->count();
-    }
+    // public function getFeedbacklessReplyCountAttribute() {
+    //   return $this->replies()->feedbackless()->count();
+    // }
 
     public function next() {
       return $this->week->lessons()->select('id','title')->where('day', '>', $this->day)->live()->first();
