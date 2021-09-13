@@ -9,6 +9,7 @@
   "license": "MIT",
   "require": {
     "php": "^7.2",
+    "alive2tinker/resource-activities": "dev-main",
     "aws/aws-sdk-php": "3.173.23",
     "codex-team/editor.js": "dev-master",
     "fideloper/proxy": "^4.2",
@@ -26,9 +27,10 @@
     "laravel/tinker": "^2.0",
     "league/flysystem-aws-s3-v3": "^1.0",
     "limedeck/nova-cashier-overview": "^3.0",
+    "optimistdigital/nova-notes-field": "^2.0",
     "pbmedia/laravel-ffmpeg": "7.5.9",
     "spatie/eloquent-sortable": "^3.11",
-    "spatie/laravel-activitylog": "^3.16",
+    "spatie/laravel-activitylog": "^3.17",
     "tightenco/nova-stripe": "^1.0",
     "tightenco/ziggy": "^1.0",
     "vinkla/hashids": "^9.1"

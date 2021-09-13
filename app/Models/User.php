@@ -11,9 +11,11 @@ use Laravel\Cashier\Billable;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\SubscriptionsSync;
 use Illuminate\Database\Eloquent\Builder;
+use OptimistDigital\NovaNotesField\Traits\HasNotes;
 
 class User extends Authenticatable
 {
+    use HasNotes;
     use Billable;
     use Notifiable;
     use HasFactory;

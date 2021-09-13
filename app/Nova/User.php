@@ -13,8 +13,11 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\Badge;
+
 use KABBOUCHI\NovaImpersonate\Impersonate;
 use LimeDeck\NovaCashierOverview\Subscription;
+use OptimistDigital\NovaNotesField\NotesField;
+use Alive2tinker\ResourceActivities\ResourceActivities;
 
 class User extends Resource
 {
@@ -108,6 +111,13 @@ class User extends Resource
             Impersonate::make($this)->withMeta([
 			    'hideText' => true,
 			]),
+
+            ResourceActivities::make(),
+
+            NotesField::make('Notes')
+            ->placeholder('Add new note') // Optional
+            ->addingNotesEnabled(true) // Optional
+            ->fullWidth(), // Optional
 
         ];
     }
