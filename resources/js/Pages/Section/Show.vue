@@ -190,6 +190,7 @@
                 <inertia-link
                   :href="
                     route('week.show', {
+                      cohort: $page.props.parameters.cohort,
                       course: $page.props.parameters.course,
                       week: next_week.number
                     })
