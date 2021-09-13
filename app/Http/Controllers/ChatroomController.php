@@ -74,7 +74,7 @@ class ChatroomController extends Controller
 
         return Inertia::render('Admin/Chatroom/Section', [
             'new_count' => Reply::whereNull('reply_id')->feedbackless()->count(),
-            'cohorts' => fn () => Cohort::all(),
+            'cohorts' => fn () => Cohort::withCount('replies')->get(),
             'cohort' => fn () => $cohort,
             'course' => fn () => $course,
             'lesson' => fn () => $lesson->load('week'),

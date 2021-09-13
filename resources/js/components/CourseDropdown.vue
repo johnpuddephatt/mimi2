@@ -29,6 +29,12 @@
         {{ cohort.course.title }}&nbsp;<em v-if="cohort.title != 'Default'">{{
           cohort.title
         }}</em>
+        &nbsp;
+        <span
+          :title="`${cohort.replies_count} replies awaiting feedback`"
+          class="tag is-success is-rounded ml-a"
+          >{{ cohort.replies_count }} new</span
+        >
       </inertia-link>
     </b-dropdown-item>
   </b-dropdown>

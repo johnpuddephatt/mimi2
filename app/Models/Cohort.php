@@ -57,4 +57,11 @@ class Cohort extends Model
   {
     return $this->belongsToMany('App\Models\User', 'user_cohorts')->withPivot('is_subscription_based');;
   }
+
+  public function replies()
+  
+  {
+    return $this->hasMany('App\Models\Reply');
+  }
+
 }
