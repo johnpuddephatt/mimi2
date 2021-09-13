@@ -17,6 +17,7 @@
 
     <b-dropdown-item has-link aria-role="menuitem">
       <inertia-link
+        class="is-flex"
         v-for="cohort in cohorts"
         :key="cohort.id"
         :href="
