@@ -54,10 +54,13 @@ class ChatroomController extends Controller
     {
         $lessons = $course->lessons()->whereHas('sections', function ($query) {
             $query->where('is_chatroom', '=', true);
-        })->with('week:id,name')->get();
+        })->with('week:id,name')->withCount(['replies' => function ($query) use ($cohort) {
+            $query->where('cohort_id', '=', $cohort->id);
+            $query->feedbackless();
+        }])->get();
 
-        $lessons->each->append('feedbackless_reply_count');
-
+        // $lessons->each->append('feedbackless_reply_count');
+        
         $replies = $request->include_already_replied_to ?
                                 $lesson->replies()->where('cohort_id',$cohort->id)->with('user:id,first_name,last_name,description,photo,email,created_at', 'video', 'feedback.video')->get() : $lesson->replies()->where('cohort_id',$cohort->id)->feedbackless()->with('user:id,first_name,last_name,description,photo,email,created_at', 'video', 'feedback.video')->get();
 
