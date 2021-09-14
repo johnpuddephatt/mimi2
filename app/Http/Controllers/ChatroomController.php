@@ -31,7 +31,7 @@ class ChatroomController extends Controller
         }
 
         return Inertia::render('Admin/Chatroom/Cohort', [
-          'new_count' => Reply::whereNull('reply_id')->feedbackless()->count(),
+          'new_count' => Reply::feedbackless()->count(),
           'cohorts' => Cohort::all(),
           'cohort' => $cohort,
           'course' => $course
@@ -73,7 +73,7 @@ class ChatroomController extends Controller
         }
 
         return Inertia::render('Admin/Chatroom/Section', [
-            'new_count' => Reply::whereNull('reply_id')->feedbackless()->count(),
+            'new_count' => Reply::feedbackless()->count(),
             'cohorts' => fn () => Cohort::withCount(['replies' => function($query) {
                 $query->feedbackless();
             }])->get(),

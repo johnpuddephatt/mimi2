@@ -77,7 +77,7 @@ class Reply extends Model
     }
 
     public function scopeFeedbackless($query) {
-      return $query->doesntHave('feedback');
+      return $query->whereNull('reply_id')->doesntHave('feedback');
     }
 
     public function user()
