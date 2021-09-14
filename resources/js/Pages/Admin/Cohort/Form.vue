@@ -144,7 +144,9 @@ export default {
         enables_companion_courses:
           this.data?.enables_companion_courses ?? false,
         active: this.data?.active ?? true,
-        companion: this.data?.companion ?? false
+        companion: this.data?.companion ?? false,
+        enables_speaking_club_access:
+          this.data?.enables_speaking_club_access ?? false
       })
     };
   },
