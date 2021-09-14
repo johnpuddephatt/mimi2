@@ -24,8 +24,7 @@ class CourseFactory extends Factory
 
       return [
           'title' => $this->faker->sentence(5),
-          'description' => $this->faker->paragraph(1),
-          'archived' => floor(rand(0,10)/9)
+          'description' => $this->faker->paragraph(1)
       ];
     }
 };

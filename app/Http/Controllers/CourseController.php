@@ -37,16 +37,6 @@ class CourseController extends Controller
       return redirect()->route('course.edit', ['course' => $course]);
     }
 
-    public function show(Course $course) {
-      if(!$course->live && !\Auth::user()->is_admin) {
-        return back()->with('message', 'This course is not live yet.');
-      }
-      $course->load(['weeks' => function ($query) {
-        $query->where('live', true);
-      }]);
-      return Inertia::render('Course/Show', ['course' => $course]);
-    }
-
     public function edit(Course $course) {
       $course->load('weeks.lessons');
       $course->load('cohorts');

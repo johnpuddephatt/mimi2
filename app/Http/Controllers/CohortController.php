@@ -26,7 +26,7 @@ class CohortController extends Controller
       else {
         $cohorts = \Auth::User()->cohorts()->active()->get();
         
-        if(\Auth::User()->subscribed() || \Auth::User()->hasActiveCohort() || \Auth::User()->hasCredits()) {
+        if(\Auth::User()->hasAccessToCompanionCourses()) {
             $cohorts = $cohorts->merge(Cohort::companion()->get());
         }
         $inactive_cohorts = \Auth::User()->inactiveCohorts()->get();
@@ -67,9 +67,6 @@ class CohortController extends Controller
      */
     public function show(Cohort $cohort, Course $course)
     {
-      // if(!$cohort->active && !\Auth::user()->is_admin) {
-      //   return back()->with('message', 'This class is not live yet.');
-      // }
       $course->load(['weeks' => function ($query) {
         $query->where('live', true);
       }]);

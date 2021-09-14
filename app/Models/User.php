@@ -79,8 +79,18 @@ class User extends Authenticatable
       return $this->credits > 0;
     }
 
-    public function hasActiveCohort() {
-      return $this->cohorts()->where('active', true)->where('companion', false)->count();
+    public function hasAccessToCompanionCourses() {
+      return \Auth::User()->subscribed()
+          || \Auth::User()->hasCredits()
+          || $this->cohorts()->where('active', true)->where('enables_companion_courses', true)->count();
+    }
+
+    public function hasAccessToSpeakingClub() {
+      return \Auth::User()->is_admin || $this->cohorts()->where('active', true)->where('enables_speaking_club_access', true)->count();
+    }
+
+    public function isCurrent() {
+      return $this->cohorts()->where('active', true)->where('companion', false)->count() || Auth::User()->subscribed() || Auth::User()->hasCredits();
     }
 
     public function courses()

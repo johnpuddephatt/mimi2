@@ -23,7 +23,9 @@
       <div class="navbar-start">
         @if(Auth::user())
         <a class="navbar-item" href="{{ route('cohort.index') }}">My classes</a>
+        @if(Auth::user()->hasAccessToSpeakingClub())
         <a class="navbar-item" href="{{ route('scheduler') }}">Speaking club</a>
+        @endif
         @endif
       </div>
 

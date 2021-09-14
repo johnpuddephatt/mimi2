@@ -66,10 +66,6 @@ class UserController extends Controller
 
     public function chatrooms() {
        $cohorts = \Auth::User()->cohorts()->where('enable_chatroom')->active()->get();
-        
-        if(\Auth::User()->subscribed() || \Auth::User()->hasActiveCohort()) {
-            $cohorts = $cohorts->merge(Cohort::companion()->where('enable_chatroom')->get());
-        }
 
         if(!$cohorts->count()) {
           abort(404);
@@ -86,7 +82,7 @@ class UserController extends Controller
 
         $cohorts = \Auth::User()->cohorts()->where('enable_chatroom')->active()->get();
         
-        if(\Auth::User()->subscribed() || \Auth::User()->hasActiveCohort()) {
+        if(\Auth::User()->hasAccessToCompanionCourses()) {
             $cohorts = $cohorts->merge(Cohort::companion()->where('enable_chatroom')->get());
         }
 

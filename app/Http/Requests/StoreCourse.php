@@ -26,8 +26,7 @@ class StoreCourse extends FormRequest
       return [
           'title' => 'required|max:255',
           'description' => 'nullable',
-          'archived' => 'boolean',
-          'is_open' => 'boolean'
-      ];
+          'archived' => 'boolean'
+        ];
     }
 }

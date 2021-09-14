@@ -29,7 +29,6 @@
           </h3>
         </div>
         <Chatroom
-          :show_admin_interface="true"
           :in_chatroom_manager="true"
           :comments="comments"
           :replies="replies"

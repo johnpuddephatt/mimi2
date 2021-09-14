@@ -16,10 +16,6 @@
             ></div>
           </div>
 
-          <div v-if="course.archived" class="notification is-warning">
-            <strong>This class has finished and has now been archived.</strong>
-          </div>
-
           <inertia-link
             v-for="week in course.weeks"
             :key="week.id"

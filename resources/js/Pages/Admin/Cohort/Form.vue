@@ -43,13 +43,51 @@
                 ></b-input>
               </b-field>
 
+              <hr />
+
               <b-checkbox v-model="form.enable_chatroom"
-                >Allow students to post in chatroom?</b-checkbox
+                >Enable chatroom?</b-checkbox
               >
-              <b-checkbox v-model="form.companion"
-                >Companion course?</b-checkbox
-              >
+              <p class="is-size-7 mb-2">
+                When <strong>disabled</strong>, chatrooms will not be displayed
+                within this class.
+              </p>
+
               <b-checkbox v-model="form.active">Active?</b-checkbox>
+              <p class="is-size-7 mb-2">
+                When <strong>enabled</strong>, this class will be listed in
+                students’ active classes and students will be able to post new
+                chatroom replies.<br />
+                When <strong>disabled</strong>, students will no longer be able
+                to post new chatroom replies. They will also lose access to
+                speaking club and companion classes, even if these options are
+                enabled below.
+              </p>
+
+              <b-checkbox v-model="form.enables_companion_courses"
+                >Enables access to companion classes?</b-checkbox
+              >
+              <p class="is-size-7 mb-2">
+                When <strong>enabled</strong>, students enrolled in this class
+                will be able to access companion classes while this class is
+                active.
+              </p>
+
+              <b-checkbox v-model="form.companion">Companion class?</b-checkbox>
+              <p class="is-size-7 mb-2">
+                When <strong>enabled</strong>, this class will be accessible by
+                all students enrolled in an active class that includes access to
+                companion courses.
+              </p>
+
+              <b-checkbox v-model="form.enables_speaking_club_access"
+                >Includes access to speaking club?</b-checkbox
+              >
+              <p class="is-size-7 mb-2">
+                When <strong>enabled</strong>, this students enrolled on this
+                class will be able to access speaking club.
+                <em>This is only in effect while this class is active.</em>
+              </p>
             </b-tab-item>
             <b-tab-item v-if="$page.props.parameters.cohort" label="Students">
               <course-users :cohort_id="$page.props.parameters.cohort" />
@@ -103,6 +141,8 @@ export default {
         id: this.data?.id ?? null,
         title: this.data?.title ?? null,
         enable_chatroom: this.data?.enable_chatroom ?? false,
+        enables_companion_courses:
+          this.data?.enables_companion_courses ?? false,
         active: this.data?.active ?? true,
         companion: this.data?.companion ?? false
       })

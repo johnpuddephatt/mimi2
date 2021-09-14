@@ -109,10 +109,10 @@
 
           <Chatroom
             class="negative-margin"
-            v-if="section.is_chatroom"
+            v-if="section.is_chatroom && enable_chatroom"
             :replies="replies"
             :comments="comments"
-            :page.props.parameters="$page.props.parameters"
+            :allow_new="allow_new"
           ></Chatroom>
 
           <div class="section-footer container is-flex">
@@ -226,6 +226,8 @@ import Chatroom from "@/components/Chatroom";
 
 export default {
   props: [
+    "enable_chatroom",
+    "allow_new",
     "blocks_prerendered",
     "comments",
     "replies",

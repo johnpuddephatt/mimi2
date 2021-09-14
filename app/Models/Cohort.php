@@ -13,13 +13,17 @@ class Cohort extends Model
     protected $fillable = [
       'course_id',
       'enable_chatroom',
+      'enables_companion_courses',
       'title',
       'active',
-      'companion'
+      'companion',
+      'enables_speaking_club_access'
     ];
 
     protected $casts = [
       'course_id' => 'integer',
+      'enables_companion_courses' => 'boolean',
+      'enables_speaking_club_access' => 'boolean',
       'enable_chatroom' => 'boolean',
       'active' => 'boolean',
       'companion' => 'boolean'

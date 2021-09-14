@@ -75,10 +75,10 @@ class User extends Resource
 
             Badge::make('Status', function () {
                 if($this->subscribed() == 'true') {
-                    return 'Subscribed';
+                    return 'Active (pay monthly)';
                 }
-                elseif($this->hasActiveCohort()) {
-                    return 'Enrolled';
+                elseif($this->isCurrent()) {
+                    return 'Active';
                 }
                 else {
                     return null;

@@ -29,7 +29,7 @@ class RedirectIfNotEnrolled
       
       
       // Check user has subscription or active cohort if we’re not looking at a cohort
-      if(!$cohort_id && (Auth::User()->hasActiveCohort() || Auth::User()->subscribed() || Auth::User()->hasCredits())) {
+      if(!$cohort_id && (Auth::User()->isCurrent())) {
         return $next($request);
       }
 
@@ -40,7 +40,7 @@ class RedirectIfNotEnrolled
       }
 
       // Return next if cohort is companion and user is enrolled in an active non-companion cohort OR has a subscription OR has credits (useful at start of term when people haven't been enrolled yet)
-      if($cohort_id && $request->route('cohort')->companion && (Auth::User()->hasActiveCohort() || Auth::User()->subscribed() || Auth::User()->hasCredits())) {
+      if($cohort_id && $request->route('cohort')->companion && Auth::User()->hasAccessToCompanionCourses()) {
         return $next($request);
       }
 

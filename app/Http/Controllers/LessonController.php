@@ -115,7 +115,7 @@ class LessonController extends Controller
       }
 
       return Inertia::render('Lesson/Print', [
-        'course' => $course->only('id','title','archived'),
+        'course' => $course->only('id','title'),
         'lesson' => $lesson->load('sections:id,order,title,lesson_id')->only('id','title','instructions','day','sections'),
         'blocks_prerendered' => $blocks_prerendered
       ]);

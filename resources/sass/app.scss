@@ -28,7 +28,7 @@
 // Fat button, used for section next/previous links
 .is-fat {
   height: auto;
-  padding: .75em 1.25em;
+  padding: 0.75em 1.25em;
   font-weight: 600;
   white-space: normal;
   line-height: 1.1;
@@ -40,7 +40,7 @@
 
 .back-link {
   display: inline-block;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 
 .section {
@@ -96,15 +96,16 @@
 }
 
 @keyframes autoDismiss {
-  0%,100% {
+  0%,
+  100% {
     opacity: 0;
     transform: translateY(1em);
   }
-  15%, 85% {
+  15%,
+  85% {
     opacity: 1;
     transform: translateY(0);
   }
-
 }
 
 .button {
@@ -153,7 +154,6 @@ main {
   }
 }
 
-
 .modal {
   @media screen and (orientation: portrait) {
     // Keeps modal over help scout on small screens
@@ -167,7 +167,8 @@ main {
   max-width: 100%;
 }
 
-#card-element, #stripe-element-mount-point {
+#card-element,
+#stripe-element-mount-point {
   @extend .input;
   display: block !important;
 }
@@ -182,5 +183,15 @@ main {
     background-color: #e3f1f3;
     color: $text;
     border-left: 1em solid $success;
+  }
+}
+
+.details-summary {
+  summary {
+    padding: 0 1em;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid gray;
+    background-color: white;
   }
 }

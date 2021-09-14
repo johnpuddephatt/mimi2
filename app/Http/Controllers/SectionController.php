@@ -51,7 +51,9 @@ class SectionController extends Controller
 
         $lesson_with_sections = $lesson->load('sections:id,title,lesson_id')->only('id','title','instructions','day','sections');
         return Inertia::render('Section/Show', [
-          'course' => fn () => $course->only('id','title','archived'),
+          'enable_chatroom' => $cohort->enable_chatroom,
+          'allow_new' => $cohort->active,
+          'course' => fn () => $course->only('id','title'),
           'week' => fn () => $week->only('id','name','number'),
           'lesson' => fn () => $lesson_with_sections,
           'section' => fn () => $section->only('id','title','order','is_chatroom'),

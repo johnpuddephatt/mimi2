@@ -64,6 +64,7 @@ class Kernel extends HttpKernel
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'nonpaying' => \App\Http\Middleware\RedirectIfAlreadyPaying::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
+        'speakingclub' => \App\Http\Middleware\RedirectIfNoSpeakingClub::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'cashier.verifyredirecturl' => \Laravel\Cashier\Http\Middleware\VerifyRedirectUrl::class

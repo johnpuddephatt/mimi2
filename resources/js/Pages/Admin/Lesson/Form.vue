@@ -2,30 +2,53 @@
   <app-layout>
     <div class="columns is-centered">
       <div class="column is-7-tablet is-6-desktop is-5-widescreen">
-        <inertia-link  class="back-link has-text-dark" :href="route('course.edit', { course: $page.props.parameters.course })">&larr; Back to course</inertia-link>
+        <inertia-link
+          class="back-link has-text-dark"
+          :href="
+            route('course.edit', { course: $page.props.parameters.course })
+          "
+          >&larr; Back to course</inertia-link
+        >
         <div class="box">
-          <h3 class="title has-text-centered">{{ data ? 'Modifica' : 'Creare' }} lezione <span class="emoji">🆕</span></h3>
-          <p class="subtitle has-text-centered">{{ data ? 'Edit the' : 'Set up a new'  }} lesson below</p>
+          <h3 class="title has-text-centered">
+            {{ data ? "Modifica" : "Creare" }} lezione
+            <span class="emoji">🆕</span>
+          </h3>
+          <p class="subtitle has-text-centered">
+            {{ data ? "Edit the" : "Set up a new" }} lesson below
+          </p>
 
           <b-notification
-                v-if="errors.course"
-                type="is-danger"
-                has-icon
-                role="alert"
-                :closable="false"
-                :message="errors.course[0]">
+            v-if="errors.course"
+            type="is-danger"
+            has-icon
+            role="alert"
+            :closable="false"
+            :message="errors.course[0]"
+          >
           </b-notification>
 
           <b-tabs>
             <b-tab-item label="Overview">
-              <b-field label="Title" :message="errors.title" :type="errors.title ? 'is-danger' : null">
-                <b-input required name="title" v-model="form.title" placeholder="Enter the title for this lesson"></b-input>
+              <b-field
+                label="Title"
+                :message="errors.title"
+                :type="errors.title ? 'is-danger' : null"
+              >
+                <b-input
+                  required
+                  name="title"
+                  v-model="form.title"
+                  placeholder="Enter the title for this lesson"
+                ></b-input>
               </b-field>
 
               <b-field grouped>
                 <b-field expanded label="Week">
                   <b-select v-model="form.week" placeholder="Select a week">
-                    <option v-for="week in weeks" :value="week.number">{{ week.name}}</option>
+                    <option v-for="week in weeks" :value="week.number">{{
+                      week.name
+                    }}</option>
                   </b-select>
                 </b-field>
                 <b-field expanded label="Day">
@@ -39,39 +62,94 @@
                     <option value="7">Sunday</option>
                   </b-select>
                 </b-field>
-
               </b-field>
 
-              <b-field label="Instructions" :message="errors.instructions" :type="errors.instructions ? 'is-danger' : null">
+              <b-field
+                label="Instructions"
+                :message="errors.instructions"
+                :type="errors.instructions ? 'is-danger' : null"
+              >
                 <tip-tap v-model="form.instructions" />
               </b-field>
 
-              <b-checkbox v-model="form.live">Make this lesson live?</b-checkbox>
-
+              <b-checkbox v-model="form.live"
+                >Make this lesson live?</b-checkbox
+              >
             </b-tab-item>
             <b-tab-item label="Sections">
               <h3 class="label is-flex is-justify-between">
                 <p>Sections</p>
-                <inertia-link v-if="$page.props.parameters.lesson"  class="button is-small is-primary ml-a has-text-weight-normal" :href="route('section.create', {course: $page.props.parameters.course, week: $page.props.parameters.week, lesson: data.id})">Add new section</inertia-link>
+                <inertia-link
+                  v-if="$page.props.parameters.lesson"
+                  class="button is-small is-primary ml-a has-text-weight-normal"
+                  :href="
+                    route('section.create', {
+                      course: $page.props.parameters.course,
+                      week: $page.props.parameters.week,
+                      lesson: data.id
+                    })
+                  "
+                  >Add new section</inertia-link
+                >
               </h3>
-              <nav v-if="$page.props.parameters.lesson" class="panel is-shadowless is-bordered">
-
-                <draggable v-model="form.sections" @start="drag=true" @end="onMoveEnd">
-                  <div v-for="section in form.sections" :key="section.id" class="panel-block">
+              <nav
+                v-if="$page.props.parameters.lesson"
+                class="panel is-shadowless is-bordered"
+              >
+                <draggable
+                  v-model="form.sections"
+                  @start="drag = true"
+                  @end="onMoveEnd"
+                >
+                  <div
+                    v-for="section in form.sections"
+                    :key="section.id"
+                    class="panel-block"
+                  >
                     <b-icon icon="menu" type="is-dark"></b-icon>
                     <p class="pl-2 ml-a text-overflow-ellipsis">
                       {{ section.title }}
-                      <span v-if="section.is_chatroom" class="tag is-rounded">chatroom</span>
+                      <span v-if="section.is_chatroom" class="tag is-rounded"
+                        >chatroom</span
+                      >
                     </p>
                     <div>
-                      <button class="button is-small ml-3" @click="confirmSectionDelete(section.id)">Delete</button>
-                      <inertia-link class="button is-small ml-1" :href="route('section.edit', {course: $page.props.parameters.course, week: $page.props.parameters.week, lesson: $page.props.parameters.lesson, section: section.id})">Edit</inertia-link>
+                      <button
+                        class="button is-small ml-3"
+                        @click="confirmSectionDelete(section.id)"
+                      >
+                        Delete
+                      </button>
+                      <inertia-link
+                        class="button is-small ml-1"
+                        :href="
+                          route('section.edit', {
+                            course: $page.props.parameters.course,
+                            week: $page.props.parameters.week,
+                            lesson: $page.props.parameters.lesson,
+                            section: section.id
+                          })
+                        "
+                        >Edit</inertia-link
+                      >
                     </div>
                   </div>
                 </draggable>
 
-                <section v-if="!form.sections.length" class="section is-medium has-background-light has-text-centered">
-                  No sections added yet. <br><inertia-link :href="route('section.create', {course: $page.props.parameters.course, week: $page.props.parameters.week, lesson: data.id})">Create the first section</inertia-link>
+                <section
+                  v-if="!form.sections.length"
+                  class="section is-medium has-background-light has-text-centered"
+                >
+                  No sections added yet. <br /><inertia-link
+                    :href="
+                      route('section.create', {
+                        course: $page.props.parameters.course,
+                        week: $page.props.parameters.week,
+                        lesson: data.id
+                      })
+                    "
+                    >Create the first section</inertia-link
+                  >
                 </section>
               </nav>
               <div class="notification" v-else>
@@ -79,8 +157,15 @@
               </div>
             </b-tab-item>
           </b-tabs>
-          <hr>
-          <b-button type="is-primary" :disabled="!form.title" @click.prevent="onSubmit" :loading="form.processing" expanded>{{ data ? 'Update' : 'Create' }}</b-button>
+          <hr />
+          <b-button
+            type="is-primary"
+            :disabled="!form.title"
+            @click.prevent="onSubmit"
+            :loading="form.processing"
+            expanded
+            >{{ data ? "Update" : "Create" }}</b-button
+          >
         </div>
       </div>
     </div>
@@ -88,17 +173,17 @@
 </template>
 
 <script>
-import { Inertia } from '@inertiajs/inertia';
+import { Inertia } from "@inertiajs/inertia";
 import CameraField from "@/components/CameraField";
-import draggable from 'vuedraggable'
-import TipTap from '@/components/TipTap';
+import draggable from "vuedraggable";
+import TipTap from "@/components/TipTap";
 
 export default {
-  props: ['errors', 'data', 'weeks', 'latest_lesson_number'],
+  props: ["errors", "data", "weeks", "latest_lesson_number"],
   components: {
-     CameraField,
-     TipTap,
-     draggable
+    CameraField,
+    TipTap,
+    draggable
   },
   data() {
     return {
@@ -113,63 +198,85 @@ export default {
         sections: this.data?.sections ?? [],
         live: this.data?.live ?? true
       }),
-      destroySectionForm: this.$inertia.form(),
-    }
+      destroySectionForm: this.$inertia.form()
+    };
   },
 
   methods: {
-    onMoveEnd: function(){
+    onMoveEnd: function() {
       this.drag = false;
 
-      this.$inertia.post(route('lesson.reorderSections', {course: this.$page.props.parameters.course, week: this.$page.props.parameters.week, lesson: this.data.id, newOrder: this.form.sections.map(section => section.id)}), null, {
-        preserveScroll: true,
-      });
+      this.$inertia.post(
+        route("lesson.reorderSections", {
+          course: this.$page.props.parameters.course,
+          week: this.$page.props.parameters.week,
+          lesson: this.data.id,
+          newOrder: this.form.sections.map(section => section.id)
+        }),
+        null,
+        {
+          preserveScroll: true
+        }
+      );
     },
 
     onSubmit() {
-      let postRoute = this.data ? route('lesson.update', { course: this.$page.props.parameters.course, week: this.form.week, lesson: this.form.id }) : route('lesson.store', { course: this.$page.props.parameters.course, week: this.form.week });
-      this.form.transform((data) => ({
+      let postRoute = this.data
+        ? route("lesson.update", {
+            course: this.$page.props.parameters.course,
+            week: this.form.week,
+            lesson: this.form.id
+          })
+        : route("lesson.store", {
+            course: this.$page.props.parameters.course,
+            week: this.form.week
+          });
+      this.form
+        .transform(data => ({
           ...data,
-          _method: (this.data ? 'PUT' : 'POST'),
+          _method: this.data ? "PUT" : "POST"
         }))
         .post(postRoute, {
           preserveScroll: true,
           onSuccess: () => {
-            this.successToast('Lesson saved');
+            this.successToast("Lesson saved");
           },
           onError: errors => {
-            this.errorToast('Check the form for errors');
-          },
-        })
+            this.errorToast("Check the form for errors");
+          }
+        });
     },
 
     confirmSectionDelete(sectionId) {
       this.$buefy.dialog.confirm({
-        title: 'Confirm section deletion',
-        type: 'is-danger',
+        title: "Confirm section deletion",
+        type: "is-danger",
         hasIcon: true,
-        message: 'Are you sure you want to delete this section?',
-        onConfirm: () => this.destroySectionForm.delete(route('section.delete', {
-            section: sectionId,
-            lesson: this.$page.props.parameters.lesson,
-            week: this.$page.props.parameters.week,
-            course: this.$page.props.parameters.course
-          }), {
-            preserveScroll: true,
-            onSuccess: () => {
-              Inertia.reload();
-              this.form.sections = this.data.sections;
-              this.successToast('Section deleted');
-            },
-            onError: errors => {
-              this.errorToast('Could not delete section.');
-            },
-          })
-      })
-    },
+        message: "Are you sure you want to delete this section?",
+        onConfirm: () =>
+          this.destroySectionForm.delete(
+            route("section.delete", {
+              section: sectionId,
+              lesson: this.$page.props.parameters.lesson,
+              week: this.$page.props.parameters.week,
+              course: this.$page.props.parameters.course
+            }),
+            {
+              preserveScroll: true,
+              onSuccess: () => {
+                Inertia.reload();
+                this.form.sections = this.data.sections;
+                this.successToast("Section deleted");
+              },
+              onError: errors => {
+                this.errorToast("Could not delete section.");
+              }
+            }
+          )
+      });
+    }
   }
-}
+};
 </script>
 
-<style>
-</style>
+<style></style>

@@ -19,10 +19,6 @@
           <h3 class="title">{{ course.title }}</h3>
           <h2 class="subtitle mb-4">{{ week.name }}</h2>
 
-          <div v-if="course.archived" class="notification is-warning">
-            <strong>This class has finished and has now been archived.</strong>
-          </div>
-
           <div class="content mb-4" v-html="week.description"></div>
 
           <h3 v-if="week.lessons.length" class="title is-size-5">

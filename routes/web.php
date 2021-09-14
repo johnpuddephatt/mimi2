@@ -20,7 +20,7 @@ Route::post('log', function (\Illuminate\Http\Request $request) {
 
 Route::get('/scheduler', function(){
   return view('scheduler');
-})->name('scheduler')->middleware(['auth','enrolled']);
+})->name('scheduler')->middleware(['auth','speakingclub']);
 
 Route::get('/terms', function(){
   return view('terms');
