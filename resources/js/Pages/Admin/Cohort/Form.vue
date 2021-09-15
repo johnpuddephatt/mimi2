@@ -45,6 +45,41 @@
 
               <hr />
 
+              <b-checkbox
+                @change.native="toggleActiveSubSettings"
+                v-model="form.active"
+                >Active?</b-checkbox
+              >
+              <p class="is-size-7 mb-2">
+                When <strong>enabled</strong>, this class will be listed in
+                students’ active classes and students will be able to post new
+                chatroom replies.
+              </p>
+              <div
+                class="is-size-7 ml-4 mt-4"
+                :class="form.active ? '' : 'disabled'"
+              >
+                <b-checkbox v-model="form.enables_companion_courses"
+                  >Includes access to companion classes?</b-checkbox
+                >
+                <p class="is-size-7 mb-2">
+                  This allows students enrolled in this class to access
+                  companion classes.
+                </p>
+
+                <b-checkbox
+                  class="mt-2"
+                  v-model="form.enables_speaking_club_access"
+                  >Includes access to speaking club?</b-checkbox
+                >
+                <p class="is-size-7 mb-2">
+                  This allows students enrolled on this class to access speaking
+                  club.
+                </p>
+              </div>
+
+              <hr />
+
               <b-checkbox v-model="form.enable_chatroom"
                 >Enable chatroom?</b-checkbox
               >
@@ -53,40 +88,13 @@
                 within this class.
               </p>
 
-              <b-checkbox v-model="form.active">Active?</b-checkbox>
-              <p class="is-size-7 mb-2">
-                When <strong>enabled</strong>, this class will be listed in
-                students’ active classes and students will be able to post new
-                chatroom replies.<br />
-                When <strong>disabled</strong>, students will no longer be able
-                to post new chatroom replies. They will also lose access to
-                speaking club and companion classes, even if these options are
-                enabled below.
-              </p>
-
-              <b-checkbox v-model="form.enables_companion_courses"
-                >Enables access to companion classes?</b-checkbox
-              >
-              <p class="is-size-7 mb-2">
-                When <strong>enabled</strong>, students enrolled in this class
-                will be able to access companion classes while this class is
-                active.
-              </p>
+              <hr />
 
               <b-checkbox v-model="form.companion">Companion class?</b-checkbox>
               <p class="is-size-7 mb-2">
                 When <strong>enabled</strong>, this class will be accessible by
                 all students enrolled in an active class that includes access to
-                companion courses.
-              </p>
-
-              <b-checkbox v-model="form.enables_speaking_club_access"
-                >Includes access to speaking club?</b-checkbox
-              >
-              <p class="is-size-7 mb-2">
-                When <strong>enabled</strong>, students enrolled on this class
-                will be able to access speaking club.
-                <em>This is only in effect while this class is active.</em>
+                companion classes.
               </p>
             </b-tab-item>
             <b-tab-item v-if="$page.props.parameters.cohort" label="Students">
@@ -154,6 +162,12 @@ export default {
   mounted() {},
 
   methods: {
+    toggleActiveSubSettings() {
+      if (this.form.active == false) {
+        this.form.enables_companion_courses = false;
+        this.form.enables_speaking_club_access = false;
+      }
+    },
     onSubmit() {
       let postRoute = this.data
         ? route("cohort.update", {
@@ -183,4 +197,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+</style>
