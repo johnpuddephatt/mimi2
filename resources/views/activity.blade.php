@@ -60,7 +60,7 @@
               </div>
 
               @if($activity->subject->lesson)
-              <a class="button" href="{{ $activity->subject->getUrl() }}">View</a>
+              <a class="button" href="{{ $activity->subject->reply->getUrl() }}">View</a>
               @else
               This entry has since been deleted
               @endif
