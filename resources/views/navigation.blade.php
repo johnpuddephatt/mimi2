@@ -55,9 +55,9 @@
             {{-- <a class="navbar-item" href="{{ route('admin.emails') }}">
             Emails
             </a> --}}
-            <a class="navbar-item" href="/admin/activity">
+            {{-- <a class="navbar-item" href="/admin/activity">
               Activity
-            </a>
+            </a> --}}
             {{--<a class="navbar-item" href="/admin/logs">
               Logs
             </a>
