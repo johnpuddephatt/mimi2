@@ -90,7 +90,7 @@ class User extends Authenticatable
     }
 
     public function isCurrent() {
-      return $this->cohorts()->where('active', true)->where('companion', false)->count() || \Auth::User()->subscribed() || Auth::User()->hasCredits();
+      return $this->cohorts()->where('active', true)->where('companion', false)->count() || \Auth::User()->subscribed() || \Auth::User()->hasCredits();
     }
 
     public function courses()
