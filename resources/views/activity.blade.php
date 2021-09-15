@@ -44,7 +44,7 @@
               </div>
               @if($activity->subject->has('reply'))
 
-              <a class="button" href="{{ $activity-subject->reply->getUrl(true) }}">View</a>
+              <a class="button" href="{{ $activity->subject->reply->getUrl(true) }}">View</a>
               @else
               This entry has since been deleted
               @endif
