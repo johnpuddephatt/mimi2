@@ -78,6 +78,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         return [
             new \Tighten\NovaStripe\NovaStripe,
             new \KABBOUCHI\LogsTool\LogsTool(),
+            new \Spatie\BackupTool\BackupTool(),
         ];
     }
 

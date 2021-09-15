@@ -31,6 +31,8 @@
     "pbmedia/laravel-ffmpeg": "7.5.9",
     "spatie/eloquent-sortable": "^3.11",
     "spatie/laravel-activitylog": "^3.17",
+    "spatie/laravel-backup": "^6.16",
+    "spatie/nova-backup-tool": "^4.1",
     "tightenco/nova-stripe": "^1.0",
     "tightenco/ziggy": "^1.0",
     "vinkla/hashids": "^9.1"
