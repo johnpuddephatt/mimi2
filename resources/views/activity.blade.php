@@ -11,7 +11,6 @@
           <p class="subtitle has-text-centered">Take a look at what’s been happening</p>
           <div class="panel is-shadowless is-bordered">
             @foreach($activities as $activity)
-            @if($activity->subject && $activity->subject->reply)
             <div class="panel-block is-justify-between">
               @if(class_basename($activity->subject_type) == 'Comment')
               <figure class="image is-64x64 mr-2 is-align-self-flex-start is-flex-shrink-0">
@@ -29,14 +28,7 @@
                   <div class="is-italic is-size-7 mb-2">{!!$activity->properties['attributes']['value'] !!}</div>
                   <div class="is-size-7 has-text-grey">{{$activity->created_at->diffForHumans()}}</div>
               </div>
-              <a class="button" href="{{ route('section.reply', [
-                        'cohort' => $activity->subject->reply->cohort->id,
-                        'course' => $activity->subject->reply->lesson->week->course->id,
-                        'lesson' => $activity->subject->reply->lesson->id,
-                        'week' => $activity->subject->reply->lesson->week,
-                        'section' => $activity->subject->reply->lesson->sections->where('is_chatroom', true)->first()->id,
-                        'reply' => $activity->subject->reply->id ]) }}">View</a>
-
+              <a class="button" href="{{ $activity->subject->getUrl() }}">View</a>
               @endif
 
               @if(class_basename($activity->subject_type) == 'Reply')
@@ -51,14 +43,8 @@
                 <div class="is-size-7 has-text-grey">{{ $activity->created_at->diffForHumans() }}</div>
               </div>
               @if($activity->subject->has('reply'))
-              <a class="button" href="{{ route('section.reply', [
-                          'cohort' => $activity->subject->reply->cohort->id,
-                          'course' => $activity->subject->reply->lesson->week->course->id,
-                          'week' => $activity->subject->reply->lesson->week,
-                          'lesson' => $activity->subject->reply->lesson->id,
-                          'section' => $activity->subject->reply->lesson->sections->where('is_chatroom', true)->first()->id,
-                          'reply' => $activity->subject->reply->id,
-                          'show_feedback' => true ]) }}">View</a>
+
+              <a class="button" href="{{ $activity-subject->reply->getUrl(true) }}">View</a>
               @else
               This entry has since been deleted
               @endif
@@ -74,20 +60,13 @@
               </div>
 
               @if($activity->subject->lesson)
-              <a class="button" href="{{ route('section.reply', [
-                          'course' => $activity->subject->lesson->week->course->id,
-                          'lesson' => $activity->subject->lesson->id,
-                          'week' => $activity->subject->lesson->week,
-                          'section' => $activity->subject->lesson->sections->where('is_chatroom', true)->first()->id,
-                          'reply' => $activity->subject->id,
-                          'show_feedback' => false ]) }}">View</a>
+              <a class="button" href="{{ $activity->subject->getUrl() }}">View</a>
               @else
               This entry has since been deleted
               @endif
               @endif
               @endif
             </div>
-            @endif
             @endforeach
           </div>
           {{ $activities->links() }}

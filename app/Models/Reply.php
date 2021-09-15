@@ -80,6 +80,19 @@ class Reply extends Model
       return $query->whereNull('reply_id')->doesntHave('feedback');
     }
 
+    public function getUrl($show_feedback = false) {
+      if(!$this->cohort) {
+        dd($this->cohort());
+      }
+      return route('section.reply', [
+                        'cohort' => $this->cohort,
+                        'course' => $this->lesson->week->course,
+                        'lesson' => $this->lesson,
+                        'week' => $this->lesson->week,
+                        'section' => $this->lesson->sections->where('is_chatroom', true)->first(),
+                        'reply' => $this ]);
+    }
+
     public function user()
     {
       return $this->belongsTo('App\Models\User');
@@ -98,6 +111,12 @@ class Reply extends Model
     public function reply()
     {
       return $this->belongsTo('App\Models\Reply');
+    }
+
+
+    public function cohort()
+    {
+      return $this->belongsTo('App\Models\Cohort');
     }
 
     public function comments()

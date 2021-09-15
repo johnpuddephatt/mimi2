@@ -16,7 +16,6 @@
     "fruitcake/laravel-cors": "^1.0",
     "graham-campbell/markdown": "^13.1",
     "guzzlehttp/guzzle": "^7.0.1",
-    "haruncpi/laravel-log-reader": "^1.0",
     "inertiajs/inertia-laravel": "^0.3.6",
     "intervention/image": "^2.5",
     "kabbouchi/nova-impersonate": "^1.7",
