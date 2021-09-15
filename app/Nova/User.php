@@ -85,8 +85,8 @@ class User extends Resource
                 }
 
             })->map([
-                'Subscribed' => 'success',
-                'Enrolled' => 'success'
+                'Active (pay monthly)' => 'success',
+                'Active' => 'success'
             ])->addTypes([
                 null => ''
             ]),
