@@ -91,7 +91,7 @@
               <hr />
 
               <b-checkbox v-model="form.companion">Companion class?</b-checkbox>
-              <p class="is-size-7 mb-2">
+              <p class="is-size-7 mb-0">
                 When <strong>enabled</strong>, this class will be accessible by
                 all students enrolled in an active class that includes access to
                 companion classes.
