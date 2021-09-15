@@ -97,16 +97,18 @@
             <div :is="dynamicComponent"></div>
           </div>
 
-          <Chatroom
-            class="negative-margin"
-            v-if="replies && (replies.length || enable_chatroom)"
-            :replies="replies"
-            :comments="comments"
-            :enable_chatroom="enable_chatroom"
-          ></Chatroom>
+          <div v-if="replies">
+            <Chatroom
+              class="negative-margin"
+              v-if="replies.length || enable_chatroom"
+              :replies="replies"
+              :comments="comments"
+              :enable_chatroom="enable_chatroom"
+            ></Chatroom>
 
-          <div v-else class="notification is-primary">
-            <strong>🚦 The chatroom is unavailable.</strong>
+            <div v-else class="notification is-primary">
+              <strong>🚦 The chatroom is unavailable.</strong>
+            </div>
           </div>
 
           <div class="section-footer container is-flex">
