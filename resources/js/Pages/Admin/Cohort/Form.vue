@@ -84,8 +84,8 @@
                 >Includes access to speaking club?</b-checkbox
               >
               <p class="is-size-7 mb-2">
-                When <strong>enabled</strong>, this students enrolled on this
-                class will be able to access speaking club.
+                When <strong>enabled</strong>, students enrolled on this class
+                will be able to access speaking club.
                 <em>This is only in effect while this class is active.</em>
               </p>
             </b-tab-item>
