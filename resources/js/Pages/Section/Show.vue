@@ -99,7 +99,7 @@
 
           <Chatroom
             class="negative-margin"
-            v-if="(replies && replies.length) || enable_chatroom"
+            v-if="replies && (replies.length || enable_chatroom)"
             :replies="replies"
             :comments="comments"
             :enable_chatroom="enable_chatroom"
