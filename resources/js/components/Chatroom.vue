@@ -60,16 +60,19 @@
         </p>
         <p class="control">
           <create-reply
-            v-if="allow_new || in_chatroom_manager"
+            v-if="enable_chatroom || in_chatroom_manager"
             @uploaded="startRefreshing"
           />
         </p>
       </div>
     </div>
 
-    <div class="chatroom-notice" v-if="!(allow_new || in_chatroom_manager)">
+    <div
+      class="chatroom-notice"
+      v-if="!(enable_chatroom || in_chatroom_manager)"
+    >
       <div class="notification is-primary">
-        <strong>🚦 This chatroom has now closed.</strong> New replies cannot be
+        <strong>🚦 This chatroom is closed.</strong> New replies cannot be
         posted.
       </div>
     </div>
@@ -126,7 +129,7 @@ export default {
     "comments",
     "in_chatroom_manager",
     "include_already_replied_to",
-    "allow_new"
+    "enable_chatroom"
   ],
   components: {},
   data() {

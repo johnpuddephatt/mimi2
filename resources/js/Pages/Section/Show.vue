@@ -95,25 +95,19 @@
             }"
           >
             <div :is="dynamicComponent"></div>
-
-            <!-- <div v-if="wordList.length">
-            <div class="editor-js-block editor-js-block__paired-heading">
-              <h2>Impare le parole 🔎</h2>
-              <h3>Learn the words</h3>
-            </div>
-            <ul>
-              <li v-for="word in wordList"><strong>{{word.word}}:</strong> {{ word.translation}}</li>
-            </ul>
-          </div> -->
           </div>
 
           <Chatroom
             class="negative-margin"
-            v-if="section.is_chatroom && enable_chatroom"
+            v-if="replies.length || enable_chatroom"
             :replies="replies"
             :comments="comments"
-            :allow_new="allow_new"
+            :enable_chatroom="enable_chatroom"
           ></Chatroom>
+
+          <div v-else class="notification is-primary">
+            <strong>🚦 The chatroom is unavailable.</strong>
+          </div>
 
           <div class="section-footer container is-flex">
             <inertia-link
@@ -208,6 +202,7 @@
           </div>
 
           <!-- <div v-if="end_of_course">
+            can't distinguish between true end and false end due to course content being incomplete...
           <div class="message mt-4 is-success">
             <div class="message-body p-5 has-text-centered">
               <h3 class="title mt-3 is-4">{{ randomGreeting }}</h3>
@@ -227,7 +222,6 @@ import Chatroom from "@/components/Chatroom";
 export default {
   props: [
     "enable_chatroom",
-    "allow_new",
     "blocks_prerendered",
     "comments",
     "replies",

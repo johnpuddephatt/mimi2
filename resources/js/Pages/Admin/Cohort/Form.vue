@@ -51,15 +51,22 @@
                 >Active?</b-checkbox
               >
               <p class="is-size-7 mb-2">
-                When <strong>enabled</strong>, this class will be listed in
-                students’ active classes and students will be able to post new
-                chatroom replies.
+                This will list the class as one of a student’s active classes.
               </p>
               <div
                 class="is-size-7 ml-4 mt-4"
                 :class="form.active ? '' : 'disabled'"
               >
-                <b-checkbox v-model="form.enables_companion_courses"
+                <b-checkbox v-model="form.enable_chatroom"
+                  >Enable chatroom?</b-checkbox
+                >
+                <p class="is-size-7 mb-2">
+                  This allows students to post replies in the chatroom.
+                </p>
+
+                <b-checkbox
+                  class="mt-2"
+                  v-model="form.enables_companion_courses"
                   >Includes access to companion classes?</b-checkbox
                 >
                 <p class="is-size-7 mb-2">
@@ -77,16 +84,6 @@
                   club.
                 </p>
               </div>
-
-              <hr />
-
-              <b-checkbox v-model="form.enable_chatroom"
-                >Enable chatroom?</b-checkbox
-              >
-              <p class="is-size-7 mb-2">
-                When <strong>disabled</strong>, chatrooms will not be displayed
-                within this class.
-              </p>
 
               <hr />
 
@@ -163,10 +160,9 @@ export default {
 
   methods: {
     toggleActiveSubSettings() {
-      if (this.form.active == false) {
-        this.form.enables_companion_courses = false;
-        this.form.enables_speaking_club_access = false;
-      }
+      this.form.enables_companion_courses = this.form.active;
+      this.form.enables_speaking_club_access = this.form.active;
+      this.form.enable_chatroom = this.form.active;
     },
     onSubmit() {
       let postRoute = this.data
