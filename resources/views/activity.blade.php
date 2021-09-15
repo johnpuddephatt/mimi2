@@ -28,7 +28,7 @@
                   <div class="is-italic is-size-7 mb-2">{!!$activity->properties['attributes']['value'] !!}</div>
                   <div class="is-size-7 has-text-grey">{{$activity->created_at->diffForHumans()}}</div>
               </div>
-              <a class="button" href="{{ $activity->subject->getUrl() }}">View</a>
+              <a class="button" href="{{ $activity->subject->reply->getUrl() }}">View</a>
               @endif
 
               @if(class_basename($activity->subject_type) == 'Reply')
@@ -60,7 +60,7 @@
               </div>
 
               @if($activity->subject->lesson)
-              <a class="button" href="{{ $activity->subject->reply->getUrl() }}">View</a>
+              <a class="button" href="{{ $activity->subject->getUrl() }}">View</a>
               @else
               This entry has since been deleted
               @endif
