@@ -93,7 +93,7 @@ export default {
       placeholder: "Start writing!",
       inlineToolbar: ["bold", "italic", "hyperlink", "markerTool"],
       tools: this.toolConfig(),
-      tunes: ["textVariant"],
+      // tunes: ["textVariant"],
 
       onChange: () => {
         this.isDirty = true;
@@ -291,7 +291,7 @@ export default {
         },
         warning: Warning,
         paragraph: {
-          tunes: ["textVariant"]
+          tunes: []
         },
         hyperlink: {
           class: Hyperlink,
