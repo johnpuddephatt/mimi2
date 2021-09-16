@@ -105,22 +105,28 @@
     }
   }
 
-  .editor-js-block__translate-block--row {
-    border-left: 0.25em solid $primary;
-    padding: 0.5em;
-    margin-bottom: 0.25em;
-    line-height: 1.3;
-
-    &--original {
-      margin-bottom: 0 !important;
-      cursor: help;
+  .editor-js-block__translate-block {
+    &:hover .editor-js-block__translate-block--row {
+      background-color: transparentize($success, 0.9);
     }
-    &--translated {
-      height: 0px;
-      color: $grey;
-      font-size: 0.9rem;
-      overflow: hidden;
-      transition: height 0.5s;
+
+    &--row {
+      border-left: 0.25em solid $success;
+      padding: 0.5em;
+      // margin-bottom: 0.25em;
+      line-height: 1.3;
+      cursor: help;
+
+      &--original {
+        margin-bottom: 0 !important;
+      }
+      &--translated {
+        height: 0px;
+        color: $grey;
+        font-size: 0.9rem;
+        overflow: hidden;
+        transition: height 0.5s;
+      }
     }
   }
 

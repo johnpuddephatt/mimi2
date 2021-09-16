@@ -248,7 +248,7 @@ export default {
 
   mounted() {
     function slidetoggle(e) {
-      let container = e.currentTarget.parentNode.parentNode;
+      let container = e.currentTarget.parentNode;
       container.classList.toggle("expanded");
       container
         .querySelectorAll(".editor-js-block__translate-block--row--translated")
@@ -260,7 +260,7 @@ export default {
     }
 
     document
-      .querySelectorAll(".editor-js-block__translate-block--row--original")
+      .querySelectorAll(".editor-js-block__translate-block--row")
       .forEach(el => el.addEventListener("click", slidetoggle));
   },
 

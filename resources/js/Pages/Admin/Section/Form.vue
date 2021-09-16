@@ -54,8 +54,8 @@ import List from "@editorjs/list";
 import Header from "@editorjs/header";
 // import Table from '@editorjs/table';
 import Table from "editorjs-table";
-// import Warning from "@editorjs/warning";
-import TextVariantTune from "@editorjs/text-variant-tune";
+import Warning from "@editorjs/warning";
+// import TextVariantTune from "@editorjs/text-variant-tune";
 import ImageTool from "@editorjs/image";
 import VideoTool from "editorjs-video-jdp";
 import AudioTool from "editorjs-attaches-audio";
@@ -206,7 +206,7 @@ export default {
 
     toolConfig() {
       return {
-        textVariant: TextVariantTune,
+        // textVariant: TextVariantTune,
         translateBlock: {
           class: TranslateBlock,
           inlineToolbar: true
@@ -289,7 +289,7 @@ export default {
           class: Table,
           inlineToolbar: true
         },
-        // warning: Warning,
+        warning: Warning,
         paragraph: {
           tunes: ["textVariant"]
         },
