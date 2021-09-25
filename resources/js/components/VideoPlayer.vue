@@ -56,6 +56,7 @@ export default {
         this.onPlay;
       });
       this.$refs.player.addEventListener("canplay", () => {
+        this.$refs.player.currentTime = 0;
         if (this.should_autoplay) {
           this.$refs.player.play();
         }
