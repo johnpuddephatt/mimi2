@@ -40,10 +40,9 @@ export default {
   watch: {
     should_autoplay: function(autoplay) {
       if (autoplay && !this.isLoading) {
-        this.player.play();
+        this.$refs.player.play();
       } else {
-        this.player.pause();
-        this.player.currentTime(0);
+        this.$refs.player.pause();
       }
     }
   },
@@ -80,12 +79,14 @@ export default {
     }
   },
   beforeDestroy() {
-    this.player.dispose();
+    if (!this.supportsHLS()) {
+      this.player.dispose();
+    }
   },
 
   methods: {
     pause() {
-      this.player.pause();
+      this.$refs.player.pause();
     },
     onPlay() {
       console.log("onPlay");
