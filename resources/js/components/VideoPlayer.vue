@@ -39,13 +39,13 @@ export default {
 
   watch: {
     should_autoplay: function(autoplay) {
-      if (autoplay && !this.isLoading) {
-        this.$refs.player.currentTime = 1;
-        this.$refs.player.play();
-      } else {
-        this.$refs.player.currentTime = 1;
-        this.$refs.player.pause();
-      }
+      // if (autoplay && !this.isLoading) {
+      //   this.$refs.player.currentTime = 1;
+      //   this.$refs.player.play();
+      // } else {
+      //   this.$refs.player.currentTime = 1;
+      //   this.$refs.player.pause();
+      // }
     }
   },
 
@@ -60,9 +60,9 @@ export default {
       this.$refs.player.addEventListener("canplay", () => {
         this.$refs.player.currentTime = 1;
         console.log("time set to 0");
-        if (this.should_autoplay) {
-          this.$refs.player.play();
-        }
+        // if (this.should_autoplay) {
+        //   this.$refs.player.play();
+        // }
       });
       this.$refs.player.addEventListener("canplaythrough", () => {
         this.isLoading = false;
