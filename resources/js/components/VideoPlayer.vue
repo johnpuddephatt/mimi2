@@ -40,9 +40,10 @@ export default {
   watch: {
     should_autoplay: function(autoplay) {
       if (autoplay && !this.isLoading) {
-        this.$refs.player.currentTime = 0;
+        this.$refs.player.currentTime = 1;
         this.$refs.player.play();
       } else {
+        this.$refs.player.currentTime = 1;
         this.$refs.player.pause();
       }
     }
@@ -57,7 +58,8 @@ export default {
         this.onPlay;
       });
       this.$refs.player.addEventListener("canplay", () => {
-        this.$refs.player.currentTime = 0;
+        this.$refs.player.currentTime = 1;
+        console.log("time set to 0");
         if (this.should_autoplay) {
           this.$refs.player.play();
         }
@@ -87,9 +89,6 @@ export default {
   },
 
   methods: {
-    pause() {
-      this.$refs.player.pause();
-    },
     onPlay() {
       console.log("onPlay");
       this.$emit("playing");
