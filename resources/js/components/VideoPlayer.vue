@@ -40,6 +40,7 @@ export default {
   watch: {
     should_autoplay: function(autoplay) {
       if (autoplay && !this.isLoading) {
+        this.$refs.player.currentTime = 0;
         this.$refs.player.play();
       } else {
         this.$refs.player.pause();
