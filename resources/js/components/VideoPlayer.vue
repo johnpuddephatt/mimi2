@@ -50,6 +50,12 @@ export default {
 
   mounted() {
     if (this.supportsHLS()) {
+      this.$refs.player.addEventListener("play", () => {
+        this.onEnded;
+      });
+      this.$refs.player.addEventListener("ended", () => {
+        this.onPlay;
+      });
       this.$refs.player.addEventListener("canplay", () => {
         this.isLoading = false;
         if (this.should_autoplay) {
@@ -59,12 +65,6 @@ export default {
       });
       this.$refs.player.addEventListener("canplaythrough", () => {
         this.isLoading = false;
-      });
-      this.$refs.player.addEventListener("play", () => {
-        this.onEnded;
-      });
-      this.$refs.player.addEventListener("ended", () => {
-        this.onPlay;
       });
     } else {
       this.player = videojs(this.$refs.player, {});
@@ -91,9 +91,6 @@ export default {
       this.player.pause();
     },
     onPlay() {
-      // if (this.player.currentTime() === 0) {
-      //   this.player.currentTime(0);
-      // }
       console.log("onPlay");
       this.$emit("playing");
     },
