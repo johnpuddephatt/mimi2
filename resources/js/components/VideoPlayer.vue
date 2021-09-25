@@ -49,7 +49,9 @@ export default {
   },
 
   mounted() {
-    this.player = videojs(this.$refs.player, {});
+    if (!supportsHLS()) {
+      this.player = videojs(this.$refs.player, {});
+    }
 
     this.player.on("ended", this.onEnded);
 
@@ -79,6 +81,10 @@ export default {
     },
     onEnded() {
       this.$emit("stopped");
+    },
+    supportsHLS() {
+      var video = document.createElement("video");
+      return Boolean(video.canPlayType("application/vnd.apple.mpegURL"));
     }
   }
 };
