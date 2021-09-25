@@ -49,7 +49,24 @@ export default {
   },
 
   mounted() {
-    if (!this.supportsHLS()) {
+    if (this.supportsHLS()) {
+      this.$refs.player.addEventListener("canplay", () => {
+        this.isLoading = false;
+        if (this.should_autoplay) {
+          this.should_autoplay = true;
+          this.$refs.player.play();
+        }
+      });
+      this.$refs.player.addEventListener("canplaythrough", () => {
+        this.isLoading = false;
+      });
+      this.$refs.player.addEventListener("play", () => {
+        this.onEnded;
+      });
+      this.$refs.player.addEventListener("ended", () => {
+        this.onPlay;
+      });
+    } else {
       this.player = videojs(this.$refs.player, {});
 
       this.player.on("ended", this.onEnded);
