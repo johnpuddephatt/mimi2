@@ -51,19 +51,19 @@ export default {
   mounted() {
     if (!this.supportsHLS()) {
       this.player = videojs(this.$refs.player, {});
+
+      this.player.on("ended", this.onEnded);
+
+      this.player.on("play", this.onPlay);
+
+      this.player.ready(() => {
+        this.isLoading = false;
+        if (this.should_autoplay) {
+          this.should_autoplay = true;
+          this.player.play();
+        }
+      });
     }
-
-    this.player.on("ended", this.onEnded);
-
-    this.player.on("play", this.onPlay);
-
-    this.player.ready(() => {
-      this.isLoading = false;
-      if (this.should_autoplay) {
-        this.should_autoplay = true;
-        this.player.play();
-      }
-    });
   },
   beforeDestroy() {
     this.player.dispose();
@@ -77,9 +77,11 @@ export default {
       // if (this.player.currentTime() === 0) {
       //   this.player.currentTime(0);
       // }
+      console.log("onPlay");
       this.$emit("playing");
     },
     onEnded() {
+      console.log("onEnded");
       this.$emit("stopped");
     },
     supportsHLS() {
