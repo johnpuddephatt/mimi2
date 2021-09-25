@@ -38,8 +38,8 @@ export default {
   },
 
   watch: {
-    should_autoplay: function(val) {
-      if (val && !this.isLoading) {
+    should_autoplay: function(autoplay) {
+      if (autoplay && !this.isLoading) {
         this.player.play();
       } else {
         this.player.pause();
@@ -51,6 +51,9 @@ export default {
   mounted() {
     this.player = videojs(this.$refs.player, {});
 
+    this.player.options.hls.overrideNative = true;
+    this.player.options.html5.nativeAudioTracks = false;
+    this.player.options.html5.nativeVideoTracks = false;
     this.player.on("ended", this.onEnded);
 
     this.player.on("play", this.onPlay);
