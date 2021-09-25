@@ -49,7 +49,7 @@ export default {
   },
 
   mounted() {
-    if (!supportsHLS()) {
+    if (!this.supportsHLS()) {
       this.player = videojs(this.$refs.player, {});
     }
 
