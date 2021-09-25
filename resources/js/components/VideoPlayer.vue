@@ -51,6 +51,8 @@ export default {
 
   mounted() {
     if (this.supportsHLS()) {
+      this.$refs.player.currentTime = 0.1;
+
       this.$refs.player.addEventListener("playing", () => {
         this.onEnded;
       });
@@ -58,8 +60,6 @@ export default {
         this.onPlay;
       });
       this.$refs.player.addEventListener("canplay", () => {
-        this.$refs.player.currentTime = 1;
-        console.log("time set to 0");
         // if (this.should_autoplay) {
         //   this.$refs.player.play();
         // }
