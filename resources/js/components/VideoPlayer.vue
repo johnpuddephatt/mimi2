@@ -50,16 +50,14 @@ export default {
 
   mounted() {
     if (this.supportsHLS()) {
-      this.$refs.player.addEventListener("play", () => {
+      this.$refs.player.addEventListener("playing", () => {
         this.onEnded;
       });
       this.$refs.player.addEventListener("ended", () => {
         this.onPlay;
       });
       this.$refs.player.addEventListener("canplay", () => {
-        this.isLoading = false;
         if (this.should_autoplay) {
-          this.should_autoplay = true;
           this.$refs.player.play();
         }
       });
@@ -76,7 +74,6 @@ export default {
       this.player.ready(() => {
         this.isLoading = false;
         if (this.should_autoplay) {
-          this.should_autoplay = true;
           this.player.play();
         }
       });
